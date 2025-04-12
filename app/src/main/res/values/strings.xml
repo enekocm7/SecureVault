@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SecureVault</string>
+    <string name="securevault">SecureVault</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="securevault_logo">SecureVault logo</string>
 </resources>
