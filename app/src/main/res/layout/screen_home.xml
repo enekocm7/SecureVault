@@ -6,60 +6,53 @@
     android:layout_height="match_parent"
     android:background="#F0F0F0"
     android:padding="24dp"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="147dp"
-        android:layout_height="135dp"
+        android:layout_width="157dp"
+        android:layout_height="145dp"
         android:layout_marginTop="80dp"
         android:contentDescription="@string/securevault_logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/securevault" />
 
     <TextView
         android:id="@+id/registerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/securevault"
+        android:textColor="@color/gris"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:textColor="@color/gris"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/imageView2" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/registerButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
+        android:minHeight="72dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_marginBottom="32dp"
+        android:textSize="22sp"
         android:backgroundTint="@color/black"
+        android:fontFamily="@font/roboto"
+        android:text="@string/next"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         app:cornerRadius="16dp"
-        app:layout_constraintWidth_max="320dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/loginButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:textColor="#333333"
-        android:backgroundTint="#D1D1D1"
-        app:cornerRadius="16dp"
-        app:layout_constraintWidth_max="320dp"
-        android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintWidth_max="320dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,4 +4,10 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="securevault_logo">SecureVault logo</string>
+    <string name="next">Next</string>
+    <string name="create_master_password">Create Master Password</string>
+    <string name="master_password">Master Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="strength">Strength:</string>
+    <string name="continue_button">Continue</string>
 </resources>
