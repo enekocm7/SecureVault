@@ -1,7 +1,6 @@
 package com.example.securevault.ui.activities
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -10,10 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.securevault.R
 import com.example.securevault.ui.viewmodels.RegisterViewModel
-import com.example.securevault.utils.PasswordStrength
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import androidx.core.graphics.toColorInt
 
 class RegisterActivity : AppCompatActivity() {
 
