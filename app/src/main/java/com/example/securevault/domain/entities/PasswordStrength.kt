@@ -1,6 +1,5 @@
 package com.example.securevault.domain.entities
 
-import me.gosimple.nbvcxz.Nbvcxz
 import androidx.core.graphics.toColorInt
 
 enum class PasswordStrength(val score: Int,val label: String,val color: String){
