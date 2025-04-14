@@ -1,4 +1,4 @@
-package com.example.securevault.ui.activities
+package com.example.securevault.ui.view
 
 import android.content.Intent
 import android.os.Bundle
