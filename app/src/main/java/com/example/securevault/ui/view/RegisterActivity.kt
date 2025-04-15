@@ -8,13 +8,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.widget.doAfterTextChanged
-import com.example.securevault.databinding.ActivityMasterPasswordBinding
+import com.example.securevault.databinding.CreateMasterPasswordBinding
 import com.example.securevault.domain.entities.PasswordStrength
 import com.example.securevault.ui.viewmodel.RegisterViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMasterPasswordBinding
+    private lateinit var binding: CreateMasterPasswordBinding
 
     private val viewModel: RegisterViewModel by viewModels()
     private val label = "Strength:"
@@ -22,7 +24,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
-        binding = ActivityMasterPasswordBinding.inflate(layoutInflater)
+        binding = CreateMasterPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setObserver()
@@ -46,12 +48,22 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setListener(){
         binding.continueButton.setOnClickListener {
-            if (binding.masterPasswordInput.text.toString() == binding.confirmPasswordInput.text.toString()){
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                finishAffinity()
-            }else{
-                Toast.makeText(this,"The passwords must be the same", Toast.LENGTH_LONG).show()
+            val masterPassword = binding.masterPasswordInput.text.toString()
+            val confirmPassword = binding.confirmPasswordInput.text.toString()
+
+            when {
+                masterPassword.isEmpty() -> {
+                    Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_LONG).show()
+                }
+                masterPassword != confirmPassword -> {
+                    Toast.makeText(this, "The passwords must be the same", Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    viewModel.createAppKey(masterPassword)
+                    if (viewModel.isKeyConfigured()) {
+                        homeActivity()
+                    }
+                }
             }
         }
     }
@@ -60,6 +72,12 @@ class RegisterActivity : AppCompatActivity() {
         binding.masterPasswordInput.doAfterTextChanged {
             viewModel.calculateStrength(binding.masterPasswordInput.text.toString())
         }
+    }
+
+    private fun homeActivity(){
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+        finishAffinity()
     }
 }
 

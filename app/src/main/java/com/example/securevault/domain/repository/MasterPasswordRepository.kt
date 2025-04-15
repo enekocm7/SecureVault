@@ -1,12 +1,10 @@
 package com.example.securevault.domain.repository
 
-import com.example.securevault.data.storage.AppKeyStorage
-
 interface MasterPasswordRepository {
-    suspend fun generateAndStoreAppKey(password: String)
-    suspend fun generateAndStoreAppKeyBio()
-    suspend fun unlockAppKeyWithPassword(password: String): ByteArray?
-    suspend fun unlockAppKeyWithBiometrics(): ByteArray?
-    suspend fun isAppKeyConfigured(): Boolean
-    suspend fun isBiometricConfigured(): Boolean
+    fun generateAndStoreAppKey(password: String)
+    fun generateAndStoreAppKeyBio()
+    fun unlockAppKeyWithPassword(password: String): ByteArray?
+    fun unlockAppKeyWithBiometrics(): ByteArray?
+    fun isAppKeyConfigured(): Boolean
+    fun isBiometricConfigured(): Boolean
 }

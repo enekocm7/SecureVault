@@ -5,13 +5,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securevault.domain.entities.PasswordStrength
 import com.example.securevault.domain.usecases.EstimatePassword
+import com.example.securevault.domain.usecases.GenerateAppKey
+import com.example.securevault.domain.usecases.GenerateBiometricKey
+import com.example.securevault.domain.usecases.IsAppKeyConfigured
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class RegisterViewModel : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val estimatePassword: EstimatePassword,
+    private val generateBiometricKey: GenerateBiometricKey,
+    private val generateAppKey: GenerateAppKey,
+    private val isAppKeyConfigured: IsAppKeyConfigured
+) : ViewModel() {
 
     val passwordStrength = MutableLiveData<PasswordStrength>()
-    val estimatePassword = EstimatePassword()
 
     fun calculateStrength(password: String){
         viewModelScope.launch {
@@ -19,5 +29,20 @@ class RegisterViewModel : ViewModel() {
             passwordStrength.postValue(strength)
         }
     }
+
+    fun createBiometricKey(){
+        generateBiometricKey()
+    }
+
+    fun createAppKey(password: String){
+        generateAppKey(password)
+    }
+
+     fun isKeyConfigured(): Boolean {
+        return isAppKeyConfigured()
+
+    }
+
+
 
 }

@@ -13,7 +13,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         private val appKey = ByteArray(32).apply { SecureRandom().nextBytes(this) }
     }
 
-    override suspend fun generateAndStoreAppKey(password: String) {
+    override fun generateAndStoreAppKey(password: String) {
         val salt = PasswordKeyManager.generateSalt()
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
         val (encWithPw, ivPw) = AppKeyEncryptor.encrypt(appKey, passwordKey)
@@ -23,7 +23,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         storage.save("iv_pw", ivPw)
     }
 
-    override suspend fun generateAndStoreAppKeyBio() {
+    override fun generateAndStoreAppKeyBio() {
         BiometricKeyManager.generateKey()
         val biometricKey = BiometricKeyManager.getKey()
         val (encryptedWithBio, ivBio) = AppKeyEncryptor.encrypt(appKey, biometricKey)
@@ -32,7 +32,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         storage.save("iv_bio", ivBio)
     }
 
-    override suspend fun unlockAppKeyWithPassword(password: String): ByteArray? {
+    override fun unlockAppKeyWithPassword(password: String): ByteArray? {
         val salt = storage.get("salt")?: return null
         val encryptedData = storage.get("encrypted_app_key_pw") ?: return null
         val iv = storage.get("iv_pw")?: return null
@@ -45,7 +45,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
 
     }
 
-    override suspend fun unlockAppKeyWithBiometrics(): ByteArray? {
+    override fun unlockAppKeyWithBiometrics(): ByteArray? {
         val encryptedData = storage.get("encrypted_app_key_bio") ?: return null
         val iv = storage.get("iv_bio")?: return null
         val biometricKey = BiometricKeyManager.getKey()
@@ -56,11 +56,11 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         }
     }
 
-    override suspend fun isAppKeyConfigured(): Boolean {
+    override fun isAppKeyConfigured(): Boolean {
         return storage.isPasswordConfigured()
     }
 
-    override suspend fun isBiometricConfigured(): Boolean {
+    override fun isBiometricConfigured(): Boolean {
         return storage.isBiometricConfigured()
     }
 
