@@ -11,7 +11,7 @@ interface PasswordDao {
     @Query("Select * from passwords")
     suspend fun getAllPasswords(): List<PasswordEntity>
 
-    @Query("Select * from passwords p where p.name = :name")
+    @Query("Select * from passwords p where p.name like :name")
     suspend fun getPasswordByName(name:String): PasswordEntity
 
     @Query("Select * from passwords order by name asc")

@@ -10,4 +10,14 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="strength">Strength:</string>
     <string name="continue_button">Continue</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="email_placeholder">email@example.com</string>
+    <string name="passwords">Passwords</string>
+    <string name="copy">Copy</string>
+    <string name="copy_password">Copy password</string>
+    <string name="add_password">Add password</string>
+    <string name="profile">Profile</string>
+    <string name="home">HOME</string>
+    <string name="search">SEARCH</string>
+    <string name="setting">SETTING</string>
 </resources>
