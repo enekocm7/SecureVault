@@ -50,7 +50,6 @@ class RegisterActivity : AppCompatActivity() {
         binding.continueButton.setOnClickListener {
             val masterPassword = binding.masterPasswordInput.text.toString()
             val confirmPassword = binding.confirmPasswordInput.text.toString()
-
             when {
                 masterPassword.isEmpty() -> {
                     Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_LONG).show()
