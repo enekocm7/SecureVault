@@ -1,4 +1,4 @@
-package com.example.securevault.domain.entities
+package com.example.securevault.domain.model
 
 data class Password(
     val name:String,

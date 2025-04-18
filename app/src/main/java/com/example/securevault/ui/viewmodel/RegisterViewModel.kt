@@ -3,13 +3,12 @@ package com.example.securevault.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securevault.domain.entities.PasswordStrength
+import com.example.securevault.domain.model.PasswordStrength
 import com.example.securevault.domain.usecases.EstimatePassword
 import com.example.securevault.domain.usecases.GenerateAppKey
 import com.example.securevault.domain.usecases.GenerateBiometricKey
 import com.example.securevault.domain.usecases.IsAppKeyConfigured
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

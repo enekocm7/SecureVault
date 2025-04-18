@@ -1,4 +1,4 @@
-package com.example.securevault.domain.entities
+package com.example.securevault.domain.model
 
 import androidx.core.graphics.toColorInt
 

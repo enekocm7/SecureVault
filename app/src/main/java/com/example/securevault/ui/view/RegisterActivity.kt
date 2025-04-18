@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.securevault.databinding.CreateMasterPasswordBinding
-import com.example.securevault.domain.entities.PasswordStrength
+import com.example.securevault.domain.model.PasswordStrength
 import com.example.securevault.ui.viewmodel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
