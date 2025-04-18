@@ -8,15 +8,15 @@ import javax.crypto.SecretKey
 
 object BiometricKeyManager {
     private const val KEY_ALIAS = "biometric_key"
+    private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
     fun generateKey(){
-        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,"AndroidKeyStore")
+        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,ANDROID_KEYSTORE)
         val keySpec = KeyGenParameterSpec.Builder(
             KEY_ALIAS,
             KeyProperties.PURPOSE_DECRYPT or KeyProperties.PURPOSE_ENCRYPT
         )
             .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            .setEncryptionPaddings()
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setUserAuthenticationRequired(true)
             .build()
