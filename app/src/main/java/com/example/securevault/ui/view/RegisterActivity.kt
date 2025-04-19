@@ -60,7 +60,7 @@ class RegisterActivity : AppCompatActivity() {
                 else -> {
                     viewModel.createAppKey(masterPassword)
                     if (viewModel.isKeyConfigured()) {
-                        homeActivity()
+                        biometricActivity()
                     }
                 }
             }
@@ -73,8 +73,8 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun homeActivity(){
-        val intent = Intent(this, HomeActivity::class.java)
+    private fun biometricActivity(){
+        val intent = Intent(this, BiometricActivity::class.java)
         startActivity(intent)
         finishAffinity()
     }

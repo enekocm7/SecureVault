@@ -9,9 +9,8 @@ import com.example.securevault.domain.biometric.BiometricAuthenticator
 import com.example.securevault.domain.model.BiometricResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import javax.inject.Inject
 
-class BiometricPromptManager @Inject constructor(
+class BiometricPromptManager (
     private val activity: AppCompatActivity
 ): BiometricAuthenticator {
 
@@ -30,6 +29,8 @@ class BiometricPromptManager @Inject constructor(
             .setDescription(description)
             .setConfirmationRequired(true)
             .setAllowedAuthenticators(authenticators)
+            .setNegativeButtonText("Cancel")
+            .build()
 
         when(manager.canAuthenticate(authenticators)){
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
@@ -66,7 +67,7 @@ class BiometricPromptManager @Inject constructor(
                 }
             }
         )
-        prompt.authenticate(promptInfo.build())
+        prompt.authenticate(promptInfo)
 
     }
 

@@ -20,4 +20,13 @@
     <string name="home">HOME</string>
     <string name="search">SEARCH</string>
     <string name="setting">SETTING</string>
+    <string name="enable_fingerprint">Enable Fingerprint Login</string>
+    <string name="fingerprint_description">You can now use your fingerprint to quickly and securely unlock your vault without entering your password each time.</string>
+    <string name="enable_fingerprint_login">Enable Fingerprint</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="fingerprint_icon">Fingerprint icon</string>
+    <string name="welcome_description">Securely store and manage all your passwords in one place.</string>
+    <string name="try_again">Try Again</string>
+    <string name="feature_unavailable">Feature Unavailable</string>
+    <string name="hardware_unavailable">Hardware Unavailable</string>
 </resources>
