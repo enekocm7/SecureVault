@@ -41,11 +41,10 @@ class BiometricActivity : AppCompatActivity() {
                     }
                     is BiometricResult.AuthenticationError -> {
                         binding.enableButton.isEnabled = true
-                        binding.enableButton.text = result.error
+                        binding.enableButton.text = getString(R.string.try_again)
                     }
-                    is BiometricResult.AuthenticationNotRecognized -> {
+                    is BiometricResult.AuthenticationNotRecognized -> {}
 
-                    }
                     is BiometricResult.FeatureUnavailable -> {
                         binding.enableButton.isEnabled = false
                         binding.enableButton.text = getString(R.string.feature_unavailable)
@@ -56,7 +55,6 @@ class BiometricActivity : AppCompatActivity() {
                     }
                     is BiometricResult.AuthenticationFailed -> {
                         binding.enableButton.isEnabled = true
-                        binding.enableButton.text = getString(R.string.try_again)
                     }
                     null -> {}
                 }

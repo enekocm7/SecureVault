@@ -29,4 +29,5 @@
     <string name="try_again">Try Again</string>
     <string name="feature_unavailable">Feature Unavailable</string>
     <string name="hardware_unavailable">Hardware Unavailable</string>
+    <string name="authentication_error">Authentication Error</string>
 </resources>
