@@ -30,4 +30,7 @@
     <string name="feature_unavailable">Feature Unavailable</string>
     <string name="hardware_unavailable">Hardware Unavailable</string>
     <string name="authentication_error">Authentication Error</string>
+    <string name="login_to_your_vault">Login to your Vault</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="biometric_login">Login with biometric</string>
 </resources>
