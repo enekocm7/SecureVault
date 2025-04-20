@@ -33,19 +33,16 @@ class BiometricViewModel
         viewModelScope.launch {
             biometricAuth.promptResults.collect {
                 result -> _authenticationState.value = result
+                generateKey()
             }
         }
         authenticateBiometrics(biometricAuth,title,description)
-        generateKey()
+
     }
 
     fun generateKey() {
         if (authenticationState.value is BiometricResult.AuthenticationSuccess){
-            viewModelScope.launch {
-                generateBiometricKey()
-            }
-        } else {
-            _authenticationState.value = BiometricResult.AuthenticationNotRecognized
+            generateBiometricKey()
         }
     }
 

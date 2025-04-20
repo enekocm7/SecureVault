@@ -37,7 +37,7 @@ class BiometricActivity : AppCompatActivity() {
                 result ->
                 when(result){
                     is BiometricResult.AuthenticationSuccess -> {
-                        skip()
+
                     }
                     is BiometricResult.AuthenticationError -> {
                         binding.enableButton.isEnabled = true

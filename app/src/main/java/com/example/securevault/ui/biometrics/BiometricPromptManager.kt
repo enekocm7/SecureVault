@@ -70,8 +70,4 @@ class BiometricPromptManager (
         prompt.authenticate(promptInfo)
 
     }
-
-
-
-
 }
