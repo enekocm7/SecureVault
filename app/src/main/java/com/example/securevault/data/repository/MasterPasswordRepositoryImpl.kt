@@ -54,7 +54,6 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         if (result !is BiometricResult.AuthenticationSuccess) {
             return null
         }
-
         val encryptedData = storage.get("encrypted_app_key_bio")
         val authenticatedCipher = result.result?.cryptoObject?.cipher ?: return null
 
@@ -74,7 +73,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     }
 
     override fun getIv(): ByteArray {
-        return storage.get("iv_pw")
+        return storage.get("iv_bio")
     }
 
 
