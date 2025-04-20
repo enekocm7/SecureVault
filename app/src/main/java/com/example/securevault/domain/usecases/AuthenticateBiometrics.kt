@@ -10,7 +10,7 @@ class AuthenticateBiometrics @Inject constructor() {
         biometricAuthenticator: BiometricAuthenticator,
         title: String,
         description: String,
-        cryptoObject: BiometricPrompt.CryptoObject
+        cryptoObject: BiometricPrompt.CryptoObject?
     ) {
         biometricAuthenticator.showBiometricPrompt(title, description, cryptoObject)
     }

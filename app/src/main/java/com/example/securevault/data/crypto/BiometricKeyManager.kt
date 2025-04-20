@@ -14,6 +14,11 @@ object BiometricKeyManager {
     private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
     fun generateKey(){
+        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+        if (keyStore.containsAlias(KEY_ALIAS)) {
+            return
+        }
+
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,ANDROID_KEYSTORE)
         val keySpec = KeyGenParameterSpec.Builder(
             KEY_ALIAS,
@@ -22,6 +27,7 @@ object BiometricKeyManager {
             .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setUserAuthenticationRequired(true)
+            .setInvalidatedByBiometricEnrollment(true)
             .build()
 
         keyGenerator.init(keySpec)
@@ -35,7 +41,6 @@ object BiometricKeyManager {
 
     fun getEncryptCipher(): Cipher {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        generateKey()
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
         return cipher
     }
@@ -47,7 +52,11 @@ object BiometricKeyManager {
         return cipher
     }
 
-    fun getEncryptCryptoObject(): BiometricPrompt.CryptoObject {
+    fun getEncryptCryptoObject(): BiometricPrompt.CryptoObject? {
+        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+        if (!keyStore.containsAlias(KEY_ALIAS)) {
+            return null
+        }
         val cipher = getEncryptCipher()
         return BiometricPrompt.CryptoObject(cipher)
     }
