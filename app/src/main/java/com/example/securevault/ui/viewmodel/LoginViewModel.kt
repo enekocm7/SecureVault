@@ -41,11 +41,7 @@ class LoginViewModel
             biometricAuth.promptResults.collect { result ->
                 if (result is BiometricResult.AuthenticationSuccess) {
                     val appKey = unlockKeyWithBiometrics(result)
-                    if (appKey != null) {
-                        _biometricLoginState.value = true
-                    } else {
-                        _biometricLoginState.value = false
-                    }
+                    _biometricLoginState.value = appKey != null
                 } else if (result is BiometricResult.AuthenticationError ||
                     result is BiometricResult.AuthenticationFailed) {
                     _biometricLoginState.value = false
