@@ -19,4 +19,17 @@ object AppKeyEncryptor {
         cipher.init(Cipher.DECRYPT_MODE,key, spec)
         return cipher.doFinal(encrypted)
     }
+
+    fun encrypt(data: ByteArray, cipher: Cipher?): Pair<ByteArray, ByteArray> {
+        if (cipher == null) {
+            return Pair(ByteArray(0), ByteArray(0))
+        }
+        val iv = cipher.iv
+        val encrypted = cipher.doFinal(data)
+        return Pair(encrypted, iv)
+    }
+
+    fun decrypt(encrypted: ByteArray, cipher: Cipher): ByteArray {
+        return cipher.doFinal(encrypted)
+    }
 }

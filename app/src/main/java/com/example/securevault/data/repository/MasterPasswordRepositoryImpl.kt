@@ -4,8 +4,10 @@ import com.example.securevault.data.crypto.AppKeyEncryptor
 import com.example.securevault.data.crypto.BiometricKeyManager
 import com.example.securevault.data.crypto.PasswordKeyManager
 import com.example.securevault.data.storage.AppKeyStorage
+import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.repository.MasterPasswordRepository
 import java.security.SecureRandom
+import javax.crypto.Cipher
 
 class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterPasswordRepository{
 
@@ -23,19 +25,22 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         storage.save("iv_pw", ivPw)
     }
 
-    override fun generateAndStoreAppKeyBio() {
+    override fun generateAndStoreAppKeyBio(result: BiometricResult) {
         BiometricKeyManager.generateKey()
-        val biometricKey = BiometricKeyManager.getKey()
-        val (encryptedWithBio, ivBio) = AppKeyEncryptor.encrypt(appKey, biometricKey)
+        var cipher : Cipher? = null
+        if (result is BiometricResult.AuthenticationSuccess) {
+            cipher = result.result?.cryptoObject?.cipher ?: return
+        }
+        val (encWithBio, ivBio) = AppKeyEncryptor.encrypt(appKey, cipher)
 
-        storage.save("encrypted_app_key_bio", encryptedWithBio)
+        storage.save("encrypted_app_key_bio", encWithBio)
         storage.save("iv_bio", ivBio)
     }
 
     override fun unlockAppKeyWithPassword(password: String): ByteArray? {
-        val salt = storage.get("salt")?: return null
-        val encryptedData = storage.get("encrypted_app_key_pw") ?: return null
-        val iv = storage.get("iv_pw")?: return null
+        val salt = storage.get("salt")
+        val encryptedData = storage.get("encrypted_app_key_pw")
+        val iv = storage.get("iv_pw")
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
         return try {
             AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv)
@@ -45,13 +50,17 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
 
     }
 
-    override fun unlockAppKeyWithBiometrics(): ByteArray? {
-        val encryptedData = storage.get("encrypted_app_key_bio") ?: return null
-        val iv = storage.get("iv_bio")?: return null
-        val biometricKey = BiometricKeyManager.getKey()
+    override fun unlockAppKeyWithBiometrics(result: BiometricResult): ByteArray? {
+        if (result !is BiometricResult.AuthenticationSuccess) {
+            return null
+        }
+
+        val encryptedData = storage.get("encrypted_app_key_bio")
+        val authenticatedCipher = result.result?.cryptoObject?.cipher ?: return null
+
         return try {
-            AppKeyEncryptor.decrypt(encryptedData, biometricKey, iv)
-        }catch (_: Exception){
+            AppKeyEncryptor.decrypt(encryptedData, authenticatedCipher)
+        } catch (_: Exception) {
             null
         }
     }
@@ -63,5 +72,10 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     override fun isBiometricConfigured(): Boolean {
         return storage.isBiometricConfigured()
     }
+
+    override fun getIv(): ByteArray {
+        return storage.get("iv_pw")
+    }
+
 
 }

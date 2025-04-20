@@ -15,11 +15,13 @@ class BiometricPromptManager (
 ): BiometricAuthenticator {
 
     private val resultChannel = Channel<BiometricResult>()
+
     override val promptResults = resultChannel.receiveAsFlow()
 
     override fun showBiometricPrompt(
         title: String,
-        description: String
+        description: String,
+        cryptoObject: BiometricPrompt.CryptoObject?
     ){
         val manager = BiometricManager.from(activity)
         val authenticators = BIOMETRIC_STRONG
@@ -58,7 +60,7 @@ class BiometricPromptManager (
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    resultChannel.trySend(BiometricResult.AuthenticationSuccess)
+                    resultChannel.trySend(BiometricResult.AuthenticationSuccess(result))
                 }
 
                 override fun onAuthenticationFailed() {
@@ -67,7 +69,11 @@ class BiometricPromptManager (
                 }
             }
         )
-        prompt.authenticate(promptInfo)
 
+        if (cryptoObject!=null){
+            prompt.authenticate(promptInfo, cryptoObject)
+        }else{
+            prompt.authenticate(promptInfo)
+        }
     }
 }

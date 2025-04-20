@@ -2,9 +2,12 @@ package com.example.securevault.data.crypto
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import androidx.biometric.BiometricPrompt
 import java.security.KeyStore
+import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.spec.GCMParameterSpec
 
 object BiometricKeyManager {
     private const val KEY_ALIAS = "biometric_key"
@@ -28,6 +31,30 @@ object BiometricKeyManager {
     fun getKey() : SecretKey{
         val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         return keyStore.getKey(KEY_ALIAS, null) as SecretKey
+    }
+
+    fun getEncryptCipher(): Cipher {
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        generateKey()
+        cipher.init(Cipher.ENCRYPT_MODE, getKey())
+        return cipher
+    }
+
+    fun getDecryptCipher(iv: ByteArray): Cipher {
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val spec = GCMParameterSpec(128, iv)
+        cipher.init(Cipher.DECRYPT_MODE, getKey(), spec)
+        return cipher
+    }
+
+    fun getEncryptCryptoObject(): BiometricPrompt.CryptoObject {
+        val cipher = getEncryptCipher()
+        return BiometricPrompt.CryptoObject(cipher)
+    }
+
+    fun getDecryptCryptoObject(iv: ByteArray): BiometricPrompt.CryptoObject {
+        val cipher = getDecryptCipher(iv)
+        return BiometricPrompt.CryptoObject(cipher)
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.usecases.AuthenticateBiometrics
 import com.example.securevault.domain.usecases.GenerateBiometricKey
+import com.example.securevault.domain.usecases.GetEncryptCryptoObject
 import com.example.securevault.ui.biometrics.BiometricPromptManagerFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ class BiometricViewModel
 @Inject constructor(
     private val generateBiometricKey: GenerateBiometricKey,
     private val authenticateBiometrics: AuthenticateBiometrics,
-    private val biometricPromptManagerFactory: BiometricPromptManagerFactory
+    private val biometricPromptManagerFactory: BiometricPromptManagerFactory,
+    private val getEncryptCryptoObject: GetEncryptCryptoObject
 ) : ViewModel() {
 
     private val title = "Biometric Authentication"
@@ -33,16 +35,15 @@ class BiometricViewModel
         viewModelScope.launch {
             biometricAuth.promptResults.collect {
                 result -> _authenticationState.value = result
-                generateKey()
+                generateKey(result)
             }
         }
-        authenticateBiometrics(biometricAuth,title,description)
-
+        authenticateBiometrics(biometricAuth,title,description, getEncryptCryptoObject())
     }
 
-    fun generateKey() {
+    fun generateKey(result: BiometricResult) {
         if (authenticationState.value is BiometricResult.AuthenticationSuccess){
-            generateBiometricKey()
+            generateBiometricKey(result)
         }
     }
 
