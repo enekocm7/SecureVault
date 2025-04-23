@@ -67,13 +67,13 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAfterTextChanged(){
+    private fun setAfterTextChanged() {
         binding.masterPasswordInput.doAfterTextChanged {
             viewModel.calculateStrength(binding.masterPasswordInput.text.toString())
         }
     }
 
-    private fun biometricActivity(){
+    private fun biometricActivity() {
         val intent = Intent(this, BiometricActivity::class.java)
         startActivity(intent)
         finishAffinity()

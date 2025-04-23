@@ -54,7 +54,11 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         binding.biometricButton.setOnClickListener {
-            viewModel.login(this)
+            if (viewModel.isBiometricKeyConfigured()) {
+                viewModel.login(this)
+            } else {
+                Toast.makeText(this, "Biometric authentication not configured", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

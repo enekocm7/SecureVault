@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.usecases.AuthenticateBiometrics
 import com.example.securevault.domain.usecases.GetDecryptCryptoObject
+import com.example.securevault.domain.usecases.IsBiometricConfigured
 import com.example.securevault.domain.usecases.UnlockKeyWithBiometrics
 import com.example.securevault.domain.usecases.UnlockKeyWithPassword
 import com.example.securevault.ui.biometrics.BiometricPromptManagerFactory
@@ -20,6 +21,7 @@ class LoginViewModel
 @Inject constructor(
     private val unlockKeyWithPassword: UnlockKeyWithPassword,
     private val unlockKeyWithBiometrics: UnlockKeyWithBiometrics,
+    private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val biometricPromptManagerFactory: BiometricPromptManagerFactory,
     private val getDecryptCryptoObject: GetDecryptCryptoObject
@@ -49,6 +51,10 @@ class LoginViewModel
             }
         }
         authenticateBiometrics(biometricAuth, title, description, getDecryptCryptoObject())
+    }
+
+    fun isBiometricKeyConfigured(): Boolean {
+        return isBiometricConfigured()
     }
 
 }
