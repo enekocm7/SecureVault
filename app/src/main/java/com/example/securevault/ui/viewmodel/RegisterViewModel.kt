@@ -1,5 +1,6 @@
 package com.example.securevault.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,12 +19,13 @@ class RegisterViewModel @Inject constructor(
     private val isAppKeyConfigured: IsAppKeyConfigured,
 ) : ViewModel() {
 
-    val passwordStrength = MutableLiveData<PasswordStrength>()
+    private val _passwordStrength = MutableLiveData<PasswordStrength>()
+    val passwordStrength : LiveData<PasswordStrength> = _passwordStrength
 
     fun calculateStrength(password: String){
         viewModelScope.launch {
            val strength = estimatePassword(password)
-            passwordStrength.postValue(strength)
+            _passwordStrength.value = strength
         }
     }
 

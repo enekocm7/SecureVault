@@ -1,6 +1,6 @@
 [versions]
 activityKtx = "1.10.1"
-agp = "8.9.1"
+agp = "8.9.2"
 biometric = "1.1.0"
 hiltAndroid = "2.51.1"
 kotlin = "2.0.21"
@@ -14,7 +14,7 @@ material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
 nbvcxz = "1.5.1"
-roomRuntime = "2.7.0"
+roomRuntime = "2.7.1"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }

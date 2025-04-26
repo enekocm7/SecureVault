@@ -41,9 +41,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setObserver(){
-        viewModel.passwordStrength.observe(this) {
-                strength -> changeProgressBar(strength)
-        }
+
+            viewModel.passwordStrength.observe(this) {
+                    strength -> changeProgressBar(strength)
+            }
+
     }
 
     private fun setListener(){
