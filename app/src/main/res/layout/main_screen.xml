@@ -95,11 +95,4 @@
         app:layout_constraintTop_toBottomOf="@id/topBarBackground"
         app:layout_constraintVertical_bias="1.0" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DDDDDD"
-        android:layout_gravity="bottom"
-        app:layout_constraintBottom_toTopOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
