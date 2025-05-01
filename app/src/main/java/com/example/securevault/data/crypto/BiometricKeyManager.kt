@@ -55,7 +55,7 @@ object BiometricKeyManager {
     fun getEncryptCryptoObject(): BiometricPrompt.CryptoObject? {
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
         if (!keyStore.containsAlias(KEY_ALIAS)) {
-            return null
+            generateKey()
         }
         val cipher = getEncryptCipher()
         return BiometricPrompt.CryptoObject(cipher)
