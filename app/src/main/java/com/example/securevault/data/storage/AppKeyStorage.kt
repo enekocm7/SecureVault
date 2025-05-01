@@ -14,7 +14,7 @@ class AppKeyStorage @Inject constructor(@ApplicationContext context: Context) {
     private val prefs : SharedPreferences =  context.getSharedPreferences("app_key_prefs", Context.MODE_PRIVATE)
 
     fun save(name : String, data: ByteArray){
-        prefs.edit { putString(name, Base64.encodeToString(data, Base64.NO_WRAP)) }
+        prefs.edit(commit = true) { putString(name, Base64.encodeToString(data, Base64.NO_WRAP)) }
     }
 
     fun getFromSharedPreferences(name: String) : ByteArray {
