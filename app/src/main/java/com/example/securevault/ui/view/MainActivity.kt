@@ -21,7 +21,13 @@ class MainActivity : AppCompatActivity() {
         binding = ScreenHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setListeners()
+        if (isLoggedIn()){
+            startActivity(Intent(this, LoginActivity::class.java))
+            finishAffinity()
+        }else{
+            setListeners()
+        }
+
     }
 
     private fun setListeners(){

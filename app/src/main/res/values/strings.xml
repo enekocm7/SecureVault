@@ -34,4 +34,13 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="biometric_login">Login with biometric</string>
     <string name="authentication_not_recognized">Authentication Not Recognized</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_password">Enter a new password</string>
+    <string name="create_password">Create password\n</string>
+    <string name="name">Name</string>
+    <string name="url">Url</string>
+    <string name="username">Username/email</string>
+    <string name="password">Password</string>
+    <string name="generate_password">Generate new password</string>
 </resources>
