@@ -41,7 +41,7 @@ class BiometricViewModel
         authenticateBiometrics(biometricAuth,title,description, getEncryptCryptoObject())
     }
 
-    fun generateKey(result: BiometricResult) {
+    private fun generateKey(result: BiometricResult) {
         if (authenticationState.value is BiometricResult.AuthenticationSuccess){
             generateBiometricKey(result)
         }

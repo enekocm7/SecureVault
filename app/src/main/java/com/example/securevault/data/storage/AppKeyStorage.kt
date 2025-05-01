@@ -17,7 +17,7 @@ class AppKeyStorage @Inject constructor(@ApplicationContext context: Context) {
         prefs.edit { putString(name, Base64.encodeToString(data, Base64.NO_WRAP)) }
     }
 
-    fun get(name: String) : ByteArray {
+    fun getFromSharedPreferences(name: String) : ByteArray {
         val encoded = prefs.getString(name,null)
         return Base64.decode(encoded, Base64.NO_WRAP)
     }

@@ -33,4 +33,5 @@
     <string name="login_to_your_vault">Login to your Vault</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="biometric_login">Login with biometric</string>
+    <string name="authentication_not_recognized">Authentication Not Recognized</string>
 </resources>

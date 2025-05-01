@@ -38,9 +38,9 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     }
 
     override fun unlockAppKeyWithPassword(password: String): ByteArray? {
-        val salt = storage.get("salt")
-        val encryptedData = storage.get("encrypted_app_key_pw")
-        val iv = storage.get("iv_pw")
+        val salt = storage.getFromSharedPreferences("salt")
+        val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_pw")
+        val iv = storage.getFromSharedPreferences("iv_pw")
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
         return try {
             AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv)
@@ -54,7 +54,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         if (result !is BiometricResult.AuthenticationSuccess) {
             return null
         }
-        val encryptedData = storage.get("encrypted_app_key_bio")
+        val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_bio")
         val authenticatedCipher = result.result?.cryptoObject?.cipher ?: return null
 
         return try {
@@ -73,7 +73,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     }
 
     override fun getIv(): ByteArray {
-        return storage.get("iv_bio")
+        return storage.getFromSharedPreferences("iv_bio")
     }
 
 

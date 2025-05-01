@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RoomModule {
 
-    const val PASSWORD_DATABASE_NAME = "password_database"
+    private const val PASSWORD_DATABASE_NAME = "password_database"
 
     @Singleton
     @Provides

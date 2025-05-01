@@ -2,7 +2,7 @@ package com.example.securevault.domain.model
 
 import androidx.core.graphics.toColorInt
 
-enum class PasswordStrength(val score: Int,val label: String,val color: String){
+enum class PasswordStrength(private val score: Int, val label: String, val color: String){
     VERY_WEAK(0, "Very Weak", "#D32F2F"),
     WEAK(1, "Weak", "#F57C00"),
     MEDIUM(2, "Medium", "#FBC02D"),

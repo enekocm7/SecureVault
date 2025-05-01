@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setListeners()
     }
 
-    fun setListeners(){
+    private fun setListeners(){
         binding.registerButton.setOnClickListener {
             if (isLoggedIn()){
                 startActivity(Intent(this, LoginActivity::class.java))
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun isLoggedIn(): Boolean {
+    private fun isLoggedIn(): Boolean {
         return viewModel.isKeyConfigured()
     }
 }

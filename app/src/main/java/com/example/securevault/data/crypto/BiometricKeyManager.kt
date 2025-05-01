@@ -34,18 +34,18 @@ object BiometricKeyManager {
         keyGenerator.generateKey()
     }
 
-    fun getKey() : SecretKey{
+    private fun getKey() : SecretKey{
         val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         return keyStore.getKey(KEY_ALIAS, null) as SecretKey
     }
 
-    fun getEncryptCipher(): Cipher {
+    private fun getEncryptCipher(): Cipher {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
         return cipher
     }
 
-    fun getDecryptCipher(iv: ByteArray): Cipher {
+    private fun getDecryptCipher(iv: ByteArray): Cipher {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         val spec = GCMParameterSpec(128, iv)
         cipher.init(Cipher.DECRYPT_MODE, getKey(), spec)

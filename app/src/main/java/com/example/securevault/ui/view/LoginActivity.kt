@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    fun setListeners(){
+    private fun setListeners(){
         binding.loginButton.setOnClickListener {
             viewModel.login(binding.passwordInput.text.toString()).let { result ->
                 if (result) {
