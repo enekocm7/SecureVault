@@ -10,7 +10,6 @@ import com.example.securevault.databinding.BiometricSugestionBinding
 import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.ui.viewmodel.BiometricViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class BiometricActivity : AppCompatActivity() {
@@ -62,9 +61,7 @@ class BiometricActivity : AppCompatActivity() {
                     binding.enableButton.isEnabled = true
                 }
 
-                null -> {
-                    exitProcess(1)
-                }
+                null -> {}
             }
         }
 
