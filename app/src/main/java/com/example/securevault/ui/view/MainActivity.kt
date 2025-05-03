@@ -22,8 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (isLoggedIn()){
-            startActivity(Intent(this, LoginActivity::class.java))
-            finishAffinity()
+            login()
         }else{
             setListeners()
         }
@@ -33,8 +32,7 @@ class MainActivity : AppCompatActivity() {
     private fun setListeners(){
         binding.registerButton.setOnClickListener {
             if (isLoggedIn()){
-                startActivity(Intent(this, LoginActivity::class.java))
-                finishAffinity()
+                login()
             }else{
                 startActivity(Intent(this, RegisterActivity::class.java))
                 finishAffinity()
@@ -44,5 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLoggedIn(): Boolean {
         return viewModel.isKeyConfigured()
+    }
+
+    private fun login(){
+        startActivity(Intent(this, LoginActivity::class.java))
+        finishAffinity()
     }
 }
