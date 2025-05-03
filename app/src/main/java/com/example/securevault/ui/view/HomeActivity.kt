@@ -22,4 +22,14 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    private fun setListeners(){
+        binding.addIcon.setOnClickListener{
+            showCreatePasswordDialog()
+        }
+    }
+
+    private fun showCreatePasswordDialog() {
+
+    }
+
 }
