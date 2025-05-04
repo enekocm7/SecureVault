@@ -27,7 +27,6 @@ class BiometricActivity : AppCompatActivity() {
 
         setListeners()
         setObservers()
-
     }
 
     private fun setObservers() {
