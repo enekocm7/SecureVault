@@ -1,0 +1,346 @@
+@startuml SecureVault
+
+package "com.example.securevault" {
+  class SecureVaultApp {
+  }
+}
+
+package "com.example.securevault.data.crypto" {
+  class AppKeyEncryptor {
+    + {static} encrypt(data: ByteArray, key: SecretKey): Pair<ByteArray, ByteArray>
+    + {static} decrypt(encrypted: ByteArray, key: SecretKey, iv: ByteArray): ByteArray
+    + {static} encrypt(data: ByteArray, cipher: Cipher?): Pair<ByteArray, ByteArray>
+    + {static} decrypt(encrypted: ByteArray, cipher: Cipher): ByteArray
+  }
+
+  class BiometricKeyManager {
+    - {static} KEY_ALIAS: String
+    - {static} ANDROID_KEYSTORE: String
+    + {static} generateKey(): void
+    - {static} getKey(): SecretKey
+    - {static} getEncryptCipher(): Cipher
+    - {static} getDecryptCipher(iv: ByteArray): Cipher
+    + {static} getEncryptCryptoObject(): BiometricPrompt.CryptoObject?
+    + {static} getDecryptCryptoObject(iv: ByteArray): BiometricPrompt.CryptoObject
+  }
+
+  class PasswordKeyManager {
+    + {static} generateSalt(): ByteArray
+    + {static} deriveKey(password: String, salt: ByteArray): SecretKey
+  }
+}
+
+package "com.example.securevault.data.database" {
+  abstract class PasswordsDatabase {
+    + abstract getPasswordsDao(): PasswordDao
+  }
+}
+
+package "com.example.securevault.data.database.dao" {
+  interface PasswordDao {
+    + suspend getAllPasswords(): List<PasswordEntity>
+    + suspend getPasswordByName(name: String): PasswordEntity
+    + suspend getPasswordsOrderByName(): List<PasswordEntity>
+    + suspend insertPassword(password: PasswordEntity): void
+    + suspend insertPasswords(passwords: List<PasswordEntity>): void
+    + suspend deletePassword(password: PasswordEntity): void
+  }
+}
+
+package "com.example.securevault.data.database.entities" {
+  class PasswordEntity {
+    + id: Int
+    + name: String
+    + url: String?
+    + username: String
+    + value: String
+    + createdAt: Long
+    + updatedAt: Long
+  }
+}
+
+package "com.example.securevault.data.repository" {
+  class MasterPasswordRepositoryImpl {
+    - storage: AppKeyStorage
+    - {static} appKey: ByteArray
+    + generateAndStoreAppKey(password: String): void
+    + generateAndStoreAppKeyBio(result: BiometricResult): void
+    + unlockAppKeyWithPassword(password: String): ByteArray?
+    + unlockAppKeyWithBiometrics(result: BiometricResult): ByteArray?
+    + isAppKeyConfigured(): Boolean
+    + isBiometricConfigured(): Boolean
+    + getIv(): ByteArray
+  }
+}
+
+package "com.example.securevault.data.storage" {
+  class AppKeyStorage {
+    - prefs: SharedPreferences
+    + save(name: String, data: ByteArray): void
+    + getFromSharedPreferences(name: String): ByteArray
+    + isPasswordConfigured(): Boolean
+    + isBiometricConfigured(): Boolean
+  }
+}
+
+package "com.example.securevault.di" {
+  class BiometricAuthenticatorModule {
+    + {static} provideBiometricAuthenticatorFactory(): BiometricPromptManagerFactory
+  }
+
+  class MasterPasswordRepositoryModule {
+    + {static} provideMasterPasswordRepository(storage: AppKeyStorage): MasterPasswordRepository
+  }
+
+  class NbvcxzModule {
+    + {static} provideNbvcxz(): Nbvcxz
+  }
+
+  class RoomModule {
+    - {static} PASSWORD_DATABASE_NAME: String
+    + {static} provideRoom(context: Context): PasswordsDatabase
+    + {static} providePasswordDao(db: PasswordsDatabase): PasswordDao
+  }
+}
+
+package "com.example.securevault.domain.biometric" {
+  interface BiometricAuthenticator {
+    + promptResults: Flow<BiometricResult>
+    + showBiometricPrompt(title: String, description: String, cryptoObject: BiometricPrompt.CryptoObject?): void
+  }
+}
+
+package "com.example.securevault.domain.model" {
+  enum PasswordStrength {
+    VERY_WEAK
+    WEAK
+    MEDIUM
+    STRONG
+    VERY_STRONG
+    + progress: Int
+    + colorInt: Int
+    + {static} fromScore(score: Int): PasswordStrength
+  }
+
+  class Password {
+    + name: String
+    + url: String
+    + username: String
+    + value: String
+  }
+
+  interface BiometricResult {
+    {static} class HardwareNotAvailable
+    {static} class FeatureUnavailable
+    class AuthenticationError
+    {static} class AuthenticationFailed
+    class AuthenticationSuccess
+    {static} class AuthenticationNotRecognized
+  }
+}
+
+package "com.example.securevault.domain.repository" {
+  interface MasterPasswordRepository {
+    + generateAndStoreAppKey(password: String): void
+    + generateAndStoreAppKeyBio(result: BiometricResult): void
+    + unlockAppKeyWithPassword(password: String): ByteArray?
+    + unlockAppKeyWithBiometrics(result: BiometricResult): ByteArray?
+    + isAppKeyConfigured(): Boolean
+    + isBiometricConfigured(): Boolean
+    + getIv(): ByteArray
+  }
+}
+
+package "com.example.securevault.domain.usecases" {
+  class AuthenticateBiometrics {
+    + invoke(biometricAuthenticator: BiometricAuthenticator, title: String, description: String, cryptoObject: BiometricPrompt.CryptoObject?): void
+  }
+
+  class EstimatePassword {
+    - nbvcxz: Nbvcxz
+    + invoke(password: String): PasswordStrength
+  }
+
+  class GenerateAppKey {
+    - repo: MasterPasswordRepository
+    + invoke(password: String): void
+  }
+
+  class GenerateBiometricKey {
+    - repo: MasterPasswordRepository
+    + invoke(result: BiometricResult): void
+  }
+
+  class GetDecryptCryptoObject {
+    - masterPasswordRepository: MasterPasswordRepository
+    + invoke(): BiometricPrompt.CryptoObject
+  }
+
+  class GetEncryptCryptoObject {
+    + invoke(): BiometricPrompt.CryptoObject?
+  }
+
+  class IsAppKeyConfigured {
+    - repo: MasterPasswordRepository
+    + invoke(): Boolean
+  }
+
+  class IsBiometricConfigured {
+    - repo: MasterPasswordRepository
+    + invoke(): Boolean
+  }
+
+  class UnlockKeyWithBiometrics {
+    - repo: MasterPasswordRepository
+    + invoke(result: BiometricResult): ByteArray?
+  }
+
+  class UnlockKeyWithPassword {
+    - repo: MasterPasswordRepository
+    + invoke(password: String): ByteArray?
+  }
+}
+
+package "com.example.securevault.ui.biometrics" {
+  class BiometricPromptManager {
+    - activity: AppCompatActivity
+    - resultChannel: Channel<BiometricResult>
+    + promptResults: Flow<BiometricResult>
+    + showBiometricPrompt(title: String, description: String, cryptoObject: BiometricPrompt.CryptoObject?): void
+  }
+
+  class BiometricPromptManagerFactory {
+    + create(activity: AppCompatActivity): BiometricAuthenticator
+  }
+}
+
+package "com.example.securevault.ui.view" {
+  class BiometricActivity {
+    - binding: BiometricSugestionBinding
+    - viewModel: BiometricViewModel
+    # onCreate(savedInstanceState: Bundle?): void
+    - setObservers(): void
+    - setListeners(): void
+    - skip(): void
+  }
+
+  class HomeActivity {
+    - binding: MainScreenBinding
+    - homeViewModel: HomeViewModel
+    # onCreate(savedInstanceState: Bundle?): void
+    - setListeners(): void
+    - showCreatePasswordDialog(): void
+  }
+
+  class LoginActivity {
+    - binding: LoginScreenBinding
+    - viewModel: LoginViewModel
+    # onCreate(savedInstanceState: Bundle?): void
+    - setObserver(): void
+    - setListeners(): void
+    - skip(): void
+  }
+
+  class MainActivity {
+    - binding: ScreenHomeBinding
+    - viewModel: MainViewModel
+    # onCreate(savedInstanceState: Bundle?): void
+    - setListeners(): void
+    - isLoggedIn(): Boolean
+    - login(): void
+  }
+
+  class RegisterActivity {
+    - binding: CreateMasterPasswordBinding
+    - viewModel: RegisterViewModel
+    - label: String
+    # onCreate(savedInstanceState: Bundle?): void
+    - changeProgressBar(strength: PasswordStrength): void
+    - setObserver(): void
+    - setListener(): void
+    - setAfterTextChanged(): void
+    - biometricActivity(): void
+  }
+}
+
+package "com.example.securevault.ui.view.fragments" {
+  class CreatePasswordDialog {
+  }
+}
+
+package "com.example.securevault.ui.viewmodel" {
+  class BiometricViewModel {
+    - title: String
+    - description: String
+    - _authenticationState: MutableLiveData<BiometricResult?>
+    + authenticationState: LiveData<BiometricResult?>
+    + enableBiometric(activity: AppCompatActivity): void
+    - generateKey(result: BiometricResult): void
+  }
+
+  class HomeViewModel {
+  }
+
+  class LoginViewModel {
+    - title: String
+    - description: String
+    - _biometricLoginState: MutableStateFlow<Boolean?>
+    + biometricLoginState: StateFlow<Boolean?>
+    + login(password: String): Boolean
+    + login(activity: AppCompatActivity): void
+    + isBiometricKeyConfigured(): Boolean
+  }
+
+  class MainViewModel {
+    + isKeyConfigured(): Boolean
+  }
+
+  class RegisterViewModel {
+    - _passwordStrength: MutableLiveData<PasswordStrength>
+    + passwordStrength: LiveData<PasswordStrength>
+    + calculateStrength(password: String): void
+    + createAppKey(password: String): void
+    + isKeyConfigured(): Boolean
+  }
+}
+
+SecureVaultApp <|-- Application
+
+MasterPasswordRepositoryImpl ..|> MasterPasswordRepository
+BiometricPromptManager ..|> BiometricAuthenticator
+
+BiometricKeyManager ..> BiometricPrompt.CryptoObject
+MasterPasswordRepositoryImpl --> AppKeyStorage
+MasterPasswordRepositoryImpl ..> AppKeyEncryptor
+MasterPasswordRepositoryImpl ..> PasswordKeyManager
+MasterPasswordRepositoryImpl ..> BiometricKeyManager
+
+PasswordsDatabase --|> RoomDatabase
+PasswordDao <-- PasswordsDatabase
+PasswordEntity <-- PasswordDao
+
+BiometricViewModel --> AuthenticateBiometrics
+BiometricViewModel --> GenerateBiometricKey
+BiometricViewModel --> BiometricPromptManagerFactory
+BiometricViewModel --> GetEncryptCryptoObject
+
+LoginViewModel --> UnlockKeyWithPassword
+LoginViewModel --> UnlockKeyWithBiometrics
+LoginViewModel --> IsBiometricConfigured
+LoginViewModel --> AuthenticateBiometrics
+LoginViewModel --> BiometricPromptManagerFactory
+LoginViewModel --> GetDecryptCryptoObject
+
+MainViewModel --> IsAppKeyConfigured
+
+RegisterViewModel --> EstimatePassword
+RegisterViewModel --> GenerateAppKey
+RegisterViewModel --> IsAppKeyConfigured
+
+BiometricActivity --> BiometricViewModel
+HomeActivity --> HomeViewModel
+LoginActivity --> LoginViewModel
+MainActivity --> MainViewModel
+RegisterActivity --> RegisterViewModel
+
+@enduml
