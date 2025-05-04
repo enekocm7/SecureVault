@@ -84,10 +84,6 @@ package "com.example.securevault.data.storage" {
 }
 
 package "com.example.securevault.di" {
-  class BiometricAuthenticatorModule {
-    + {static} provideBiometricAuthenticatorFactory(): BiometricPromptManagerFactory
-  }
-
   class MasterPasswordRepositoryModule {
     + {static} provideMasterPasswordRepository(storage: AppKeyStorage): MasterPasswordRepository
   }
@@ -208,10 +204,6 @@ package "com.example.securevault.ui.biometrics" {
     + promptResults: Flow<BiometricResult>
     + showBiometricPrompt(title: String, description: String, cryptoObject: BiometricPrompt.CryptoObject?): void
   }
-
-  class BiometricPromptManagerFactory {
-    + create(activity: AppCompatActivity): BiometricAuthenticator
-  }
 }
 
 package "com.example.securevault.ui.view" {
@@ -321,14 +313,12 @@ PasswordEntity <-- PasswordDao
 
 BiometricViewModel --> AuthenticateBiometrics
 BiometricViewModel --> GenerateBiometricKey
-BiometricViewModel --> BiometricPromptManagerFactory
 BiometricViewModel --> GetEncryptCryptoObject
 
 LoginViewModel --> UnlockKeyWithPassword
 LoginViewModel --> UnlockKeyWithBiometrics
 LoginViewModel --> IsBiometricConfigured
 LoginViewModel --> AuthenticateBiometrics
-LoginViewModel --> BiometricPromptManagerFactory
 LoginViewModel --> GetDecryptCryptoObject
 
 MainViewModel --> IsAppKeyConfigured
