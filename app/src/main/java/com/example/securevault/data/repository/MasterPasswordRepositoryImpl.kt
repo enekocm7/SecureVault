@@ -8,10 +8,12 @@ import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.repository.MasterPasswordRepository
 import java.security.SecureRandom
 import javax.crypto.Cipher
+import javax.inject.Singleton
 
-class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterPasswordRepository{
+@Singleton
+class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterPasswordRepository {
 
-    companion object{
+    companion object {
         private val appKey = ByteArray(32).apply { SecureRandom().nextBytes(this) }
     }
 
@@ -27,7 +29,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
 
     override fun generateAndStoreAppKeyBio(result: BiometricResult) {
         BiometricKeyManager.generateKey()
-        var cipher : Cipher? = null
+        var cipher: Cipher? = null
         if (result is BiometricResult.AuthenticationSuccess) {
             cipher = result.result?.cryptoObject?.cipher ?: return
         }
@@ -44,10 +46,9 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
         return try {
             AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv)
-        }catch (_: Exception){
+        } catch (_: Exception) {
             null
         }
-
     }
 
     override fun unlockAppKeyWithBiometrics(result: BiometricResult): ByteArray? {
