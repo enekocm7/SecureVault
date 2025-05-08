@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.room.runtime)
     implementation(libs.hilt.android)
+    implementation(libs.moshi.kotlin)
     ksp(libs.hilt.compiler)
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
