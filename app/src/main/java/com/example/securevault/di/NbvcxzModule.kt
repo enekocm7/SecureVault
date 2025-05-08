@@ -13,7 +13,7 @@ object NbvcxzModule {
 
     @Singleton
     @Provides
-    fun provideNbvcxz(): Nbvcxz{
+    fun provideNbvcxz(): Nbvcxz {
         return Nbvcxz()
     }
 }
