@@ -3,7 +3,8 @@ package com.example.securevault.data.json.crypto
 import android.util.Base64
 import com.example.securevault.data.crypto.AppKeyEncryptor
 import com.example.securevault.data.crypto.PasswordKeyManager
-import com.example.securevault.domain.model.Password
+import com.example.securevault.data.json.model.Password
+
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

@@ -4,8 +4,8 @@ import com.example.securevault.data.json.model.Password
 
 interface PasswordRepository {
     fun getAllPasswords(): List<Password>
-    fun getPasswordByName(): Password
-    fun getPasswordByNameContainingIgnoreCase(): List<Password>
-    fun insertPassword(password: Password): Boolean
-    fun deletePassword(password: Password): Boolean
+    fun getPasswordByName(name: String): Password?
+    fun getPasswordByNameContainingIgnoreCase(name: String): List<Password>
+    fun insertPassword(password: Password)
+    fun deletePassword(password: Password)
 }
