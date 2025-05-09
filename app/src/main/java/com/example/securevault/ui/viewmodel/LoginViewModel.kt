@@ -32,8 +32,11 @@ class LoginViewModel
     private val _biometricLoginState = MutableStateFlow<Boolean?>(null)
     val biometricLoginState = _biometricLoginState.asStateFlow()
 
-    fun login(password: String): Boolean{
-        return unlockKeyWithPassword(password) != null
+    private val _passwordLoginState = MutableStateFlow<Boolean?>(null)
+    val passwordLoginState = _passwordLoginState.asStateFlow()
+
+    fun login(password: String){
+        _passwordLoginState.value = unlockKeyWithPassword(password)
     }
 
     fun login(activity: AppCompatActivity){
@@ -41,10 +44,8 @@ class LoginViewModel
         viewModelScope.launch {
             biometricAuth.promptResults.collect { result ->
                 if (result is BiometricResult.AuthenticationSuccess) {
-                    val appKey = unlockKeyWithBiometrics(result)
-                    _biometricLoginState.value = appKey != null
-                } else if (result is BiometricResult.AuthenticationError ||
-                    result is BiometricResult.AuthenticationFailed) {
+                    _biometricLoginState.value = unlockKeyWithBiometrics(result)
+                } else if (result is BiometricResult.AuthenticationError || result is BiometricResult.AuthenticationFailed) {
                     _biometricLoginState.value = false
                 }
             }

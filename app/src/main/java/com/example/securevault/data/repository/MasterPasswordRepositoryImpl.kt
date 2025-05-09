@@ -1,23 +1,21 @@
 package com.example.securevault.data.repository
 
 import com.example.securevault.data.crypto.AppKeyEncryptor
+import com.example.securevault.data.crypto.AppKeyProvider
 import com.example.securevault.data.crypto.BiometricKeyManager
 import com.example.securevault.data.crypto.PasswordKeyManager
 import com.example.securevault.data.storage.AppKeyStorage
 import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.repository.MasterPasswordRepository
-import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.inject.Singleton
 
 @Singleton
 class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterPasswordRepository {
 
-    companion object {
-        private val appKey = ByteArray(32).apply { SecureRandom().nextBytes(this) }
-    }
-
     override fun generateAndStoreAppKey(password: String) {
+        val appKey = AppKeyProvider.generate()
+        AppKeyProvider.load(appKey)
         val salt = PasswordKeyManager.generateSalt()
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
         val (encWithPw, ivPw) = AppKeyEncryptor.encrypt(appKey, passwordKey)
@@ -28,6 +26,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     }
 
     override fun generateAndStoreAppKeyBio(result: BiometricResult) {
+        val appKey = AppKeyProvider.get()
         BiometricKeyManager.generateKey()
         var cipher: Cipher? = null
         if (result is BiometricResult.AuthenticationSuccess) {
@@ -39,29 +38,34 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         storage.save("iv_bio", ivBio)
     }
 
-    override fun unlockAppKeyWithPassword(password: String): ByteArray? {
+    override fun unlockAppKeyWithPassword(password: String): Boolean {
         val salt = storage.getFromSharedPreferences("salt")
         val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_pw")
         val iv = storage.getFromSharedPreferences("iv_pw")
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
-        return try {
-            AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv)
-        } catch (_: Exception) {
-            null
+        try{
+            val appKey = AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv)
+            AppKeyProvider.load(appKey)
+            return true
+        }catch (_: Exception){
+            return false
         }
+
     }
 
-    override fun unlockAppKeyWithBiometrics(result: BiometricResult): ByteArray? {
+    override fun unlockAppKeyWithBiometrics(result: BiometricResult): Boolean {
         if (result !is BiometricResult.AuthenticationSuccess) {
-            return null
+            return false
         }
         val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_bio")
-        val authenticatedCipher = result.result?.cryptoObject?.cipher ?: return null
+        val authenticatedCipher = result.result?.cryptoObject?.cipher ?: return false
 
-        return try {
-            AppKeyEncryptor.decrypt(encryptedData, authenticatedCipher)
-        } catch (_: Exception) {
-            null
+        try{
+            val appKey = AppKeyEncryptor.decrypt(encryptedData, authenticatedCipher)
+            AppKeyProvider.load(appKey)
+            return true
+        }catch (_: Exception){
+            return false
         }
     }
 

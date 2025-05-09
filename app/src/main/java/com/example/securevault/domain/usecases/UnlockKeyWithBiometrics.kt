@@ -5,6 +5,6 @@ import com.example.securevault.domain.repository.MasterPasswordRepository
 import javax.inject.Inject
 
 class UnlockKeyWithBiometrics @Inject constructor(private val repo: MasterPasswordRepository) {
-    operator fun invoke(result: BiometricResult): ByteArray? = repo.unlockAppKeyWithBiometrics(result)
+    operator fun invoke(result: BiometricResult): Boolean = repo.unlockAppKeyWithBiometrics(result)
 
 }

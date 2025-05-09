@@ -21,48 +21,64 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            true
         binding = LoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setListeners()
-        setObserver()
+        setObserversPassword()
+        setObserversBiometric()
     }
 
-    private fun setObserver() {
+    private fun setObserversPassword() {
         lifecycleScope.launch {
-            viewModel.biometricLoginState.collect {
-                    success ->
-                if (success == false) {
-                    Toast.makeText(this@LoginActivity, "Invalid biometric authentication", Toast.LENGTH_SHORT).show()
-                } else if (success == true) {
+            viewModel.passwordLoginState.collect { success ->
+                if (success == true) {
                     skip()
+                } else if (success == false) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Invalid password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun setObserversBiometric(){
+        lifecycleScope.launch {
+            viewModel.biometricLoginState.collect { success ->
+                if (success == true) {
+                    skip()
+                } else if (success == false) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Invalid biometric authentication",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
 
 
-    private fun setListeners(){
+    private fun setListeners() {
         binding.loginButton.setOnClickListener {
-            viewModel.login(binding.passwordInput.text.toString()).let { result ->
-                if (result) {
-                    skip()
-                } else {
-                    Toast.makeText(this,"Invalid password", Toast.LENGTH_SHORT).show()
-                }
-            }
+            viewModel.login(binding.passwordInput.text.toString())
         }
         binding.biometricButton.setOnClickListener {
             if (viewModel.isBiometricKeyConfigured()) {
                 viewModel.login(this)
             } else {
-                Toast.makeText(this, "Biometric authentication not configured", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Biometric authentication not configured", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    private fun skip(){
+    private fun skip() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         finishAffinity()
