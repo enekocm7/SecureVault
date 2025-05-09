@@ -54,7 +54,7 @@ class PasswordRepositoryImpl @Inject constructor(
 
     private fun loadPasswords(): List<Password> {
         val encryptedPasswords = storage.readEncryptedFile()
-        if (encryptedPasswords == null) return emptyList()
+        if (encryptedPasswords == null) return mutableListOf<Password>()
         return encryptor.decryptPasswords(encryptedPasswords, appKey)
     }
 

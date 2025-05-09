@@ -11,6 +11,7 @@ class PasswordStorage @Inject constructor(@ApplicationContext private val contex
 
     fun saveEncryptedFile(encryptedFile: String) {
         val file = File(context.filesDir, fileName)
+        file.createNewFile()
         file.writeText(encryptedFile)
     }
 
@@ -20,6 +21,7 @@ class PasswordStorage @Inject constructor(@ApplicationContext private val contex
         return if (file.exists()) {
             file.readText(Charsets.UTF_8)
         } else {
+            file.createNewFile()
             null
         }
     }
