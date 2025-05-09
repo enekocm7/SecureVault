@@ -1,19 +1,22 @@
 package com.example.securevault.di
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.gosimple.nbvcxz.Nbvcxz
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NbvcxzModule {
+object MoshiModule {
 
     @Singleton
     @Provides
-    fun provideNbvcxz(): Nbvcxz {
-        return Nbvcxz()
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 }
