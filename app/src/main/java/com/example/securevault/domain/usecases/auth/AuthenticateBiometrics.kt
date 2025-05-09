@@ -1,4 +1,4 @@
-package com.example.securevault.domain.usecases
+package com.example.securevault.domain.usecases.auth
 
 import androidx.biometric.BiometricPrompt
 import com.example.securevault.domain.biometric.BiometricAuthenticator

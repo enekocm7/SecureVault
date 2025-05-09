@@ -1,4 +1,4 @@
-package com.example.securevault.domain.usecases
+package com.example.securevault.domain.usecases.auth
 
 import com.example.securevault.domain.repository.MasterPasswordRepository
 import javax.inject.Inject

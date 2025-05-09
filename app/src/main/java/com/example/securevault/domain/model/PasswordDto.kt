@@ -1,6 +1,6 @@
 package com.example.securevault.domain.model
 
-data class Password(
+data class PasswordDto(
     val name:String,
     val url:String,
     val username: String,

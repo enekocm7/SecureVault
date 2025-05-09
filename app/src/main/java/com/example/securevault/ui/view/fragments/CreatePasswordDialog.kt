@@ -4,10 +4,12 @@ import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.CreatePasswordDialogBinding
+import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.ui.viewmodel.CreatePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,12 +43,43 @@ class CreatePasswordDialog : DialogFragment() {
 
     private fun setListeners() {
         binding.saveButton.setOnClickListener {
-
+            val passwordDto: PasswordDto? = getPassword()
+            if (passwordDto != null){
+                viewModel.savePassword(passwordDto)
+            }
         }
 
         binding.cancelButton.setOnClickListener {
             this.dismiss()
         }
+    }
+
+    private fun getPassword(): PasswordDto?{
+        val fields = mapOf(
+            "name" to binding.nameEditText.text.toString(),
+            "url" to binding.urlEditText.text.toString(),
+            "username" to binding.usernameEditText.text.toString(),
+            "password" to binding.passwordEditText.text.toString()
+        )
+
+        fields.forEach {
+            (fieldName,value) ->
+            if (value.isEmpty()){
+                showToast(fieldName)
+                return null
+            }
+        }
+
+        return PasswordDto(
+            name = fields["name"].toString(),
+            url = fields["url"].toString(),
+            username = fields["username"].toString(),
+            value = fields["password"].toString()
+        )
+    }
+
+    private fun showToast(field: String){
+        Toast.makeText(requireContext(),"$field can not be empty",Toast.LENGTH_LONG).show()
     }
 }
 

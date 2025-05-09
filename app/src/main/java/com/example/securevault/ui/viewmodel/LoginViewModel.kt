@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securevault.domain.model.BiometricResult
-import com.example.securevault.domain.usecases.AuthenticateBiometrics
-import com.example.securevault.domain.usecases.GetDecryptCryptoObject
-import com.example.securevault.domain.usecases.IsBiometricConfigured
-import com.example.securevault.domain.usecases.UnlockKeyWithBiometrics
-import com.example.securevault.domain.usecases.UnlockKeyWithPassword
+import com.example.securevault.domain.usecases.auth.AuthenticateBiometrics
+import com.example.securevault.domain.usecases.auth.GetDecryptCryptoObject
+import com.example.securevault.domain.usecases.auth.IsBiometricConfigured
+import com.example.securevault.domain.usecases.auth.UnlockKeyWithBiometrics
+import com.example.securevault.domain.usecases.auth.UnlockKeyWithPassword
 import com.example.securevault.ui.biometrics.BiometricPromptManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
