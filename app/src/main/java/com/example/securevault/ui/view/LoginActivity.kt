@@ -26,6 +26,9 @@ class LoginActivity : AppCompatActivity() {
         binding = LoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (viewModel.isBiometricKeyConfigured()) {
+            viewModel.login(this)
+        }
         setListeners()
         setObserversPassword()
         setObserversBiometric()
