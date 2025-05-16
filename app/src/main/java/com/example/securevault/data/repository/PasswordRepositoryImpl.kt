@@ -59,7 +59,7 @@ class PasswordRepositoryImpl @Inject constructor(
     }
 
     private fun reloadPasswords() {
-        cachePasswords = loadPasswords() as MutableList<Password>
+        cachePasswords = loadPasswords().toMutableList()
     }
 
 }

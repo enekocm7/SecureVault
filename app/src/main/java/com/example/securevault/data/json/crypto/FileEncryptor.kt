@@ -32,6 +32,10 @@ class FileEncryptor @Inject constructor(moshi: Moshi) {
     }
 
     private fun decryptFile(encryptedFile: String, password: String): String {
+        if (encryptedFile.isEmpty()) {
+            return ""
+        }
+
         try {
             val combined = Base64.decode(encryptedFile, Base64.DEFAULT)
 
@@ -58,6 +62,12 @@ class FileEncryptor @Inject constructor(moshi: Moshi) {
 
     fun decryptPasswords(encryptedPasswords: String, userPassword: String): List<Password> {
         val decryptedJson = decryptFile(encryptedPasswords, userPassword)
-        return adapter.fromJson(decryptedJson) ?: emptyList()
+        var passwords: List<Password>
+        try {
+            passwords = adapter.fromJson(decryptedJson) ?: emptyList()
+        } catch (_: Exception) {
+            return emptyList()
+        }
+        return passwords
     }
 }

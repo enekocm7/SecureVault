@@ -11,7 +11,6 @@ class PasswordStorage @Inject constructor(@ApplicationContext private val contex
 
     fun saveEncryptedFile(encryptedFile: String) {
         val file = File(context.filesDir, fileName)
-        file.createNewFile()
         file.writeText(encryptedFile)
     }
 

@@ -4,11 +4,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.securevault.databinding.MainScreenBinding
+import com.example.securevault.ui.adapter.PasswordAdapter
 import com.example.securevault.ui.view.fragments.CreatePasswordDialog
 import com.example.securevault.ui.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.getValue
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -25,18 +26,21 @@ class HomeActivity : AppCompatActivity() {
             true
         binding = MainScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        renderRecyclerView()
 
         setListeners()
     }
 
     private fun setListeners() {
         binding.addIcon.setOnClickListener {
-            showCreatePasswordDialog()
+            createPasswordDialog.show(this.supportFragmentManager, "Create new password")
         }
     }
 
-    private fun showCreatePasswordDialog() {
-        createPasswordDialog.show(this.supportFragmentManager, "Create new password")
+    private fun renderRecyclerView(){
+        val recyclerView = binding.rvPasswords
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = PasswordAdapter(homeViewModel.getPasswords())
     }
 
 }
