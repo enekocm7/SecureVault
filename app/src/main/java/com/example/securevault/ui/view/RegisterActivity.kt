@@ -23,7 +23,8 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            true
         binding = CreateMasterPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -34,21 +35,21 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun changeProgressBar(strength: PasswordStrength) {
-            val text = label+" "+strength.label
-            binding.passwordStrengthLabel.text = text
-            binding.passwordStrengthBar.progress = strength.progress
-            binding.passwordStrengthBar.progressTintList = ColorStateList.valueOf(strength.colorInt)
+        val text = label + " " + strength.label
+        binding.passwordStrengthLabel.text = text
+        binding.passwordStrengthBar.progress = strength.progress
+        binding.passwordStrengthBar.progressTintList = ColorStateList.valueOf(strength.colorInt)
     }
 
-    private fun setObserver(){
+    private fun setObserver() {
 
-            viewModel.passwordStrength.observe(this) {
-                    strength -> changeProgressBar(strength)
-            }
+        viewModel.passwordStrength.observe(this) { strength ->
+            changeProgressBar(strength)
+        }
 
     }
 
-    private fun setListener(){
+    private fun setListener() {
         binding.continueButton.setOnClickListener {
             val masterPassword = binding.masterPasswordInput.text.toString()
             val confirmPassword = binding.confirmPasswordInput.text.toString()
@@ -56,9 +57,11 @@ class RegisterActivity : AppCompatActivity() {
                 masterPassword.isEmpty() -> {
                     Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_LONG).show()
                 }
+
                 masterPassword != confirmPassword -> {
                     Toast.makeText(this, "The passwords must be the same", Toast.LENGTH_LONG).show()
                 }
+
                 else -> {
                     viewModel.createAppKey(masterPassword)
                     if (viewModel.isKeyConfigured()) {

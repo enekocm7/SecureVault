@@ -43,11 +43,11 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_pw")
         val iv = storage.getFromSharedPreferences("iv_pw")
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
-        try{
+        try {
             val appKey = AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv)
             AppKeyProvider.load(appKey)
             return true
-        }catch (_: Exception){
+        } catch (_: Exception) {
             return false
         }
 
@@ -60,11 +60,11 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_bio")
         val authenticatedCipher = result.result?.cryptoObject?.cipher ?: return false
 
-        try{
+        try {
             val appKey = AppKeyEncryptor.decrypt(encryptedData, authenticatedCipher)
             AppKeyProvider.load(appKey)
             return true
-        }catch (_: Exception){
+        } catch (_: Exception) {
             return false
         }
     }

@@ -24,7 +24,7 @@ class LoginViewModel
     private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val getDecryptCryptoObject: GetDecryptCryptoObject
-): ViewModel() {
+) : ViewModel() {
 
     private val title = "Biometric Authentication"
     private val description = "Enable biometric authentication to secure your vault."
@@ -35,11 +35,11 @@ class LoginViewModel
     private val _passwordLoginState = MutableStateFlow<Boolean?>(null)
     val passwordLoginState = _passwordLoginState.asStateFlow()
 
-    fun login(password: String){
+    fun login(password: String) {
         _passwordLoginState.value = unlockKeyWithPassword(password)
     }
 
-    fun login(activity: AppCompatActivity){
+    fun login(activity: AppCompatActivity) {
         val biometricAuth = BiometricPromptManager(activity)
         viewModelScope.launch {
             biometricAuth.promptResults.collect { result ->

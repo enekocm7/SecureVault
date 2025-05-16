@@ -15,7 +15,10 @@ import javax.inject.Singleton
 object PasswordRepositoryModule {
     @Provides
     @Singleton
-    fun providePasswordRepository(storage: PasswordStorage,encryptor: FileEncryptor): PasswordRepository{
-        return PasswordRepositoryImpl(storage,encryptor)
+    fun providePasswordRepository(
+        storage: PasswordStorage,
+        encryptor: FileEncryptor
+    ): PasswordRepository {
+        return PasswordRepositoryImpl(storage, encryptor)
     }
 }

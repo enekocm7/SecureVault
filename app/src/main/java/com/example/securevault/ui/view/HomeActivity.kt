@@ -13,23 +13,24 @@ import kotlin.getValue
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var binding : MainScreenBinding
-    private val homeViewModel : HomeViewModel by viewModels()
-    private val createPasswordDialog by lazy{
+    private lateinit var binding: MainScreenBinding
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val createPasswordDialog by lazy {
         CreatePasswordDialog()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            true
         binding = MainScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setListeners()
     }
 
-    private fun setListeners(){
-        binding.addIcon.setOnClickListener{
+    private fun setListeners() {
+        binding.addIcon.setOnClickListener {
             showCreatePasswordDialog()
         }
     }

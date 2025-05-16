@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CreatePasswordDialog : DialogFragment() {
 
     private lateinit var binding: CreatePasswordDialogBinding
-    private val viewModel : CreatePasswordViewModel by viewModels()
+    private val viewModel: CreatePasswordViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = CreatePasswordDialogBinding.inflate(layoutInflater)
@@ -44,7 +44,7 @@ class CreatePasswordDialog : DialogFragment() {
     private fun setListeners() {
         binding.saveButton.setOnClickListener {
             val passwordDto: PasswordDto? = getPassword()
-            if (passwordDto != null){
+            if (passwordDto != null) {
                 viewModel.savePassword(passwordDto)
             }
         }
@@ -54,7 +54,7 @@ class CreatePasswordDialog : DialogFragment() {
         }
     }
 
-    private fun getPassword(): PasswordDto?{
+    private fun getPassword(): PasswordDto? {
         val fields = mapOf(
             "name" to binding.nameEditText.text.toString(),
             "url" to binding.urlEditText.text.toString(),
@@ -62,9 +62,8 @@ class CreatePasswordDialog : DialogFragment() {
             "password" to binding.passwordEditText.text.toString()
         )
 
-        fields.forEach {
-            (fieldName,value) ->
-            if (value.isEmpty()){
+        fields.forEach { (fieldName, value) ->
+            if (value.isEmpty()) {
                 showToast(fieldName)
                 return null
             }
@@ -78,8 +77,8 @@ class CreatePasswordDialog : DialogFragment() {
         )
     }
 
-    private fun showToast(field: String){
-        Toast.makeText(requireContext(),"$field can not be empty",Toast.LENGTH_LONG).show()
+    private fun showToast(field: String) {
+        Toast.makeText(requireContext(), "$field can not be empty", Toast.LENGTH_LONG).show()
     }
 }
 

@@ -20,24 +20,23 @@ class RegisterViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _passwordStrength = MutableLiveData<PasswordStrength>()
-    val passwordStrength : LiveData<PasswordStrength> = _passwordStrength
+    val passwordStrength: LiveData<PasswordStrength> = _passwordStrength
 
-    fun calculateStrength(password: String){
+    fun calculateStrength(password: String) {
         viewModelScope.launch {
-           val strength = estimatePassword(password)
+            val strength = estimatePassword(password)
             _passwordStrength.value = strength
         }
     }
 
-    fun createAppKey(password: String){
+    fun createAppKey(password: String) {
         generateAppKey(password)
     }
 
-     fun isKeyConfigured(): Boolean {
+    fun isKeyConfigured(): Boolean {
         return isAppKeyConfigured()
 
     }
-
 
 
 }

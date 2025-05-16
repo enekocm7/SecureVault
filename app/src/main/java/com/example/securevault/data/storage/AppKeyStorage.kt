@@ -11,14 +11,15 @@ import javax.inject.Singleton
 @Singleton
 class AppKeyStorage @Inject constructor(@ApplicationContext context: Context) {
 
-    private val prefs : SharedPreferences =  context.getSharedPreferences("app_key_prefs", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("app_key_prefs", Context.MODE_PRIVATE)
 
-    fun save(name : String, data: ByteArray){
+    fun save(name: String, data: ByteArray) {
         prefs.edit(commit = true) { putString(name, Base64.encodeToString(data, Base64.NO_WRAP)) }
     }
 
-    fun getFromSharedPreferences(name: String) : ByteArray {
-        val encoded = prefs.getString(name,null)
+    fun getFromSharedPreferences(name: String): ByteArray {
+        val encoded = prefs.getString(name, null)
         return Base64.decode(encoded, Base64.NO_WRAP)
     }
 
@@ -28,7 +29,7 @@ class AppKeyStorage @Inject constructor(@ApplicationContext context: Context) {
                 prefs.contains("salt")
     }
 
-    fun isBiometricConfigured(): Boolean{
+    fun isBiometricConfigured(): Boolean {
         return prefs.contains("encrypted_app_key_bio") &&
                 prefs.contains("iv_bio")
     }

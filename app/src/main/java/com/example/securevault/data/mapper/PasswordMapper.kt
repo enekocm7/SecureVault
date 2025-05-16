@@ -5,7 +5,7 @@ import com.example.securevault.domain.model.PasswordDto
 
 object PasswordMapper {
 
-    fun mapToDto(password: Password): PasswordDto{
+    fun mapToDto(password: Password): PasswordDto {
         return PasswordDto(
             name = password.name,
             url = password.url,
@@ -14,7 +14,7 @@ object PasswordMapper {
         )
     }
 
-    fun mapToEntity(passwordDto: PasswordDto): Password{
+    fun mapToEntity(passwordDto: PasswordDto): Password {
         return Password(
             name = passwordDto.name,
             url = passwordDto.url,

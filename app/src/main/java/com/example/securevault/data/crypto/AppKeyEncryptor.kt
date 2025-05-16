@@ -5,7 +5,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 object AppKeyEncryptor {
-    fun encrypt(data: ByteArray, key: SecretKey): Pair<ByteArray, ByteArray>{
+    fun encrypt(data: ByteArray, key: SecretKey): Pair<ByteArray, ByteArray> {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, key)
         val iv = cipher.iv
@@ -13,10 +13,10 @@ object AppKeyEncryptor {
         return Pair(encrypted, iv)
     }
 
-    fun decrypt(encrypted: ByteArray, key: SecretKey, iv: ByteArray ): ByteArray{
+    fun decrypt(encrypted: ByteArray, key: SecretKey, iv: ByteArray): ByteArray {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        val spec = GCMParameterSpec(128,iv)
-        cipher.init(Cipher.DECRYPT_MODE,key, spec)
+        val spec = GCMParameterSpec(128, iv)
+        cipher.init(Cipher.DECRYPT_MODE, key, spec)
         return cipher.doFinal(encrypted)
     }
 

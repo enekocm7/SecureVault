@@ -13,13 +13,14 @@ object BiometricKeyManager {
     private const val KEY_ALIAS = "biometric_key"
     private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
-    fun generateKey(){
+    fun generateKey() {
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
         if (keyStore.containsAlias(KEY_ALIAS)) {
             return
         }
 
-        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,ANDROID_KEYSTORE)
+        val keyGenerator =
+            KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
         val keySpec = KeyGenParameterSpec.Builder(
             KEY_ALIAS,
             KeyProperties.PURPOSE_DECRYPT or KeyProperties.PURPOSE_ENCRYPT
@@ -34,7 +35,7 @@ object BiometricKeyManager {
         keyGenerator.generateKey()
     }
 
-    private fun getKey() : SecretKey{
+    private fun getKey(): SecretKey {
         val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         return keyStore.getKey(KEY_ALIAS, null) as SecretKey
     }

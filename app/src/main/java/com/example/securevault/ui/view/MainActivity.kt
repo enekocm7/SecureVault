@@ -17,23 +17,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            true
         binding = ScreenHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (isLoggedIn()){
+        if (isLoggedIn()) {
             login()
-        }else{
+        } else {
             setListeners()
         }
 
     }
 
-    private fun setListeners(){
+    private fun setListeners() {
         binding.registerButton.setOnClickListener {
-            if (isLoggedIn()){
+            if (isLoggedIn()) {
                 login()
-            }else{
+            } else {
                 startActivity(Intent(this, RegisterActivity::class.java))
                 finishAffinity()
             }
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         return viewModel.isKeyConfigured()
     }
 
-    private fun login(){
+    private fun login() {
         startActivity(Intent(this, LoginActivity::class.java))
         finishAffinity()
     }

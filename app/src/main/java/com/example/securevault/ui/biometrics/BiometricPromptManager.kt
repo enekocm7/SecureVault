@@ -10,9 +10,9 @@ import com.example.securevault.domain.model.BiometricResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
-class BiometricPromptManager (
+class BiometricPromptManager(
     private val activity: AppCompatActivity
-): BiometricAuthenticator {
+) : BiometricAuthenticator {
 
     private val resultChannel = Channel<BiometricResult>()
 
@@ -22,7 +22,7 @@ class BiometricPromptManager (
         title: String,
         description: String,
         cryptoObject: BiometricPrompt.CryptoObject?
-    ){
+    ) {
         val manager = BiometricManager.from(activity)
         val authenticators = BIOMETRIC_STRONG
 
@@ -34,25 +34,28 @@ class BiometricPromptManager (
             .setNegativeButtonText("Cancel")
             .build()
 
-        when(manager.canAuthenticate(authenticators)){
+        when (manager.canAuthenticate(authenticators)) {
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
                 resultChannel.trySend(BiometricResult.HardwareNotAvailable)
                 return
             }
+
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
                 resultChannel.trySend(BiometricResult.FeatureUnavailable)
                 return
             }
+
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                 resultChannel.trySend(BiometricResult.AuthenticationNotRecognized)
                 return
             }
+
             else -> Unit
         }
 
         val prompt = BiometricPrompt(
             activity,
-            object : BiometricPrompt.AuthenticationCallback(){
+            object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     resultChannel.trySend(BiometricResult.AuthenticationError(errString.toString()))
@@ -70,9 +73,9 @@ class BiometricPromptManager (
             }
         )
 
-        if (cryptoObject!=null){
+        if (cryptoObject != null) {
             prompt.authenticate(promptInfo, cryptoObject)
-        }else{
+        } else {
             prompt.authenticate(promptInfo)
         }
     }

@@ -15,7 +15,7 @@ object MasterPasswordRepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMasterPasswordRepository(storage: AppKeyStorage): MasterPasswordRepository{
+    fun provideMasterPasswordRepository(storage: AppKeyStorage): MasterPasswordRepository {
         return MasterPasswordRepositoryImpl(storage)
     }
 }

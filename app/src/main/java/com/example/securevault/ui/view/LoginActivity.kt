@@ -50,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun setObserversBiometric(){
+    private fun setObserversBiometric() {
         lifecycleScope.launch {
             viewModel.biometricLoginState.collect { success ->
                 if (success == true) {

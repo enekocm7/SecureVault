@@ -6,7 +6,7 @@ import com.example.securevault.domain.repository.PasswordRepository
 import javax.inject.Inject
 
 class AddPassword @Inject constructor(private val passwordRepository: PasswordRepository) {
-    operator fun invoke(password: PasswordDto){
+    operator fun invoke(password: PasswordDto) {
         passwordRepository.insertPassword(PasswordMapper.mapToEntity(password))
     }
 }
