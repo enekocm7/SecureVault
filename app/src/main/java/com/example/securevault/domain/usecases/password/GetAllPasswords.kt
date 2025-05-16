@@ -5,8 +5,8 @@ import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.domain.repository.PasswordRepository
 import javax.inject.Inject
 
-class AddPassword @Inject constructor(private val passwordRepository: PasswordRepository) {
-    operator fun invoke(password: PasswordDto){
-        passwordRepository.insertPassword(PasswordMapper.mapToEntity(password))
+class GetAllPasswords @Inject constructor(private val passwordRepository: PasswordRepository) {
+    operator fun invoke(): List<PasswordDto>{
+        return passwordRepository.getAllPasswords().map { password -> PasswordMapper.mapToDto(password) }.toList()
     }
 }
