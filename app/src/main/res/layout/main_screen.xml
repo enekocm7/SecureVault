@@ -23,12 +23,12 @@
             android:background="@color/red">
 
             <ImageView
-                android:id="@+id/profileIcon"
+                android:id="@+id/settingIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="15dp"
-                android:contentDescription="@string/profile"
-                android:src="@drawable/ic_account_circle"
+                android:contentDescription="@string/setting"
+                android:src="@drawable/ic_settings"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/search"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@id/profileIcon"
+                app:layout_constraintStart_toEndOf="@id/settingIcon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
