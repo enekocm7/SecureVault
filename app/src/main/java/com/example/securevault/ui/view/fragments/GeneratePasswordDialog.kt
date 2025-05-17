@@ -1,6 +1,7 @@
 package com.example.securevault.ui.view.fragments
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.databinding.PasswordGeneratorBinding
+import com.example.securevault.domain.model.PasswordStrength
 import com.example.securevault.ui.viewmodel.fragments.GeneratePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -136,6 +138,17 @@ class GeneratePasswordDialog : DialogFragment() {
                 binding.generatedPasswordTextView.text = password
             }
         }
+        lifecycleScope.launch {
+            viewModel.passwordStrength.collect { strength ->
+                changeStrengthBar(strength)
+            }
+        }
+    }
+
+    private fun changeStrengthBar(strength: PasswordStrength) {
+        binding.strengthTextView.text = strength.label
+        binding.strengthProgressBar.progress = strength.progress
+        binding.strengthProgressBar.progressTintList = ColorStateList.valueOf(strength.colorInt)
     }
 
     private fun generatePassword() {
