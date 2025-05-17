@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.CreatePasswordDialogBinding
@@ -17,10 +18,13 @@ import com.example.securevault.ui.viewmodel.fragments.CreatePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreatePasswordDialog : DialogFragment() {
+class CreatePasswordDialog(private val supportFragmentManager: FragmentManager) : DialogFragment() {
 
     private lateinit var binding: CreatePasswordDialogBinding
     private val viewModel: CreatePasswordViewModel by viewModels()
+    private val generatePasswordDialog by lazy {
+        GeneratePasswordDialog()
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = CreatePasswordDialogBinding.inflate(layoutInflater)
@@ -56,6 +60,10 @@ class CreatePasswordDialog : DialogFragment() {
 
         binding.cancelButton.setOnClickListener {
             this.dismiss()
+        }
+
+        binding.generatePasswordButton.setOnClickListener {
+            generatePasswordDialog.show(supportFragmentManager,"Generate Password")
         }
     }
 

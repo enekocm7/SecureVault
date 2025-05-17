@@ -21,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: MainScreenBinding
     private val viewModel: HomeViewModel by viewModels()
     private val createPasswordDialog by lazy {
-        CreatePasswordDialog()
+        CreatePasswordDialog(this.supportFragmentManager)
     }
     private lateinit var passwordAdapter: PasswordAdapter
 

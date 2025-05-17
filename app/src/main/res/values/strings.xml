@@ -47,4 +47,17 @@
     <string name="edit">Edit Password</string>
     <string name="delete">Delete Password</string>
     <string name="close">Close</string>
+    <string name="password_generator">Password Generator</string>
+    <string name="generated_password_will_appear_here">Generated password will appear here</string>
+    <string name="toggle_visibility">Toggle visibility</string>
+    <string name="regenerate_password">Regenerate password</string>
+    <string name="use_this_password">Use This Password</string>
+    <string name="password_strength">Password Strength:</string>
+    <string name="passphrase">Passphrase</string>
+    <string name="length">Length:</string>
+    <string name="lowercase_a_z">Lowercase (a-z)</string>
+    <string name="uppercase_a_z">Uppercase (A-Z)</string>
+    <string name="numbers_0_9">Numbers (0–9)</string>
+    <string name="symbols">Symbols (!@#$%^*)</string>
+    <string name="number_of_words">Number of words:</string>
 </resources>
