@@ -58,7 +58,7 @@ class PasswordRepositoryImpl @Inject constructor(
         return encryptor.decryptPasswords(encryptedPasswords, appKey)
     }
 
-    private fun reloadPasswords() {
+    fun reloadPasswords() {
         cachePasswords = loadPasswords().toMutableList()
     }
 

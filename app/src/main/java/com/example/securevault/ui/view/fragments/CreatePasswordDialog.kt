@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.CreatePasswordDialogBinding
 import com.example.securevault.domain.model.PasswordDto
+import com.example.securevault.ui.view.HomeActivity
 import com.example.securevault.ui.viewmodel.CreatePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +50,8 @@ class CreatePasswordDialog : DialogFragment() {
             if (passwordDto != null) {
                 viewModel.savePassword(passwordDto)
             }
+            setFragmentResult(HomeActivity.PASSWORD_SAVED_REQUEST_KEY, bundleOf())
+            this.dismiss()
         }
 
         binding.cancelButton.setOnClickListener {
