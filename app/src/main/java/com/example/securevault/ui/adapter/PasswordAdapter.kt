@@ -2,11 +2,13 @@ package com.example.securevault.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.securevault.R
 import com.example.securevault.domain.model.PasswordDto
+import com.example.securevault.ui.view.fragments.PasswordDetailDialog
 
 class PasswordAdapter() : RecyclerView.Adapter<PasswordViewHolder>() {
 
@@ -39,6 +41,12 @@ class PasswordAdapter() : RecyclerView.Adapter<PasswordViewHolder>() {
     ) {
         val password = asyncListDiffer.currentList[position]
         holder.render(password)
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            if (context is AppCompatActivity){
+                PasswordDetailDialog(password).show(context.supportFragmentManager,"PasswordDetailDialog")
+            }
+        }
     }
 
     override fun getItemCount(): Int {

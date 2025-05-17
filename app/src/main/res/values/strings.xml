@@ -43,4 +43,8 @@
     <string name="username">Username/email</string>
     <string name="password">Password</string>
     <string name="generate_password">Generate new password</string>
+    <string name="password_details">Password Details</string>
+    <string name="edit">Edit Password</string>
+    <string name="delete">Delete Password</string>
+    <string name="close">Close</string>
 </resources>

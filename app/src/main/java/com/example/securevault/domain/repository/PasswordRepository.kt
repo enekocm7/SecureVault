@@ -7,5 +7,6 @@ interface PasswordRepository {
     fun getPasswordByName(name: String): Password?
     fun getPasswordByNameContainingIgnoreCase(name: String): List<Password>
     fun insertPassword(password: Password)
+    fun insertPassword(previousName: String, password: Password)
     fun deletePassword(password: Password)
 }

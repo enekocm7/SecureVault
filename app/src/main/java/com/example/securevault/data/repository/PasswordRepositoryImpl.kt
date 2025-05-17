@@ -35,7 +35,14 @@ class PasswordRepositoryImpl @Inject constructor(
     }
 
     override fun insertPassword(password: Password) {
-        val existingIndex = cachePasswords.indexOfFirst { it.name == password.name }
+        insertPassword(password.name, password)
+    }
+
+    override fun insertPassword(
+        previousName: String,
+        password: Password
+    ) {
+        val existingIndex = cachePasswords.indexOfFirst { it.name == previousName }
 
         if (existingIndex >= 0) {
             cachePasswords[existingIndex] = password

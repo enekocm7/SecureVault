@@ -1,4 +1,4 @@
-package com.example.securevault.ui.viewmodel
+package com.example.securevault.ui.viewmodel.fragments
 
 import androidx.lifecycle.ViewModel
 import com.example.securevault.domain.model.PasswordDto
@@ -12,6 +12,6 @@ class CreatePasswordViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun savePassword(passwordDto: PasswordDto) {
-        addPassword(passwordDto)
+        addPassword(passwordDto.name,passwordDto)
     }
 }

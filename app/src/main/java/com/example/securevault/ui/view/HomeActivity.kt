@@ -26,7 +26,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var passwordAdapter: PasswordAdapter
 
     companion object{
-        const val PASSWORD_SAVED_REQUEST_KEY = "passwordSaved"
+        const val PASSWORD_RELOAD_REQUEST_KEY = "passwordReload"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +50,9 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        supportFragmentManager.setFragmentResultListener(PASSWORD_SAVED_REQUEST_KEY, this) {
+        supportFragmentManager.setFragmentResultListener(PASSWORD_RELOAD_REQUEST_KEY, this) {
             requestKey, bundle ->
-            if (requestKey == PASSWORD_SAVED_REQUEST_KEY){
+            if (requestKey == PASSWORD_RELOAD_REQUEST_KEY){
                 viewModel.loadPasswords()
             }
         }

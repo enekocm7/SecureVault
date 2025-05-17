@@ -10,23 +10,23 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.example.securevault.databinding.CreatePasswordDialogBinding
+import com.example.securevault.databinding.PasswordDetailBinding
 import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.ui.view.HomeActivity
-import com.example.securevault.ui.viewmodel.fragments.CreatePasswordViewModel
+import com.example.securevault.ui.viewmodel.fragments.PasswordDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreatePasswordDialog : DialogFragment() {
+class PasswordDetailDialog(val passwordDto: PasswordDto): DialogFragment() {
 
-    private lateinit var binding: CreatePasswordDialogBinding
-    private val viewModel: CreatePasswordViewModel by viewModels()
+    private lateinit var binding: PasswordDetailBinding
+    private val viewModel: PasswordDetailViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = CreatePasswordDialogBinding.inflate(layoutInflater)
+        binding = PasswordDetailBinding.inflate(layoutInflater)
 
-        val displayMetrics = resources.displayMetrics
-        val width = (displayMetrics.widthPixels * 0.9).toInt()
+        val displayMetrics =resources.displayMetrics
+        val width =(displayMetrics.widthPixels * 0.9).toInt()
 
         val dialog = super.onCreateDialog(savedInstanceState).apply {
             setContentView(binding.root)
@@ -38,33 +38,53 @@ class CreatePasswordDialog : DialogFragment() {
             )
             window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         }
+        setContent()
 
         setListeners()
         return dialog
     }
 
+    private fun setContent(){
+        binding.nameDetailEditText.setText(passwordDto.name)
+        binding.urlDetailEditText.setText(passwordDto.url)
+        binding.usernameDetailEditText.setText(passwordDto.username)
+        binding.passwordDetailEditText.setText(passwordDto.value)
+    }
 
     private fun setListeners() {
         binding.saveButton.setOnClickListener {
-            val passwordDto: PasswordDto? = getPassword()
-            if (passwordDto != null) {
-                viewModel.savePassword(passwordDto)
+            val password = getPassword() ?: return@setOnClickListener
+
+            if (passwordDto.name == password.name) {
+                viewModel.savePassword(password)
+            } else {
+                viewModel.savePassword(passwordDto.name, password)
+            }
+
+            setFragmentResult(HomeActivity.PASSWORD_RELOAD_REQUEST_KEY, bundleOf())
+            this.dismiss()
+        }
+
+        binding.deleteButton.setOnClickListener {
+            val password = getPassword()
+            if (password!=null){
+                viewModel.removePassword(password)
                 setFragmentResult(HomeActivity.PASSWORD_RELOAD_REQUEST_KEY, bundleOf())
                 this.dismiss()
             }
         }
 
-        binding.cancelButton.setOnClickListener {
+        binding.closeButton.setOnClickListener {
             this.dismiss()
         }
     }
 
     private fun getPassword(): PasswordDto? {
         val fields = mapOf(
-            "name" to binding.nameEditText.text.toString(),
-            "url" to binding.urlEditText.text.toString(),
-            "username" to binding.usernameEditText.text.toString(),
-            "password" to binding.passwordEditText.text.toString()
+            "name" to binding.nameDetailEditText.text.toString(),
+            "url" to binding.urlDetailEditText.text.toString(),
+            "username" to binding.usernameDetailEditText.text.toString(),
+            "password" to binding.passwordDetailEditText.text.toString()
         )
 
         fields.forEach { (fieldName, value) ->
@@ -85,5 +105,5 @@ class CreatePasswordDialog : DialogFragment() {
     private fun showToast(field: String) {
         Toast.makeText(requireContext(), "$field can not be empty", Toast.LENGTH_LONG).show()
     }
-}
 
+}
