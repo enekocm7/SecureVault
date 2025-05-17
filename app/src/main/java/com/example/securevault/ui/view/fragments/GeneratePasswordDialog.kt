@@ -89,7 +89,9 @@ class GeneratePasswordDialog : DialogFragment() {
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //Not going to use this function
+            }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 lengthSeekBarJob?.cancel()
                 generatePassword()
@@ -117,7 +119,9 @@ class GeneratePasswordDialog : DialogFragment() {
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //Not going to use this function
+            }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 wordsCountSeekBarJob?.cancel()
                 generatePassphrase()
