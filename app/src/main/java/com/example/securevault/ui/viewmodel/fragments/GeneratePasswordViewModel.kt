@@ -31,6 +31,7 @@ class GeneratePasswordViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+
     fun getPassword(
         length: Int,
         lower: Boolean,
@@ -62,4 +63,5 @@ class GeneratePasswordViewModel @Inject constructor(
             }
         }
     }
+
 }
