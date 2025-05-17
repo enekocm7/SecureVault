@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.databinding.PasswordGeneratorBinding
 import com.example.securevault.domain.model.PasswordStrength
@@ -23,12 +24,10 @@ import kotlinx.coroutines.launch
 class GeneratePasswordDialog : DialogFragment() {
 
     private lateinit var binding: PasswordGeneratorBinding
-    private lateinit var viewModel: GeneratePasswordViewModel
+    private val viewModel: GeneratePasswordViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = PasswordGeneratorBinding.inflate(layoutInflater)
-
-        viewModel = ViewModelProvider(this)[GeneratePasswordViewModel::class]
 
         val displayMetrics = resources.displayMetrics
         val width = (displayMetrics.widthPixels * 0.9).toInt()
