@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.databinding.PasswordGeneratorBinding
 import com.example.securevault.domain.model.PasswordStrength
@@ -24,6 +26,10 @@ class GeneratePasswordDialog : DialogFragment() {
 
     private lateinit var binding: PasswordGeneratorBinding
     private val viewModel: GeneratePasswordViewModel by activityViewModels()
+
+    companion object{
+        const val REQUEST_KEY = "GENERATED_PASSWORD_REQUEST_KEY"
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = PasswordGeneratorBinding.inflate(layoutInflater)
@@ -120,7 +126,8 @@ class GeneratePasswordDialog : DialogFragment() {
 
         binding.closeButton.setOnClickListener { dismiss() }
         binding.usePasswordButton.setOnClickListener {
-            dismissNow()
+            setFragmentResult(REQUEST_KEY, bundleOf("password" to binding.generatedPasswordTextView.text.toString()))
+            dismiss()
         }
 
     }

@@ -63,8 +63,17 @@ class CreatePasswordDialog(private val supportFragmentManager: FragmentManager) 
         }
 
         binding.generatePasswordButton.setOnClickListener {
-            generatePasswordDialog.show(supportFragmentManager,"Generate Password")
+            generatePasswordDialog.show(supportFragmentManager, "Generate Password")
         }
+        supportFragmentManager.setFragmentResultListener(
+            GeneratePasswordDialog.REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            val generatedPassword = bundle.getString("password")
+            if (!generatedPassword.isNullOrEmpty()) binding.passwordEditText.setText(generatedPassword)
+
+        }
+
     }
 
     private fun getPassword(): PasswordDto? {
