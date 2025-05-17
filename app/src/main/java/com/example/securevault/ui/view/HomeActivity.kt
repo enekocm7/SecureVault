@@ -1,6 +1,7 @@
 package com.example.securevault.ui.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -8,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.securevault.R
 import com.example.securevault.databinding.MainScreenBinding
 import com.example.securevault.ui.adapter.PasswordAdapter
 import com.example.securevault.ui.view.fragments.CreatePasswordDialog
@@ -17,6 +19,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
+
+    private var isSearchMode = false
 
     private lateinit var binding: MainScreenBinding
     private val viewModel: HomeViewModel by viewModels()
@@ -39,6 +43,15 @@ class HomeActivity : AppCompatActivity() {
 
         setListeners()
         setObservers()
+
+        binding.search.setOnClickListener {
+            isSearchMode = !isSearchMode
+            if (isSearchMode) {
+                enterSearchMode()
+            } else {
+                exitSearchMode()
+            }
+        }
     }
 
     private fun setObservers() {
@@ -56,7 +69,6 @@ class HomeActivity : AppCompatActivity() {
                 viewModel.loadPasswords()
             }
         }
-
     }
 
     private fun setListeners() {
@@ -72,4 +84,23 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.adapter = passwordAdapter
     }
 
+    private fun enterSearchMode() {
+        binding.settingIcon.visibility = View.GONE
+        binding.title.visibility = View.GONE
+        binding.searchEditText.visibility = View.VISIBLE
+        binding.search.setImageResource(R.drawable.ic_close)
+        binding.searchEditText.requestFocus()
+    }
+
+    private fun exitSearchMode() {
+        binding.searchEditText.visibility = View.GONE
+        binding.settingIcon.visibility = View.VISIBLE
+        binding.title.visibility = View.VISIBLE
+        binding.search.setImageResource(R.drawable.ic_search)
+        binding.searchEditText.text.clear()
+    }
+
 }
+
+
+
