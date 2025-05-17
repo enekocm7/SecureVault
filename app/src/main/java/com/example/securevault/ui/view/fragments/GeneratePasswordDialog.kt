@@ -10,7 +10,6 @@ import android.widget.SeekBar
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.databinding.PasswordGeneratorBinding
 import com.example.securevault.domain.model.PasswordStrength
