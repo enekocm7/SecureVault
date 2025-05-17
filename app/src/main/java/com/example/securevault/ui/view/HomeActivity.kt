@@ -2,9 +2,11 @@ package com.example.securevault.ui.view
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -29,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
     }
     private lateinit var passwordAdapter: PasswordAdapter
 
-    companion object{
+    companion object {
         const val PASSWORD_RELOAD_REQUEST_KEY = "passwordReload"
     }
 
@@ -43,15 +45,6 @@ class HomeActivity : AppCompatActivity() {
 
         setListeners()
         setObservers()
-
-        binding.search.setOnClickListener {
-            isSearchMode = !isSearchMode
-            if (isSearchMode) {
-                enterSearchMode()
-            } else {
-                exitSearchMode()
-            }
-        }
     }
 
     private fun setObservers() {
@@ -63,17 +56,32 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        supportFragmentManager.setFragmentResultListener(PASSWORD_RELOAD_REQUEST_KEY, this) {
-            requestKey, bundle ->
-            if (requestKey == PASSWORD_RELOAD_REQUEST_KEY){
+        supportFragmentManager.setFragmentResultListener(
+            PASSWORD_RELOAD_REQUEST_KEY,
+            this
+        ) { requestKey, bundle ->
+            if (requestKey == PASSWORD_RELOAD_REQUEST_KEY) {
                 viewModel.loadPasswords()
             }
+        }
+
+        binding.searchEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.loadPasswords(text.toString())
         }
     }
 
     private fun setListeners() {
         binding.addIcon.setOnClickListener {
             createPasswordDialog.show(this.supportFragmentManager, "Create new password")
+        }
+
+        binding.search.setOnClickListener {
+            isSearchMode = !isSearchMode
+            if (isSearchMode) {
+                enterSearchMode()
+            } else {
+                exitSearchMode()
+            }
         }
     }
 
@@ -90,6 +98,8 @@ class HomeActivity : AppCompatActivity() {
         binding.searchEditText.visibility = View.VISIBLE
         binding.search.setImageResource(R.drawable.ic_close)
         binding.searchEditText.requestFocus()
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun exitSearchMode() {

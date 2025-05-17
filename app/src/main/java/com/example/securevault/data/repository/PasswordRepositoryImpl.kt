@@ -20,22 +20,20 @@ class PasswordRepositoryImpl @Inject constructor(
     }
 
     override fun getAllPasswords(): List<Password> {
-        reloadPasswords()
         return cachePasswords
     }
 
     override fun getPasswordByName(name: String): Password? {
-        reloadPasswords()
         return cachePasswords.find { it.name == name }
     }
 
     override fun getPasswordByNameContainingIgnoreCase(name: String): List<Password> {
-        reloadPasswords()
         return cachePasswords.filter { it.name.contains(name, ignoreCase = true) }
     }
 
     override fun insertPassword(password: Password) {
         insertPassword(password.name, password)
+        reloadPasswords()
     }
 
     override fun insertPassword(
@@ -51,12 +49,14 @@ class PasswordRepositoryImpl @Inject constructor(
         }
         val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, appKey)
         storage.saveEncryptedFile(encryptedPasswords)
+        reloadPasswords()
     }
 
     override fun deletePassword(password: Password) {
         cachePasswords.removeIf { it.name == password.name }
         val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, appKey)
         storage.saveEncryptedFile(encryptedPasswords)
+        reloadPasswords()
     }
 
     private fun loadPasswords(): List<Password> {
