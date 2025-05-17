@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.graphics.drawable.toDrawable
@@ -14,6 +15,8 @@ import com.example.securevault.databinding.PasswordGeneratorBinding
 import com.example.securevault.domain.model.PasswordStrength
 import com.example.securevault.ui.viewmodel.fragments.GeneratePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -62,17 +65,29 @@ class GeneratePasswordDialog : DialogFragment() {
             }
         }
 
+        var lengthSeekBarJob: Job? = null
+        var wordsCountSeekBarJob: Job? = null
+
         binding.lengthSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.lengthTextView.text = buildString {
                     append("Length: ")
                     append(progress)
                 }
-                if (fromUser) generatePassword()
+                if (fromUser) {
+                    lengthSeekBarJob?.cancel()
+                    lengthSeekBarJob = lifecycleScope.launch {
+                        delay(300)
+                        generatePassword()
+                    }
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                lengthSeekBarJob?.cancel()
+                generatePassword()
+            }
         })
 
         binding.lowercaseSwitch.setOnCheckedChangeListener { _, _ -> generatePassword() }
@@ -87,24 +102,24 @@ class GeneratePasswordDialog : DialogFragment() {
                     append("Number of words: ")
                     append(progress)
                 }
-                if (fromUser) generatePassphrase()
+                if (fromUser) {
+                    wordsCountSeekBarJob?.cancel()
+                    wordsCountSeekBarJob = lifecycleScope.launch {
+                        delay(300)
+                        generatePassphrase()
+                    }
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        binding.regenerateButton.setOnClickListener {
-            if (binding.passwordRadioButton.isChecked) {
-                generatePassword()
-            } else {
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                wordsCountSeekBarJob?.cancel()
                 generatePassphrase()
             }
-        }
+        })
 
         binding.closeButton.setOnClickListener { dismiss() }
         binding.usePasswordButton.setOnClickListener {
-
             dismiss()
         }
 
@@ -112,8 +127,6 @@ class GeneratePasswordDialog : DialogFragment() {
 
 
     private fun setUpView() {
-        generatePassword()
-
         binding.lengthTextView.text = buildString {
             append("Length: ")
             append(binding.lengthSeekBar.progress)
@@ -121,14 +134,6 @@ class GeneratePasswordDialog : DialogFragment() {
         binding.wordsCountTextView.text = buildString {
             append("Number of words: ")
             append(binding.wordsCountSeekBar.progress)
-        }
-
-        if (!binding.lowercaseSwitch.isChecked &&
-            !binding.uppercaseSwitch.isChecked &&
-            !binding.numbersSwitch.isChecked &&
-            !binding.symbolsSwitch.isChecked
-        ) {
-            binding.lowercaseSwitch.isChecked = true
         }
     }
 
@@ -143,6 +148,12 @@ class GeneratePasswordDialog : DialogFragment() {
                 changeStrengthBar(strength)
             }
         }
+        lifecycleScope.launch {
+            viewModel.isLoading.collect { isLoading ->
+                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                binding.generatedPasswordTextView.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+            }
+        }
     }
 
     private fun changeStrengthBar(strength: PasswordStrength) {
@@ -152,6 +163,13 @@ class GeneratePasswordDialog : DialogFragment() {
     }
 
     private fun generatePassword() {
+        if (!binding.lowercaseSwitch.isChecked &&
+            !binding.uppercaseSwitch.isChecked &&
+            !binding.numbersSwitch.isChecked &&
+            !binding.symbolsSwitch.isChecked
+        ) {
+            binding.lowercaseSwitch.isChecked = true
+        }
         viewModel.getPassword(
             length = binding.lengthSeekBar.progress,
             lower = binding.lowercaseSwitch.isChecked,
