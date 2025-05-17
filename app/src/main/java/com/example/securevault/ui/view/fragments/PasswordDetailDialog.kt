@@ -17,7 +17,7 @@ import com.example.securevault.ui.viewmodel.fragments.PasswordDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PasswordDetailDialog(val passwordDto: PasswordDto): DialogFragment() {
+class PasswordDetailDialog(private val passwordDto: PasswordDto): DialogFragment() {
 
     private lateinit var binding: PasswordDetailBinding
     private val viewModel: PasswordDetailViewModel by viewModels()
