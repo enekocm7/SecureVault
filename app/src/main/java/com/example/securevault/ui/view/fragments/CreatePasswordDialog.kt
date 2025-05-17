@@ -49,9 +49,9 @@ class CreatePasswordDialog : DialogFragment() {
             val passwordDto: PasswordDto? = getPassword()
             if (passwordDto != null) {
                 viewModel.savePassword(passwordDto)
+                setFragmentResult(HomeActivity.PASSWORD_SAVED_REQUEST_KEY, bundleOf())
+                this.dismiss()
             }
-            setFragmentResult(HomeActivity.PASSWORD_SAVED_REQUEST_KEY, bundleOf())
-            this.dismiss()
         }
 
         binding.cancelButton.setOnClickListener {
