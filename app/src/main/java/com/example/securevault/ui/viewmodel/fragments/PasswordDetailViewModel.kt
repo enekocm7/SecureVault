@@ -15,7 +15,7 @@ class PasswordDetailViewModel @Inject constructor(
     ViewModel() {
 
     fun savePassword(password: PasswordDto) {
-        addPassword(password.name,password)
+        addPassword(password)
     }
 
     fun savePassword(previousName: String, password: PasswordDto){

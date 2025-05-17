@@ -9,4 +9,7 @@ class AddPassword @Inject constructor(private val passwordRepository: PasswordRe
     operator fun invoke(previousName:String, password: PasswordDto) {
         passwordRepository.insertPassword(previousName, PasswordMapper.mapToEntity(password))
     }
+    operator fun invoke(password: PasswordDto){
+        passwordRepository.insertPassword(PasswordMapper.mapToEntity(password))
+    }
 }
