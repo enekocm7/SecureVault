@@ -50,7 +50,6 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         } catch (_: Exception) {
             return false
         }
-
     }
 
     override fun unlockAppKeyWithBiometrics(result: BiometricResult): Boolean {
