@@ -7,16 +7,16 @@ object AppKeyProvider {
 
     private var appKey: ByteArray? = null
 
-    fun generate(): ByteArray {
+    fun generate(): ByteArray? {
         check(appKey == null) {
-            throw IllegalStateException("App key already initialized")
+            return appKey
         }
 
         appKey = ByteArray(32).apply {
             java.security.SecureRandom().nextBytes(this)
         }
 
-        return appKey!!
+        return appKey
     }
 
     fun load(decryptedKey: ByteArray) {

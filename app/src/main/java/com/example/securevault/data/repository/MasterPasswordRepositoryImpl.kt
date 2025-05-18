@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterPasswordRepository {
 
     override fun generateAndStoreAppKey(password: String) {
-        val appKey = AppKeyProvider.generate()
+        val appKey = AppKeyProvider.generate() ?: return
         AppKeyProvider.load(appKey)
         val salt = PasswordKeyManager.generateSalt()
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
