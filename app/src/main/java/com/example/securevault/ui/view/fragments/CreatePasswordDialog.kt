@@ -93,7 +93,7 @@ class CreatePasswordDialog(private val supportFragmentManager: FragmentManager) 
 
         return PasswordDto(
             name = fields["name"].toString(),
-            url = fields["url"].toString(),
+            url = fields["url"].toString().lowercase(),
             username = fields["username"].toString(),
             value = fields["password"].toString()
         )

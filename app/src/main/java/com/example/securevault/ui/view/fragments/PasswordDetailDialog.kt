@@ -96,7 +96,7 @@ class PasswordDetailDialog(private val passwordDto: PasswordDto): DialogFragment
 
         return PasswordDto(
             name = fields["name"].toString(),
-            url = fields["url"].toString(),
+            url = fields["url"].toString().lowercase(),
             username = fields["username"].toString(),
             value = fields["password"].toString()
         )
