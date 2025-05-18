@@ -2,12 +2,12 @@ package com.example.securevault.ui.viewmodel.fragments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.securevault.di.DispatcherProvider
 import com.example.securevault.domain.model.PasswordStrength
 import com.example.securevault.domain.usecases.EstimatePassword
 import com.example.securevault.domain.usecases.generator.GeneratePassphrase
 import com.example.securevault.domain.usecases.generator.GeneratePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,13 +19,14 @@ import javax.inject.Inject
 class GeneratePasswordViewModel @Inject constructor(
     private val generatePassword: GeneratePassword,
     private val generatePassphrase: GeneratePassphrase,
-    private val estimatePassword: EstimatePassword
+    private val estimatePassword: EstimatePassword,
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
-    private val _password = MutableStateFlow<String>("")
+    private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password.asStateFlow()
 
-    private val _passwordStrength = MutableStateFlow<PasswordStrength>(PasswordStrength.VERY_WEAK)
+    private val _passwordStrength = MutableStateFlow(PasswordStrength.VERY_WEAK)
     val passwordStrength: StateFlow<PasswordStrength> = _passwordStrength.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
@@ -39,11 +40,11 @@ class GeneratePasswordViewModel @Inject constructor(
         numbers: Boolean,
         symbols: Boolean
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             _isLoading.value = true
             val password = generatePassword(length, lower, upper, numbers, symbols)
             val strength = estimatePassword(password)
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 _password.value = password
                 _passwordStrength.value = strength
                 _isLoading.value = false
@@ -52,11 +53,11 @@ class GeneratePasswordViewModel @Inject constructor(
     }
 
     fun getPassphrase(length: Int, delimiter: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             _isLoading.value = true
             val passphrase = generatePassphrase(length, delimiter)
             val strength = estimatePassword(passphrase)
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 _password.value = passphrase
                 _passwordStrength.value = strength
                 _isLoading.value = false

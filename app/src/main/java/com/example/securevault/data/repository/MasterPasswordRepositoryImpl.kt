@@ -26,7 +26,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     }
 
     override fun generateAndStoreAppKeyBio(result: BiometricResult) {
-        val appKey = AppKeyProvider.get()
+        val appKey = AppKeyProvider.getAppKey()
         BiometricKeyManager.generateKey()
         var cipher: Cipher? = null
         if (result is BiometricResult.AuthenticationSuccess) {

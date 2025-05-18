@@ -12,7 +12,7 @@ class PasswordRepositoryImpl @Inject constructor(
     private val encryptor: FileEncryptor
 ) : PasswordRepository {
 
-    private val appKey: String = String(AppKeyProvider.get())
+    private val appKey: String = String(AppKeyProvider.getAppKey())
     private lateinit var cachePasswords: MutableList<Password>
 
     init {
@@ -61,7 +61,7 @@ class PasswordRepositoryImpl @Inject constructor(
 
     private fun loadPasswords(): List<Password> {
         val encryptedPasswords = storage.readEncryptedFile()
-        if (encryptedPasswords == null) return mutableListOf<Password>()
+        if (encryptedPasswords == null) return mutableListOf()
         return encryptor.decryptPasswords(encryptedPasswords, appKey)
     }
 
