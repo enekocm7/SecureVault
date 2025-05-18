@@ -27,7 +27,7 @@ class GeneratePasswordDialog : DialogFragment() {
     private lateinit var binding: PasswordGeneratorBinding
     private val viewModel: GeneratePasswordViewModel by activityViewModels()
 
-    companion object{
+    companion object {
         const val REQUEST_KEY = "GENERATED_PASSWORD_REQUEST_KEY"
     }
 
@@ -102,6 +102,7 @@ class GeneratePasswordDialog : DialogFragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 //Not going to use this function
             }
+
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 lengthSeekBarJob?.cancel()
                 generatePassword()
@@ -132,6 +133,7 @@ class GeneratePasswordDialog : DialogFragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 //Not going to use this function
             }
+
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 wordsCountSeekBarJob?.cancel()
                 generatePassphrase()
@@ -140,7 +142,10 @@ class GeneratePasswordDialog : DialogFragment() {
 
         binding.closeButton.setOnClickListener { dismiss() }
         binding.usePasswordButton.setOnClickListener {
-            setFragmentResult(REQUEST_KEY, bundleOf("password" to binding.generatedPasswordTextView.text.toString()))
+            setFragmentResult(
+                REQUEST_KEY,
+                bundleOf("password" to binding.generatedPasswordTextView.text.toString())
+            )
             dismiss()
         }
 
@@ -172,7 +177,8 @@ class GeneratePasswordDialog : DialogFragment() {
         lifecycleScope.launch {
             viewModel.isLoading.collect { isLoading ->
                 binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                binding.generatedPasswordTextView.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+                binding.generatedPasswordTextView.visibility =
+                    if (isLoading) View.INVISIBLE else View.VISIBLE
             }
         }
     }
