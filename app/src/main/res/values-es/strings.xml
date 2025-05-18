@@ -10,7 +10,7 @@
     <string name="continue_button">Continuar</string>
     <string name="placeholder">Marcador</string>
     <string name="passwords">Contraseñas</string>
-    <string name="copy">Copiar</string>
+    <string name="copyText">Copiar</string>
     <string name="copy_password">Copiar Contraseña</string>
     <string name="add_password">Añadir Contraseña</string>
     <string name="profile">Perfil</string>
@@ -58,4 +58,25 @@
     <string name="symbols">Símbolos (!@#$%^*)</string>
     <string name="number_of_words">Número de palabras:</string>
     <string name="search_bar_text">Buscar…</string>
+    <string name="pref_category_security">Seguridad</string>
+    <string name="pref_category_data_management">Gestión de datos</string>
+    <string name="pref_category_autofill_browser">Autocompletar y Navegador</string>
+    <string name="pref_category_application">Aplicación</string>
+    <string name="pref_title_change_master_password">Cambiar contraseña maestra</string>
+    <string name="pref_title_enable_biometrics">Habilitar biometría</string>
+    <string name="pref_summary_enable_biometrics">Habilitar si no se ha hecho previamente</string>
+    <string name="pref_title_import_export_passwords">Importar y exportar contraseñas</string>
+    <string name="pref_title_change_file_location">Cambiar ubicación del archivo .sv</string>
+    <string name="pref_title_clear_passwords">Borrar contraseñas</string>
+    <string name="pref_summary_clear_passwords">Eliminar todas las contraseñas guardadas</string>
+    <string name="pref_title_autofill_service">Autocompletar</string>
+    <string name="pref_summary_autofill_service">Permitir que la aplicación complete contraseñas</string>
+    <string name="pref_title_browser_connection">Conectar con el navegador</string>
+    <string name="pref_summary_browser_connection">Habilitar la integración con el navegador</string>
+    <string name="pref_title_language_settings">Idioma</string>
+    <string name="pref_title_app_version">Ver versión de la aplicación</string>
+    <string name="pref_title_privacy_policy">Política de privacidad y términos</string>
+    <string name="pref_title_feedback">Enviar comentarios</string>
+    <string name="pref_summary_feedback">Informar problemas técnicos o sugerir nuevas funciones</string>
+    <string name="title_activity_settings">Ajustes</string>
 </resources>
