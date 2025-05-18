@@ -8,7 +8,7 @@ object AppKeyProvider {
     private var appKey: ByteArray? = null
 
     fun generate(): ByteArray {
-        if (appKey != null) {
+        check (appKey != null) {
             throw IllegalStateException("App key already initialized")
         }
 
@@ -23,7 +23,7 @@ object AppKeyProvider {
         appKey = decryptedKey
     }
 
-    fun get(): ByteArray {
+    fun getAppKey(): ByteArray {
         return appKey ?: throw IllegalStateException("App key not loaded")
     }
 

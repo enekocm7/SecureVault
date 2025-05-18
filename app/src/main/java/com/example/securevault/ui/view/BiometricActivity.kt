@@ -60,7 +60,9 @@ class BiometricActivity : AppCompatActivity() {
                     binding.enableButton.isEnabled = true
                 }
 
-                null -> {}
+                null -> {
+                    //Nothing
+                }
             }
         }
 
