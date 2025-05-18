@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">SecureVault</string>
-    <string name="securevault">SecureVault</string>
+    <string name="app_name" translatable="false">SecureVault</string>
+    <string name="securevault" translatable="false">SecureVault</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    <string name="securevault_logo">SecureVault logo</string>
+    <string name="securevault_logo" translatable="false">SecureVault logo</string>
     <string name="next">Next</string>
     <string name="create_master_password">Create Master Password</string>
     <string name="master_password">Master Password</string>
@@ -11,7 +11,7 @@
     <string name="strength">Strength:</string>
     <string name="continue_button">Continue</string>
     <string name="placeholder">Placeholder</string>
-    <string name="email_placeholder">email@example.com</string>
+    <string name="email_placeholder" translatable="false">email@example.com</string>
     <string name="passwords">Passwords</string>
     <string name="copy">Copy</string>
     <string name="copy_password">Copy password</string>
