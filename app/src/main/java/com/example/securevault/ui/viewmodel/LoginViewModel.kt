@@ -11,9 +11,13 @@ import com.example.securevault.domain.usecases.auth.UnlockKeyWithBiometrics
 import com.example.securevault.domain.usecases.auth.UnlockKeyWithPassword
 import com.example.securevault.ui.biometrics.BiometricPromptManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,22 +39,59 @@ class LoginViewModel
     private val _passwordLoginState = MutableStateFlow<Boolean?>(null)
     val passwordLoginState = _passwordLoginState.asStateFlow()
 
+    private val cryptoObjectDeferred by lazy {
+        viewModelScope.async(Dispatchers.Default) {
+            getDecryptCryptoObject()
+        }
+    }
+
     fun login(password: String) {
-        _passwordLoginState.value = unlockKeyWithPassword(password)
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                unlockKeyWithPassword(password)
+            }
+            _passwordLoginState.value = result
+        }
     }
 
     fun login(activity: AppCompatActivity) {
         val biometricAuth = BiometricPromptManager(activity)
+
         viewModelScope.launch {
-            biometricAuth.promptResults.collect { result ->
-                if (result is BiometricResult.AuthenticationSuccess) {
-                    _biometricLoginState.value = unlockKeyWithBiometrics(result)
-                } else if (result is BiometricResult.AuthenticationError || result is BiometricResult.AuthenticationFailed) {
-                    _biometricLoginState.value = false
+            try {
+                biometricAuth.promptResults.collect { result ->
+                    when (result) {
+                        is BiometricResult.AuthenticationSuccess -> {
+                            val authResult = withContext(Dispatchers.Default) {
+                                unlockKeyWithBiometrics(result)
+                            }
+                            _biometricLoginState.value = authResult
+                        }
+
+                        is BiometricResult.AuthenticationError,
+                        is BiometricResult.AuthenticationFailed,
+                        is BiometricResult.AuthenticationNotRecognized -> {
+                            _biometricLoginState.value = false
+                        }
+
+                        BiometricResult.FeatureUnavailable,
+                        BiometricResult.HardwareNotAvailable -> {
+                            _biometricLoginState.value = false
+                        }
+                    }
                 }
+            } catch (_: CancellationException) {
+                _biometricLoginState.value = false
             }
         }
-        authenticateBiometrics(biometricAuth, title, description, getDecryptCryptoObject())
+        viewModelScope.launch {
+            try {
+                val cryptoObject = cryptoObjectDeferred.await()
+                authenticateBiometrics(biometricAuth, title, description, cryptoObject)
+            } catch (_: Exception) {
+                _biometricLoginState.value = false
+            }
+        }
     }
 
     fun isBiometricKeyConfigured(): Boolean {

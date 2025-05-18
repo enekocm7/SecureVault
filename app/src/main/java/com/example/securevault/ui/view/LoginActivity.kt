@@ -36,17 +36,18 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setObserversPassword() {
         lifecycleScope.launch {
-            viewModel.passwordLoginState.collect { success ->
-                if (success == true) {
-                    skip()
-                } else if (success == false) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Invalid password",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            viewModel.passwordLoginState
+                .collect { success ->
+                    if (success == true) {
+                        skip()
+                    } else if (success == false) {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Invalid password",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
         }
     }
 
