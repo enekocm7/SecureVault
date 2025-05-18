@@ -6,6 +6,7 @@
     <string name="securevault_logo" translatable="false">SecureVault logo</string>
     <string name="next">Next</string>
     <string name="create_master_password">Create Master Password</string>
+    <string name="change_master_password">Change Master Password</string>
     <string name="master_password">Master Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="strength">Strength:</string>
