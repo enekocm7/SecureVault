@@ -55,15 +55,25 @@ class GeneratePasswordDialog : DialogFragment() {
     }
 
     private fun setListeners() {
+        binding.regenerateButton.setOnClickListener {
+            generatePassword()
+        }
+
         binding.passwordTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 binding.passwordRadioButton.id -> {
+                    binding.regenerateButton.setOnClickListener {
+                        generatePassword()
+                    }
                     binding.passwordOptionsLayout.visibility = ViewGroup.VISIBLE
                     binding.passphraseOptionsLayout.visibility = ViewGroup.GONE
                     generatePassword()
                 }
 
                 binding.passphraseRadioButton.id -> {
+                    binding.regenerateButton.setOnClickListener {
+                        generatePassphrase()
+                    }
                     binding.passwordOptionsLayout.visibility = ViewGroup.GONE
                     binding.passphraseOptionsLayout.visibility = ViewGroup.VISIBLE
                     generatePassphrase()
