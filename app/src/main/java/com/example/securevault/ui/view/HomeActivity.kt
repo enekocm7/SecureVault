@@ -1,5 +1,6 @@
 package com.example.securevault.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -59,7 +60,7 @@ class HomeActivity : AppCompatActivity() {
         supportFragmentManager.setFragmentResultListener(
             PASSWORD_RELOAD_REQUEST_KEY,
             this
-        ) { requestKey, bundle ->
+        ) { requestKey, _ ->
             if (requestKey == PASSWORD_RELOAD_REQUEST_KEY) {
                 viewModel.loadPasswords()
             }
@@ -82,6 +83,11 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 exitSearchMode()
             }
+        }
+
+        binding.settingIcon.setOnClickListener {
+            val intent = Intent(this,SettingsActivity::class.java)
+            startActivity(intent)
         }
     }
 

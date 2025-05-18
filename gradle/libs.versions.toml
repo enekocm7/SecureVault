@@ -14,6 +14,7 @@ lifecycleViewmodelKtx = "2.9.0"
 material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
+materialVersion = "1.11.0"
 moshiKotlin = "1.15.2"
 nbvcxz = "1.5.1"
 preferenceKtx = "1.2.1"
@@ -34,6 +35,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+material-v1110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
 nbvcxz = { module = "me.gosimple:nbvcxz", version.ref = "nbvcxz" }
 
