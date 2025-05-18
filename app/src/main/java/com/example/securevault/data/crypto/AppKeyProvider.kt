@@ -8,7 +8,7 @@ object AppKeyProvider {
     private var appKey: ByteArray? = null
 
     fun generate(): ByteArray {
-        check (appKey != null) {
+        check(appKey == null) {
             throw IllegalStateException("App key already initialized")
         }
 

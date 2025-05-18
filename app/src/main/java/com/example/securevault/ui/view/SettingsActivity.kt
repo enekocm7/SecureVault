@@ -1,5 +1,6 @@
 package com.example.securevault.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,7 @@ import com.example.securevault.ui.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity(){
+class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: SettingsActivityBinding
     private val viewModel: SettingsViewModel by viewModels()
 
@@ -26,6 +27,18 @@ class SettingsActivity : AppCompatActivity(){
             onBackPressedDispatcher.onBackPressed()
         }
         setListeners()
+        checkBiometric()
+
+    }
+
+    private fun checkBiometric() {
+        if (viewModel.isBiometric()) {
+            binding.switchBiometrics.isChecked = true
+            binding.switchBiometrics.isEnabled = false
+        } else {
+            binding.switchBiometrics.isChecked = false
+            binding.switchBiometrics.isEnabled = true
+        }
     }
 
     private fun setListeners() {
@@ -33,5 +46,12 @@ class SettingsActivity : AppCompatActivity(){
             val dialog = ChangeMasterPasswordDialog()
             dialog.show(supportFragmentManager, "ChangeMasterPasswordDialog")
         }
+        binding.switchBiometrics.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && !viewModel.isBiometric()) {
+                val intent = Intent(this, BiometricActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
     }
 }
