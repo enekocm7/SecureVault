@@ -80,4 +80,9 @@
     <string name="pref_title_feedback">Enviar comentarios</string>
     <string name="pref_summary_feedback">Informar problemas técnicos o sugerir nuevas funciones</string>
     <string name="title_activity_settings">Ajustes</string>
+    <string name="export_passwords">Exportar Contraseñas</string>
+    <string name="import_passwords">Importar Contraseñas</string>
+    <string name="auto_backup">Autoguardado</string>
+    <string name="auto_backup_file_location">Ruta Fichero Autoguardado</string>
+    <string name="file_location">Ruta Fichero:</string>
 </resources>

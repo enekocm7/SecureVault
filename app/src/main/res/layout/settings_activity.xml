@@ -94,16 +94,28 @@
                 app:layout_constraintTop_toBottomOf="@id/switch_biometrics" />
 
             <Button
-                android:id="@+id/btn_import_export"
+                android:id="@+id/btn_import"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
-                android:text="@string/pref_title_import_export_passwords"
+                android:text="@string/import_passwords"
                 android:textColor="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_data_management_header" />
+
+            <Button
+                android:id="@+id/btn_export"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:text="@string/export_passwords"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_import" />
 
             <Button
                 android:id="@+id/btn_clear_passwords"
@@ -115,7 +127,43 @@
                 android:textColor="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_import_export" />
+                app:layout_constraintTop_toBottomOf="@id/btn_export" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/auto_backup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/auto_backup"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_clear_passwords"
+                app:thumbTint="@drawable/switch_thumb_selector"
+                app:trackTint="@drawable/switch_track_selector" />
+
+            <Button
+                android:id="@+id/auto_backup_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:text="@string/auto_backup_file_location"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/auto_backup" />
+
+            <TextView
+                android:id="@+id/file_location_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/file_location"
+                android:textColor="@color/gris"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/auto_backup_location"/>
 
             <TextView
                 android:id="@+id/text_autofill_header"
@@ -128,7 +176,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_clear_passwords" />
+                app:layout_constraintTop_toBottomOf="@id/file_location_text" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_autofill"
@@ -171,18 +219,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/switch_browser_connection" />
 
-            <Button
-                android:id="@+id/btn_language_settings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/white"
-                android:text="@string/pref_title_language_settings"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_app_header" />
-
 
             <Button
                 android:id="@+id/btn_privacy_policy"
@@ -194,7 +230,7 @@
                 android:textColor="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_language_settings" />
+                app:layout_constraintTop_toBottomOf="@id/text_app_header" />
 
             <Button
                 android:id="@+id/btn_feedback"
