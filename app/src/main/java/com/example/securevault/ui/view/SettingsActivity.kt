@@ -5,7 +5,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.securevault.databinding.SettingsActivityBinding
-import com.example.securevault.ui.view.fragments.ChangeMasterPasswordDialog
+import com.example.securevault.ui.view.dialogs.ChangeMasterPasswordDialog
+import com.example.securevault.ui.view.dialogs.ExportPasswordDialog
 import com.example.securevault.ui.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,6 +52,10 @@ class SettingsActivity : AppCompatActivity() {
                 val intent = Intent(this, BiometricActivity::class.java)
                 startActivity(intent)
             }
+        }
+        binding.btnExport.setOnClickListener {
+            val dialog = ExportPasswordDialog()
+            dialog.show(supportFragmentManager, "ExportPasswordDialog")
         }
 
     }

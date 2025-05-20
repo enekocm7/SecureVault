@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.securevault.R
 import com.example.securevault.databinding.MainScreenBinding
 import com.example.securevault.ui.adapter.PasswordAdapter
-import com.example.securevault.ui.view.fragments.CreatePasswordDialog
+import com.example.securevault.ui.view.dialogs.CreatePasswordDialog
 import com.example.securevault.ui.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

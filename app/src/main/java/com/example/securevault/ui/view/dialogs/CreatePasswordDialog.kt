@@ -1,4 +1,4 @@
-package com.example.securevault.ui.view.fragments
+package com.example.securevault.ui.view.dialogs
 
 import android.app.Dialog
 import android.graphics.Color
