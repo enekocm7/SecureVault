@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/export_title">
 
-        <RadioButton
+        <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_encrypted"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,21 +45,7 @@
             android:textColor="@android:color/black"
             android:background="@drawable/option_background" />
 
-        <RadioButton
-            android:id="@+id/radio_plain_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:buttonTint="@color/red"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:text="@string/export_plain_text"
-            android:textColor="@android:color/black"
-            android:background="@drawable/option_background" />
-
-        <RadioButton
+        <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_csv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -90,7 +90,6 @@
     <string name="file_location">File Location:</string>
     <string name="export_method">Choose Export Method</string>
     <string name="export_encrypted">Encrypted (.sv)</string>
-    <string name="export_plain_text">Plain Text (.txt)</string>
     <string name="export_csv">CSV (.csv)</string>
     <string name="export">Export</string>
     <string name="export_save_location">Save Location</string>
@@ -100,7 +99,6 @@
     <string name="back">Back</string>
     <string name="import_file">Import File</string>
     <string name="import_encrypted">Encrypted (.sv)</string>
-    <string name="import_plain_text">Plain Text (.txt)</string>
     <string name="import_csv">CSV (.csv)</string>
     <string name="select_file">Select file</string>
     <string name="decryption_password">Decryption Password</string>
