@@ -95,5 +95,12 @@
     <string name="browse">Examinar</string>
     <string name="encryption_password">Contraseña de Cifrado</string>
     <string name="back">Volver</string>
+    <string name="import_file">Importar Archivo</string>
+    <string name="import_encrypted">Cifrado (.sv)</string>
+    <string name="import_plain_text">Texto Plano (.txt)</string>
+    <string name="import_csv">CSV (.csv)</string>
+    <string name="select_file">Seleccionar archivo</string>
+    <string name="decryption_password">Contraseña de Descifrado</string>
+    <string name="import_button">Importar</string>
 </resources>
 
