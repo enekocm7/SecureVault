@@ -85,4 +85,15 @@
     <string name="auto_backup">Autoguardado</string>
     <string name="auto_backup_file_location">Ruta Fichero Autoguardado</string>
     <string name="file_location">Ruta Fichero:</string>
+    <string name="export_method">Elegir Método de Exportación</string>
+    <string name="export_encrypted">Cifrado (.sv)</string>
+    <string name="export_plain_text">Texto Plano (.txt)</string>
+    <string name="export_csv">CSV (.csv)</string>
+    <string name="export">Exportar</string>
+    <string name="export_save_location">Ubicación de Guardado</string>
+    <string name="file_path">Ruta del archivo</string>
+    <string name="browse">Examinar</string>
+    <string name="encryption_password">Contraseña de Cifrado</string>
+    <string name="back">Volver</string>
 </resources>
+

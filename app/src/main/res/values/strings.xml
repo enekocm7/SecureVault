@@ -88,4 +88,15 @@
     <string name="auto_backup">Auto Backup</string>
     <string name="auto_backup_file_location">Auto Backup File Location</string>
     <string name="file_location">File Location:</string>
+    <string name="export_method">Choose Export Method</string>
+    <string name="export_encrypted">Encrypted (.sv)</string>
+    <string name="export_plain_text">Plain Text (.txt)</string>
+    <string name="export_csv">CSV (.csv)</string>
+    <string name="export">Export</string>
+    <string name="export_save_location">Save Location</string>
+    <string name="file_path">File path</string>
+    <string name="browse">Browse</string>
+    <string name="encryption_password">Encryption Password</string>
+    <string name="back">Back</string>
 </resources>
+
