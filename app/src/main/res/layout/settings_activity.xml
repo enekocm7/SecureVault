@@ -169,7 +169,7 @@
                 android:id="@+id/text_autofill_header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp"
+                android:paddingTop= "20dp"
                 android:text="@string/pref_category_autofill_browser"
                 android:textColor="@color/red"
                 android:textSize="18sp"
