@@ -85,6 +85,7 @@ class ChangeMasterPasswordDialog: DialogFragment() {
                     viewModel.createAppKey(masterPassword)
                     if (viewModel.isKeyConfigured()) {
                         dismiss()
+                        Toast.makeText(context,getString(R.string.password_changed),Toast.LENGTH_LONG).show()
                     }
                 }
             }
