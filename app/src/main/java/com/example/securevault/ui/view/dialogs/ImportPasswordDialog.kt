@@ -7,16 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
-import com.example.securevault.databinding.DialogExportMethodBinding
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.securevault.databinding.DialogImportFileBinding
 
-@AndroidEntryPoint
-class ExportPasswordDialog : DialogFragment() {
+class ImportPasswordDialog : DialogFragment() {
 
-    private lateinit var binding: DialogExportMethodBinding
+    private lateinit var binding: DialogImportFileBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogExportMethodBinding.inflate(layoutInflater)
+        binding = DialogImportFileBinding.inflate(layoutInflater)
 
         val displayMetrics = resources.displayMetrics
         val width = (displayMetrics.widthPixels * 0.9).toInt()
@@ -37,13 +35,13 @@ class ExportPasswordDialog : DialogFragment() {
     }
 
     private fun setPasswordInput() {
-        binding.exportMethodGroup.setOnCheckedChangeListener { _, _ ->
-            if (binding.radioEncrypted.isChecked){
+        binding.importMethodGroup.setOnCheckedChangeListener { _, _ ->
+            if (binding.radioEncrypted.isChecked) {
                 binding.passwordSection.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.passwordSection.visibility = View.GONE
             }
         }
-    }
 
+    }
 }

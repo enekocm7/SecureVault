@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.securevault.databinding.SettingsActivityBinding
 import com.example.securevault.ui.view.dialogs.ChangeMasterPasswordDialog
 import com.example.securevault.ui.view.dialogs.ExportPasswordDialog
+import com.example.securevault.ui.view.dialogs.ImportPasswordDialog
 import com.example.securevault.ui.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,6 +57,10 @@ class SettingsActivity : AppCompatActivity() {
         binding.btnExport.setOnClickListener {
             val dialog = ExportPasswordDialog()
             dialog.show(supportFragmentManager, "ExportPasswordDialog")
+        }
+        binding.btnImport.setOnClickListener {
+            val dialog = ImportPasswordDialog()
+            dialog.show(supportFragmentManager,"ImportPasswordDialog")
         }
 
     }
