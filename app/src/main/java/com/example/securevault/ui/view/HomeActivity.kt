@@ -45,6 +45,11 @@ class HomeActivity : AppCompatActivity() {
         setObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPasswords()
+    }
+
     private fun setObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
