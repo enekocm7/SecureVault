@@ -59,6 +59,12 @@ class PasswordRepositoryImpl @Inject constructor(
         reloadPasswords()
     }
 
+    override fun deleteAllPasswords() {
+        cachePasswords.clear()
+        val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, appKey)
+        storage.saveEncryptedFile(encryptedPasswords)
+    }
+
     private fun loadPasswords(): List<Password> {
         val encryptedPasswords = storage.readEncryptedFile()
         if (encryptedPasswords == null) return mutableListOf()

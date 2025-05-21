@@ -6,7 +6,6 @@ import com.example.securevault.domain.repository.PasswordRepository
 import javax.inject.Inject
 
 class DeletePassword @Inject constructor(private val passwordRepository: PasswordRepository) {
-    operator fun invoke(passwordDto: PasswordDto){
-        passwordRepository.deletePassword(PasswordMapper.mapToEntity(passwordDto))
-    }
+    operator fun invoke(passwordDto: PasswordDto) = passwordRepository.deletePassword(PasswordMapper.mapToEntity(passwordDto))
+
 }

@@ -9,4 +9,5 @@ interface PasswordRepository {
     fun insertPassword(password: Password)
     fun insertPassword(previousName: String, password: Password)
     fun deletePassword(password: Password)
+    fun deleteAllPasswords()
 }
