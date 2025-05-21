@@ -81,8 +81,10 @@
     <string name="pref_summary_feedback">Informar problemas técnicos o sugerir nuevas funciones</string>
     <string name="title_activity_settings">Ajustes</string>
     <string name="password_changed">Contraseña cambiada exitosamente</string>
+    <string name="passwords_clear_toast">Contraseñas borradas exitosamente</string>
     <string name="export_passwords">Exportar Contraseñas</string>
     <string name="import_passwords">Importar Contraseñas</string>
+    <string name="clear_passwords_confirmation_message">¿Estas seguro que quieres borrar las contraseñas, esta acción no se puede deshacer?</string>
     <string name="auto_backup">Autoguardado</string>
     <string name="auto_backup_file_location">Ruta Fichero Autoguardado</string>
     <string name="file_location">Ruta Fichero:</string>

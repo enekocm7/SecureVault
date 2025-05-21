@@ -22,9 +22,6 @@ class CreatePasswordDialog(private val supportFragmentManager: FragmentManager) 
 
     private lateinit var binding: CreatePasswordDialogBinding
     private val viewModel: CreatePasswordViewModel by viewModels()
-    private val generatePasswordDialog by lazy {
-        GeneratePasswordDialog()
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = CreatePasswordDialogBinding.inflate(layoutInflater)
@@ -47,7 +44,6 @@ class CreatePasswordDialog(private val supportFragmentManager: FragmentManager) 
         return dialog
     }
 
-
     private fun setListeners() {
         binding.saveButton.setOnClickListener {
             val passwordDto: PasswordDto? = getPassword()
@@ -63,7 +59,7 @@ class CreatePasswordDialog(private val supportFragmentManager: FragmentManager) 
         }
 
         binding.generatePasswordButton.setOnClickListener {
-            generatePasswordDialog.show(supportFragmentManager, "Generate Password")
+            GeneratePasswordDialog().show(supportFragmentManager, "Generate Password")
         }
         supportFragmentManager.setFragmentResultListener(
             GeneratePasswordDialog.REQUEST_KEY,

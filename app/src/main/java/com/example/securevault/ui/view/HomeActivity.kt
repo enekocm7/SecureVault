@@ -27,9 +27,6 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: MainScreenBinding
     private val viewModel: HomeViewModel by viewModels()
-    private val createPasswordDialog by lazy {
-        CreatePasswordDialog(this.supportFragmentManager)
-    }
     private lateinit var passwordAdapter: PasswordAdapter
 
     companion object {
@@ -73,7 +70,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setListeners() {
         binding.addIcon.setOnClickListener {
-            createPasswordDialog.show(this.supportFragmentManager, "Create new password")
+            CreatePasswordDialog(supportFragmentManager).show(supportFragmentManager, "Create new password")
         }
 
         binding.search.setOnClickListener {
@@ -117,6 +114,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
 }
+
 
 
 

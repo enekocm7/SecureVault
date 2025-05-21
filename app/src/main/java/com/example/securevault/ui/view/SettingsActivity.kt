@@ -2,8 +2,11 @@ package com.example.securevault.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.securevault.R
 import com.example.securevault.databinding.SettingsActivityBinding
 import com.example.securevault.ui.view.dialogs.ChangeMasterPasswordDialog
 import com.example.securevault.ui.view.dialogs.ExportPasswordDialog
@@ -45,8 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setListeners() {
         binding.btnChangeMasterPassword.setOnClickListener {
-            val dialog = ChangeMasterPasswordDialog()
-            dialog.show(supportFragmentManager, "ChangeMasterPasswordDialog")
+            ChangeMasterPasswordDialog().show(supportFragmentManager, "ChangeMasterPasswordDialog")
         }
         binding.switchBiometrics.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && !viewModel.isBiometric()) {
@@ -55,13 +57,28 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         binding.btnExport.setOnClickListener {
-            val dialog = ExportPasswordDialog()
-            dialog.show(supportFragmentManager, "ExportPasswordDialog")
+            ExportPasswordDialog().show(supportFragmentManager, "ExportPasswordDialog")
         }
         binding.btnImport.setOnClickListener {
-            val dialog = ImportPasswordDialog()
-            dialog.show(supportFragmentManager,"ImportPasswordDialog")
+            ImportPasswordDialog().show(supportFragmentManager, "ImportPasswordDialog")
         }
+        binding.btnClearPasswords.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.pref_title_clear_passwords))
+                .setMessage(getString(R.string.clear_passwords_confirmation_message))
+                .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                    viewModel.clearPasswords()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.passwords_clear_toast),
+                        Toast.LENGTH_LONG
+                    ).show()
 
+                }
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show()
+        }
     }
 }
+
+

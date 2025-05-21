@@ -63,6 +63,7 @@ class PasswordRepositoryImpl @Inject constructor(
         cachePasswords.clear()
         val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, appKey)
         storage.saveEncryptedFile(encryptedPasswords)
+        reloadPasswords()
     }
 
     private fun loadPasswords(): List<Password> {
