@@ -104,5 +104,7 @@
     <string name="decryption_password">Contraseña de Descifrado</string>
     <string name="import_button">Importar</string>
     <string name="decryption_password_toast">La contraseña para desencriptar no puede estar vacia</string>
+    <string name="missing_file_toast">No hay ningún fichero seleccionado</string>
+    <string name="wrong_password_toast">La contraseña es incorrecta</string>
 </resources>
 

@@ -14,10 +14,13 @@ import com.example.securevault.R
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.DialogImportFileBinding
 import com.example.securevault.ui.viewmodel.fragments.ImportPasswordViewModel
+import java.io.File
 
 class ImportPasswordDialog : DialogFragment() {
 
@@ -29,6 +32,7 @@ class ImportPasswordDialog : DialogFragment() {
     private lateinit var binding: DialogImportFileBinding
     private lateinit var filePickerLauncher: ActivityResultLauncher<Intent>
 
+    private var file: File? = null
     private val viewModel: ImportPasswordViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -62,7 +66,6 @@ class ImportPasswordDialog : DialogFragment() {
                 binding.passwordSection.visibility = View.GONE
             }
         }
-
     }
 
     private fun setFilePickerLauncher() {
@@ -71,7 +74,8 @@ class ImportPasswordDialog : DialogFragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri = result.data?.data
                     uri?.let {
-                        handleFile(uri)
+                        file = uri.toFile()
+                        binding.filePathInput.setText(file?.name)
                     }
                 }
             }
@@ -86,17 +90,31 @@ class ImportPasswordDialog : DialogFragment() {
                 showMissingPasswordToast()
                 return@setOnClickListener
             }
-
             val fileType = if (isEncrypted) ENCRYPTED else CSV
             openFile(null, fileType)
         }
 
+        binding.btnImport.setOnClickListener {
+            if (file == null) showMissingFileToast() else handleFile(file!!.toUri())
+        }
+
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
     }
 
     private fun showMissingPasswordToast() {
         Toast.makeText(
             context,
             getString(R.string.decryption_password_toast),
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    private fun showMissingFileToast() {
+        Toast.makeText(
+            context,
+            getString(R.string.missing_file_toast),
             Toast.LENGTH_LONG
         ).show()
     }
@@ -116,7 +134,19 @@ class ImportPasswordDialog : DialogFragment() {
     private fun handleFile(uri: Uri) {
         context?.contentResolver?.openInputStream(uri)?.bufferedReader().use {
             val passwords = it?.readText() ?: ""
-            viewModel.insertAllPasswords(passwords, binding.passwordInput.text.toString())
+            try {
+                viewModel.insertAllPasswords(passwords, binding.passwordInput.text.toString())
+            }catch (_: Exception){
+                showWrongPasswordToast()
+            }
         }
+    }
+
+    private fun showWrongPasswordToast() {
+        Toast.makeText(
+            context,
+            getString(R.string.wrong_password_toast),
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
