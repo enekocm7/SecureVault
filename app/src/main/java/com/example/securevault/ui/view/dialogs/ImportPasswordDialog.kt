@@ -26,7 +26,7 @@ class ImportPasswordDialog : DialogFragment() {
 
     companion object {
         private const val ENCRYPTED = "application/sv"
-        private const val CSV = "application/csv"
+        private const val CSV = "text/csv"
     }
 
     private lateinit var binding: DialogImportFileBinding

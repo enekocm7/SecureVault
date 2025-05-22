@@ -3,11 +3,12 @@ package com.example.securevault.data.csv.storage
 import android.content.Context
 import com.example.securevault.data.csv.formatter.CsvFormatter
 import com.example.securevault.data.json.model.Password
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
 
 class CsvStorage @Inject constructor(
-    private val context: Context, private val csvFormatter: CsvFormatter
+    @ApplicationContext private val context: Context, private val csvFormatter: CsvFormatter
 ) {
 
     @Throws(IOException::class)
