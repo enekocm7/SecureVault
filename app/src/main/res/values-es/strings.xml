@@ -103,5 +103,6 @@
     <string name="select_file">Seleccionar archivo</string>
     <string name="decryption_password">Contraseña de Descifrado</string>
     <string name="import_button">Importar</string>
+    <string name="decryption_password_toast">La contraseña para desencriptar no puede estar vacia</string>
 </resources>
 

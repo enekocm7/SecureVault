@@ -106,5 +106,6 @@
     <string name="select_file">Select file</string>
     <string name="decryption_password">Decryption Password</string>
     <string name="import_button">Import</string>
+    <string name="decryption_password_toast">The decryption password can not be empty</string>
 </resources>
 

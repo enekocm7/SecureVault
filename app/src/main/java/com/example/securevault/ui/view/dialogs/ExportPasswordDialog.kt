@@ -13,6 +13,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ExportPasswordDialog : DialogFragment() {
 
+    companion object {
+        private const val ENCRYPTED = "application/sv"
+        private const val CSV = "application/csv"
+    }
+
     private lateinit var binding: DialogExportMethodBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -33,17 +38,30 @@ class ExportPasswordDialog : DialogFragment() {
         }
 
         setPasswordInput()
+        setFilePickerLauncher()
+        setListeners()
         return dialog
+    }
+
+    private fun setFilePickerLauncher() {
+
+    }
+
+    private fun setListeners() {
+        binding.browseButton.setOnClickListener {
+
+        }
     }
 
     private fun setPasswordInput() {
         binding.exportMethodGroup.setOnCheckedChangeListener { _, _ ->
-            if (binding.radioEncrypted.isChecked){
+            if (binding.radioEncrypted.isChecked) {
                 binding.passwordSection.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.passwordSection.visibility = View.GONE
             }
         }
     }
+
 
 }
