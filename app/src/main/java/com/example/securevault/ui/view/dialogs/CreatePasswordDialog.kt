@@ -14,7 +14,7 @@ import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.CreatePasswordDialogBinding
 import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.ui.view.HomeActivity
-import com.example.securevault.ui.viewmodel.fragments.CreatePasswordViewModel
+import com.example.securevault.ui.viewmodel.dialogs.CreatePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

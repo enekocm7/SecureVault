@@ -19,7 +19,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.DialogImportFileBinding
-import com.example.securevault.ui.viewmodel.fragments.ImportPasswordViewModel
+import com.example.securevault.ui.viewmodel.dialogs.ImportPasswordViewModel
 import java.io.File
 
 class ImportPasswordDialog : DialogFragment() {
@@ -83,6 +83,11 @@ class ImportPasswordDialog : DialogFragment() {
 
     private fun setListeners() {
         binding.selectFileButton.setOnClickListener {
+            val fileType = if (binding.radioEncrypted.isChecked) ENCRYPTED else CSV
+            openFile(null, fileType)
+        }
+
+        binding.btnImport.setOnClickListener {
             val isEncrypted = binding.radioEncrypted.isChecked
             val password = binding.passwordInput.text.toString()
 
@@ -90,11 +95,6 @@ class ImportPasswordDialog : DialogFragment() {
                 showMissingPasswordToast()
                 return@setOnClickListener
             }
-            val fileType = if (isEncrypted) ENCRYPTED else CSV
-            openFile(null, fileType)
-        }
-
-        binding.btnImport.setOnClickListener {
             if (file == null) showMissingFileToast() else handleFile(file!!.toUri())
         }
 
@@ -132,14 +132,19 @@ class ImportPasswordDialog : DialogFragment() {
     }
 
     private fun handleFile(uri: Uri) {
-        context?.contentResolver?.openInputStream(uri)?.bufferedReader().use {
-            val passwords = it?.readText() ?: ""
-            try {
-                viewModel.insertAllPasswords(passwords, binding.passwordInput.text.toString())
-            }catch (_: Exception){
-                showWrongPasswordToast()
+        if (binding.radioEncrypted.isChecked) {
+            context?.contentResolver?.openInputStream(uri)?.bufferedReader().use {
+                val passwords = it?.readText() ?: ""
+                try {
+                    viewModel.insertAllPasswords(passwords, binding.passwordInput.text.toString())
+                } catch (_: Exception) {
+                    showWrongPasswordToast()
+                }
             }
+        }else if (binding.radioCsv.isChecked){
+            viewModel.insertAllPasswords(uri)
         }
+
     }
 
     private fun showWrongPasswordToast() {

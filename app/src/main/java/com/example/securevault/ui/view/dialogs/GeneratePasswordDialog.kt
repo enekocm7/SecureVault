@@ -15,7 +15,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.databinding.PasswordGeneratorBinding
 import com.example.securevault.domain.model.PasswordStrength
-import com.example.securevault.ui.viewmodel.fragments.GeneratePasswordViewModel
+import com.example.securevault.ui.viewmodel.dialogs.GeneratePasswordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

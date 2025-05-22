@@ -1,4 +1,4 @@
-package com.example.securevault.ui.viewmodel.fragments
+package com.example.securevault.ui.viewmodel.dialogs
 
 import androidx.lifecycle.ViewModel
 import com.example.securevault.domain.model.PasswordDto
