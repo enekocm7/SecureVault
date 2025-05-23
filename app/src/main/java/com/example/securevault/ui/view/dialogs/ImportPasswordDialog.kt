@@ -10,7 +10,6 @@ import android.provider.DocumentsContract
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
@@ -30,7 +29,18 @@ class ImportPasswordDialog : DialogFragment() {
     }
 
     private lateinit var binding: DialogImportFileBinding
-    private lateinit var filePickerLauncher: ActivityResultLauncher<Intent>
+    private val filePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val uri = result.data?.data
+                uri?.let {
+                    fileUri = it
+                    val fileName = getFileNameFromUri(it)
+                    binding.filePathInput.setText(fileName ?: it.lastPathSegment)
+                }
+            }
+        }
 
     private var fileUri: Uri? = null
     private val viewModel: ImportPasswordViewModel by activityViewModels()
@@ -53,7 +63,6 @@ class ImportPasswordDialog : DialogFragment() {
         }
 
         setPasswordInput()
-        setFilePickerLauncher()
         setListeners()
         observeLoadingState()
         return dialog
@@ -65,20 +74,6 @@ class ImportPasswordDialog : DialogFragment() {
                 if (binding.radioEncrypted.isChecked) View.VISIBLE else View.GONE
 
         }
-    }
-
-    private fun setFilePickerLauncher() {
-        filePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val uri = result.data?.data
-                    uri?.let {
-                        fileUri = it
-                        val fileName = getFileNameFromUri(it)
-                        binding.filePathInput.setText(fileName ?: it.lastPathSegment)
-                    }
-                }
-            }
     }
 
     private fun getFileNameFromUri(uri: Uri): String? {
