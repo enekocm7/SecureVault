@@ -5,7 +5,6 @@ import android.net.Uri
 import com.example.securevault.data.csv.formatter.CsvFormatter
 import com.example.securevault.data.json.model.Password
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.io.IOException
 import javax.inject.Inject
 
 class CsvStorage @Inject constructor(
@@ -21,14 +20,11 @@ class CsvStorage @Inject constructor(
     }
 
     fun readCsv(uri: Uri): List<Password> {
-        return try {
-            context.contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
-                val csvData = reader?.readText() ?: ""
-                if (csvData.isBlank()) emptyList()
-                else csvFormatter.unparsePasswordsWithHeader(csvData)
-            }
-        } catch (_: IOException) {
-            emptyList()
+        return context.contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
+            val csvData = reader?.readText() ?: ""
+            if (csvData.isBlank()) emptyList()
+            else csvFormatter.unparsePasswordsWithHeader(csvData)
         }
     }
+
 }

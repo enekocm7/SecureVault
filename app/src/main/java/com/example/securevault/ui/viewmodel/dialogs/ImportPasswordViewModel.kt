@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securevault.di.DispatcherProvider
+import com.example.securevault.domain.model.ImportState
 import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.domain.usecases.csv.ReadCsv
 import com.example.securevault.domain.usecases.password.GetPasswordsFromEncrypted
@@ -26,6 +27,9 @@ class ImportPasswordViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
+    private val _importState = MutableStateFlow<ImportState?>(null)
+    val importState = _importState.asStateFlow()
+
     private fun insertAllPasswords(passwords: List<PasswordDto>) {
         _loading.value = true
         saveAllPasswords(passwords)
@@ -33,18 +37,33 @@ class ImportPasswordViewModel @Inject constructor(
     }
 
     fun insertAllPasswords(encryptedPasswords: String, key: String) {
-        _loading.value = true
-        insertAllPasswords(getPasswordsFromEncrypted(encryptedPasswords, key))
-        _loading.value = false
+        viewModelScope.launch(dispatcherProvider.io) {
+            _loading.value = true
+            try {
+                insertAllPasswords(getPasswordsFromEncrypted(encryptedPasswords, key))
+                _importState.value = ImportState.Success
+            } catch (_: Exception) {
+                _importState.value = ImportState.WrongPassword
+            }
+            _loading.value = false
+        }
     }
 
     fun insertAllPasswords(uri: Uri) {
         viewModelScope.launch(dispatcherProvider.io) {
             _loading.value = true
-            val list = readCsv(uri)
-            insertAllPasswords(list)
+            try {
+                insertAllPasswords(readCsv(uri))
+                _importState.value = ImportState.Success
+            } catch (_: Exception) {
+                _importState.value = ImportState.CsvFormatError
+            }
             _loading.value = false
         }
+    }
+
+    fun clearError() {
+        _importState.value = null
     }
 
 }

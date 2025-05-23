@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.securevault.domain.usecases.csv.WriteCsv
 import com.example.securevault.domain.usecases.password.GetAllPasswords
+import com.example.securevault.domain.usecases.sv.WriteSv
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class ExportPasswordViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val writeCsv: WriteCsv,
+    private val writeSv: WriteSv,
     private val getAllPasswords: GetAllPasswords
 ) : ViewModel() {
 
@@ -32,8 +34,14 @@ class ExportPasswordViewModel @Inject constructor(
         }
         _loading.value = false
     }
+
     fun createSv(folderUri: Uri, password: String) {
-        TODO()
+        _loading.value = true
+        val fileUri = createFileInFolder(folderUri, fileNameSv, "text/sv")
+        fileUri?.let {
+            writeSv(it, getAllPasswords(), password)
+        }
+        _loading.value = false
     }
 
     private fun createFileInFolder(folderUri: Uri, fileName: String, mimeType: String): Uri? {

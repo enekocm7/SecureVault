@@ -108,12 +108,14 @@
     <string name="decryption_password_toast">La contraseña para desencriptar no puede estar vacia</string>
     <string name="missing_file_toast">No hay ningún fichero seleccionado</string>
     <string name="wrong_password_toast">La contraseña es incorrecta</string>
-    <string name="csv_import_toast">Contraseñas importadas correctamente</string>
+    <string name="import_toast">Contraseñas importadas correctamente</string>
     <string name="importing_passwords">Importando contraseñas</string>
     <string name="missing_folder_toast">Seleccione una carpeta</string>
     <string name="missing_password_toast">La contraseña no puede estar vacia</string>
     <string name="different_password_toast">Las contraseñas deben ser iguales</string>
     <string name="exporting_passwords">Exportando contraseñas</string>
     <string name="exported_passwords_successfully_toast">Contraseñas exportadas correctamente</string>
+    <string name="file_type_csv_error">El fichero debe ser .csv</string>
+    <string name="file_type_sv_error">El fichero debe ser .sv</string>
 </resources>
 

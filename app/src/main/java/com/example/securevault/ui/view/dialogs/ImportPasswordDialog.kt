@@ -12,20 +12,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.R
 import com.example.securevault.databinding.DialogImportBinding
+import com.example.securevault.domain.model.ImportState
 import com.example.securevault.ui.viewmodel.dialogs.ImportPasswordViewModel
 import kotlinx.coroutines.launch
 
 class ImportPasswordDialog : DialogFragment() {
 
     companion object {
-        private const val ENCRYPTED = "application/sv"
-        private const val CSV = "text/csv"
+        private const val ENCRYPTED = "*/*"
+        private const val CSV = "text/*"
     }
 
     private lateinit var binding: DialogImportBinding
@@ -34,9 +34,24 @@ class ImportPasswordDialog : DialogFragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data
                 uri?.let {
-                    fileUri = it
-                    val fileName = getFileNameFromUri(it)
-                    binding.filePathInput.setText(fileName ?: it.lastPathSegment)
+                    val fileName = getFileNameFromUri(it) ?: it.lastPathSegment ?: ""
+                    val isEncrypted = binding.radioEncrypted.isChecked
+                    val isCsv = binding.radioCsv.isChecked
+
+                    when {
+                        isEncrypted && !fileName.endsWith(".sv") -> {
+                            showToast(getString(R.string.file_type_sv_error))
+                        }
+
+                        isCsv && !fileName.endsWith(".csv") -> {
+                            showToast(getString(R.string.file_type_csv_error))
+                        }
+
+                        else -> {
+                            fileUri = it
+                            binding.filePathInput.setText(fileName)
+                        }
+                    }
                 }
             }
         }
@@ -64,8 +79,10 @@ class ImportPasswordDialog : DialogFragment() {
         setPasswordInput()
         setListeners()
         observeLoadingState()
+        observeErrorState()
         return dialog
     }
+
 
     private fun setPasswordInput() {
         binding.importMethodGroup.setOnCheckedChangeListener { _, _ ->
@@ -102,23 +119,17 @@ class ImportPasswordDialog : DialogFragment() {
             val password = binding.passwordInput.text.toString()
 
             if (isEncrypted && password.isBlank()) {
-                showMissingPasswordToast()
+                showToast(getString(R.string.decryption_password_toast))
                 return@setOnClickListener
             }
-            if (fileUri == null) showMissingFileToast() else handleFile(fileUri!!)
+            if (fileUri == null) showToast(getString(R.string.missing_file_toast)) else handleFile(
+                fileUri!!
+            )
         }
 
         binding.btnCancel.setOnClickListener {
             dismiss()
         }
-    }
-
-    private fun showMissingPasswordToast() {
-        Toast.makeText(
-            context,
-            getString(R.string.decryption_password_toast),
-            Toast.LENGTH_LONG
-        ).show()
     }
 
     private fun openFile(fileType: String) {
@@ -136,7 +147,7 @@ class ImportPasswordDialog : DialogFragment() {
                 try {
                     viewModel.insertAllPasswords(passwords, binding.passwordInput.text.toString())
                 } catch (_: Exception) {
-                    showWrongPasswordToast()
+                    showToast(getString(R.string.wrong_password_toast))
                 }
             }
         } else if (binding.radioCsv.isChecked) {
@@ -144,19 +155,9 @@ class ImportPasswordDialog : DialogFragment() {
         }
     }
 
-    private fun showSuccessToast() {
-        Toast.makeText(context, getString(R.string.csv_import_toast), Toast.LENGTH_LONG)
-            .show()
-    }
-
     private fun observeLoadingState() {
         lifecycleScope.launch {
             viewModel.loading.collect { isLoading ->
-                if (!isLoading && binding.progressContainer.isVisible) {
-                    showSuccessToast()
-                    dismiss()
-                }
-
                 binding.progressContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
                 binding.buttonsContainer.isEnabled = !isLoading
                 binding.btnImport.isEnabled = !isLoading
@@ -165,18 +166,38 @@ class ImportPasswordDialog : DialogFragment() {
         }
     }
 
-    private fun showMissingFileToast() {
-        Toast.makeText(
-            context,
-            getString(R.string.missing_file_toast),
-            Toast.LENGTH_LONG
-        ).show()
+    private fun observeErrorState() {
+        lifecycleScope.launch {
+            viewModel.importState.collect { state ->
+                when (state) {
+                    ImportState.WrongPassword ->
+                        showToast(getString(R.string.wrong_password_toast))
+
+                    ImportState.CsvFormatError ->
+                        showToast(getString(R.string.csv_file_creation_error))
+
+                    ImportState.Success -> {
+                        showToast(getString(R.string.import_toast))
+                        dismiss()
+                    }
+
+
+                    null -> {
+                        /*Nothing*/
+                    }
+                }
+
+                if (state != null) {
+                    viewModel.clearError()
+                }
+            }
+        }
     }
 
-    private fun showWrongPasswordToast() {
+    private fun showToast(message: String) {
         Toast.makeText(
             context,
-            getString(R.string.wrong_password_toast),
+            message,
             Toast.LENGTH_LONG
         ).show()
     }

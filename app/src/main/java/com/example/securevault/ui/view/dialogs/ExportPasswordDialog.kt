@@ -112,8 +112,6 @@ class ExportPasswordDialog : DialogFragment() {
         }
     }
 
-
-
     private fun selectFolder() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

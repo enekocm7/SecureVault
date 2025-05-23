@@ -111,12 +111,14 @@
     <string name="decryption_password_toast">The decryption password can not be empty</string>
     <string name="missing_file_toast">There is no file selected</string>
     <string name="wrong_password_toast">The password is incorrect</string>
-    <string name="csv_import_toast">Passwords imported successfully</string>
+    <string name="import_toast">Passwords imported successfully</string>
     <string name="importing_passwords">Importing passwords</string>
     <string name="missing_folder_toast">Missing folder destination</string>
     <string name="missing_password_toast">Password cannot be empty</string>
     <string name="different_password_toast">The passwords must be the same</string>
     <string name="exporting_passwords">Exporting passwords</string>
     <string name="exported_passwords_successfully_toast">Exported passwords successfully</string>
+    <string name="file_type_csv_error">The file must be .csv</string>
+    <string name="file_type_sv_error">The file must be .sv</string>
 </resources>
 
