@@ -8,5 +8,5 @@ import javax.inject.Inject
 
 class ReadCsv @Inject constructor(private val csvStorage: CsvStorage) {
     operator fun invoke(uri: Uri): List<PasswordDto> =
-        csvStorage.readCsv(uri.path ?: "").map { PasswordMapper.mapToDto(it) }
+        csvStorage.readCsv(uri).map { PasswordMapper.mapToDto(it) }
 }

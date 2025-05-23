@@ -1,6 +1,7 @@
 package com.example.securevault.data.csv.storage
 
 import android.content.Context
+import android.net.Uri
 import com.example.securevault.data.csv.formatter.CsvFormatter
 import com.example.securevault.data.json.model.Password
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,15 +20,10 @@ class CsvStorage @Inject constructor(
         }
     }
 
-    fun readCsv(fileName: String): List<Password> {
-        val file = context.getFileStreamPath(fileName)
-        if (!file.exists()) {
-            return emptyList()
-        }
-
+    fun readCsv(uri: Uri): List<Password> {
         return try {
-            context.openFileInput(fileName).bufferedReader().use { reader ->
-                val csvData = reader.readText()
+            context.contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
+                val csvData = reader?.readText() ?: ""
                 if (csvData.isBlank()) emptyList()
                 else csvFormatter.unparsePasswordsWithHeader(csvData)
             }

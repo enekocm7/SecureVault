@@ -109,5 +109,7 @@
     <string name="decryption_password_toast">The decryption password can not be empty</string>
     <string name="missing_file_toast">There is no file selected</string>
     <string name="wrong_password_toast">The password is incorrect</string>
+    <string name="csv_import_toast">Passwords imported successfully</string>
+    <string name="importing_passwords">Importing passwords</string>
 </resources>
 

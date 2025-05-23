@@ -36,6 +36,22 @@ class PasswordRepositoryImpl @Inject constructor(
         reloadPasswords()
     }
 
+    override fun insertAllPasswords(passwords: List<Password>) {
+        passwords.forEach { insertPasswordCache(it.name, it) }
+        savePasswordsFromCache()
+        reloadPasswords()
+    }
+
+    private fun insertPasswordCache(name: String, password: Password) {
+        val existingIndex = cachePasswords.indexOfFirst { it.name == name }
+
+        if (existingIndex >= 0) {
+            cachePasswords[existingIndex] = password
+        } else {
+            cachePasswords.add(password)
+        }
+    }
+
     override fun insertPassword(
         previousName: String,
         password: Password
@@ -74,6 +90,10 @@ class PasswordRepositoryImpl @Inject constructor(
 
     fun reloadPasswords() {
         cachePasswords = loadPasswords().toMutableList()
+    }
+
+    private fun savePasswordsFromCache(){
+        storage.saveEncryptedFile(encryptor.encryptPasswords(cachePasswords,appKey))
     }
 
 }

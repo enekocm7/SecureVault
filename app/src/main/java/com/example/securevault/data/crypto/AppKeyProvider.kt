@@ -8,7 +8,7 @@ object AppKeyProvider {
     private var appKey: ByteArray? = null
 
     fun generate(): ByteArray? {
-        check(appKey == null) {
+        if(appKey != null) {
             return appKey
         }
 

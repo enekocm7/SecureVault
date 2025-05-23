@@ -8,6 +8,8 @@ interface PasswordRepository {
     fun getPasswordByNameContainingIgnoreCase(name: String): List<Password>
     fun insertPassword(password: Password)
     fun insertPassword(previousName: String, password: Password)
+
+    fun insertAllPasswords(passwords: List<Password>)
     fun deletePassword(password: Password)
     fun deleteAllPasswords()
 }

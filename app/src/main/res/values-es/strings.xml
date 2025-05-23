@@ -106,5 +106,7 @@
     <string name="decryption_password_toast">La contraseña para desencriptar no puede estar vacia</string>
     <string name="missing_file_toast">No hay ningún fichero seleccionado</string>
     <string name="wrong_password_toast">La contraseña es incorrecta</string>
+    <string name="csv_import_toast">Contraseñas importadas correctamente</string>
+    <string name="importing_passwords">Importando contraseñas</string>
 </resources>
 
