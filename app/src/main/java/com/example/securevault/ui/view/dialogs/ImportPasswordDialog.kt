@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.R
-import com.example.securevault.databinding.DialogImportFileBinding
+import com.example.securevault.databinding.DialogImportBinding
 import com.example.securevault.ui.viewmodel.dialogs.ImportPasswordViewModel
 import kotlinx.coroutines.launch
 
@@ -25,13 +25,12 @@ class ImportPasswordDialog : DialogFragment() {
 
     companion object {
         private const val ENCRYPTED = "application/sv"
-        private const val CSV = "text/*"
+        private const val CSV = "text/csv"
     }
 
-    private lateinit var binding: DialogImportFileBinding
+    private lateinit var binding: DialogImportBinding
     private val filePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data
                 uri?.let {
@@ -46,7 +45,7 @@ class ImportPasswordDialog : DialogFragment() {
     private val viewModel: ImportPasswordViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogImportFileBinding.inflate(layoutInflater)
+        binding = DialogImportBinding.inflate(layoutInflater)
 
         val displayMetrics = resources.displayMetrics
         val width = (displayMetrics.widthPixels * 0.9).toInt()
@@ -141,9 +140,7 @@ class ImportPasswordDialog : DialogFragment() {
                 }
             }
         } else if (binding.radioCsv.isChecked) {
-            lifecycleScope.launch {
-                viewModel.insertAllPasswords(uri)
-            }
+            viewModel.insertAllPasswords(uri)
         }
     }
 

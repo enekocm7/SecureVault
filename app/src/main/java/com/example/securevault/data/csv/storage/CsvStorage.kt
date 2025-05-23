@@ -9,14 +9,14 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CsvStorage @Inject constructor(
-    @ApplicationContext private val context: Context, private val csvFormatter: CsvFormatter
+    @ApplicationContext private val context: Context,
+    private val csvFormatter: CsvFormatter
 ) {
 
-    @Throws(IOException::class)
-    fun writeCsv(fileName: String, passwords: List<Password>) {
+    fun writeCsv(fileName: Uri, passwords: List<Password>) {
         val csvData = csvFormatter.parsePasswordsWithHeader(passwords)
-        context.openFileOutput(fileName, Context.MODE_PRIVATE).bufferedWriter().use {
-            it.write(csvData)
+        context.contentResolver.openOutputStream(fileName)?.bufferedWriter().use {
+            it?.write(csvData)
         }
     }
 

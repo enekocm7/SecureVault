@@ -8,5 +8,5 @@ import javax.inject.Inject
 
 class WriteCsv @Inject constructor(private val csvStorage: CsvStorage) {
     operator fun invoke(uri: Uri, passwords: List<PasswordDto>) =
-        csvStorage.writeCsv(uri.path ?: "", passwords.map { PasswordMapper.mapToEntity(it) })
+        csvStorage.writeCsv(uri, passwords.map { PasswordMapper.mapToEntity(it) })
 }

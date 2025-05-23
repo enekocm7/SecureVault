@@ -3,7 +3,7 @@ package com.example.securevault.ui.viewmodel
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securevault.di.DefaultDispatcherProvider
+import com.example.securevault.di.DispatcherProvider
 import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.usecases.auth.AuthenticateBiometrics
 import com.example.securevault.domain.usecases.auth.GetDecryptCryptoObject
@@ -27,7 +27,7 @@ class LoginViewModel
     private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val getDecryptCryptoObject: GetDecryptCryptoObject,
-    private val dispatchers: DefaultDispatcherProvider
+    private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
     private val title = "Biometric Authentication"

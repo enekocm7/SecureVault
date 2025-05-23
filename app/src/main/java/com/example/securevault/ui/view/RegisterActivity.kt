@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.widget.doAfterTextChanged
+import com.example.securevault.R
 import com.example.securevault.databinding.CreateMasterPasswordBinding
 import com.example.securevault.domain.model.PasswordStrength
 import com.example.securevault.ui.viewmodel.RegisterViewModel
@@ -53,11 +54,11 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPassword = binding.confirmPasswordInput.text.toString()
             when {
                 masterPassword.isEmpty() -> {
-                    Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.missing_password_toast), Toast.LENGTH_LONG).show()
                 }
 
                 masterPassword != confirmPassword -> {
-                    Toast.makeText(this, "The passwords must be the same", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.different_password_toast), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
