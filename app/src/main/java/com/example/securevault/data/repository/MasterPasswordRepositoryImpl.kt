@@ -13,9 +13,8 @@ import javax.inject.Singleton
 @Singleton
 class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterPasswordRepository {
 
-    override fun generateAndStoreAppKey(password: String) {
-        val appKey = AppKeyProvider.generate() ?: return
-        AppKeyProvider.load(appKey)
+    override suspend fun generateAndStoreAppKey(password: String) {
+        val appKey = AppKeyProvider.generate()
         val salt = PasswordKeyManager.generateSalt()
         val passwordKey = PasswordKeyManager.deriveKey(password, salt)
         val (encWithPw, ivPw) = AppKeyEncryptor.encrypt(appKey, passwordKey)
@@ -25,7 +24,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         storage.save("iv_pw", ivPw)
     }
 
-    override fun generateAndStoreAppKeyBio(result: BiometricResult) {
+    override suspend fun generateAndStoreAppKeyBio(result: BiometricResult) {
         val appKey = AppKeyProvider.getAppKey()
         BiometricKeyManager.generateKey()
         var cipher: Cipher? = null
@@ -38,7 +37,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         storage.save("iv_bio", ivBio)
     }
 
-    override fun unlockAppKeyWithPassword(password: String): Boolean {
+    override suspend fun unlockAppKeyWithPassword(password: String): Boolean {
         val salt = storage.getFromSharedPreferences("salt")
         val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_pw")
         val iv = storage.getFromSharedPreferences("iv_pw")
@@ -52,7 +51,7 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
         }
     }
 
-    override fun unlockAppKeyWithBiometrics(result: BiometricResult): Boolean {
+    override suspend fun unlockAppKeyWithBiometrics(result: BiometricResult): Boolean {
         if (result !is BiometricResult.AuthenticationSuccess) {
             return false
         }

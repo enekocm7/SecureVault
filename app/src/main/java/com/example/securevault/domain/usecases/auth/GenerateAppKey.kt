@@ -4,5 +4,5 @@ import com.example.securevault.domain.repository.MasterPasswordRepository
 import javax.inject.Inject
 
 class GenerateAppKey @Inject constructor(private val repo: MasterPasswordRepository) {
-    operator fun invoke(password: String) = repo.generateAndStoreAppKey(password)
+    suspend operator fun invoke(password: String) = repo.generateAndStoreAppKey(password)
 }

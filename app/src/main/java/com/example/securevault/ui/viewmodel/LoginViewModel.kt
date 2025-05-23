@@ -3,6 +3,7 @@ package com.example.securevault.ui.viewmodel
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.securevault.di.DefaultDispatcherProvider
 import com.example.securevault.domain.model.BiometricResult
 import com.example.securevault.domain.usecases.auth.AuthenticateBiometrics
 import com.example.securevault.domain.usecases.auth.GetDecryptCryptoObject
@@ -12,12 +13,10 @@ import com.example.securevault.domain.usecases.auth.UnlockKeyWithPassword
 import com.example.securevault.ui.biometrics.BiometricPromptManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +26,8 @@ class LoginViewModel
     private val unlockKeyWithBiometrics: UnlockKeyWithBiometrics,
     private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
-    private val getDecryptCryptoObject: GetDecryptCryptoObject
+    private val getDecryptCryptoObject: GetDecryptCryptoObject,
+    private val dispatchers: DefaultDispatcherProvider
 ) : ViewModel() {
 
     private val title = "Biometric Authentication"
@@ -40,16 +40,14 @@ class LoginViewModel
     val passwordLoginState = _passwordLoginState.asStateFlow()
 
     private val cryptoObjectDeferred by lazy {
-        viewModelScope.async(Dispatchers.Default) {
+        viewModelScope.async(dispatchers.default) {
             getDecryptCryptoObject()
         }
     }
 
     fun login(password: String) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                unlockKeyWithPassword(password)
-            }
+            val result = unlockKeyWithPassword(password)
             _passwordLoginState.value = result
         }
     }
@@ -62,9 +60,7 @@ class LoginViewModel
                 biometricAuth.promptResults.collect { result ->
                     when (result) {
                         is BiometricResult.AuthenticationSuccess -> {
-                            val authResult = withContext(Dispatchers.Default) {
-                                unlockKeyWithBiometrics(result)
-                            }
+                            val authResult = unlockKeyWithBiometrics(result)
                             _biometricLoginState.value = authResult
                         }
 
