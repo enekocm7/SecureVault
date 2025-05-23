@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.DocumentsContract
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -125,23 +124,6 @@ class ExportPasswordDialog : DialogFragment() {
     }
 
     private fun getFolderNameFromUri(uri: Uri): String? {
-        context?.contentResolver?.query(
-            DocumentsContract.buildDocumentUriUsingTree(
-                uri,
-                DocumentsContract.getTreeDocumentId(uri)
-            ),
-            arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME),
-            null, null, null
-        )?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                val nameIndex =
-                    cursor.getColumnIndex(DocumentsContract.Document.COLUMN_DISPLAY_NAME)
-                if (nameIndex != -1) {
-                    return cursor.getString(nameIndex)
-                }
-            }
-        }
-
         return uri.lastPathSegment?.split(':')?.lastOrNull() ?: uri.lastPathSegment
     }
 
