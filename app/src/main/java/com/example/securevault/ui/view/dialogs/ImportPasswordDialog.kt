@@ -1,8 +1,6 @@
 package com.example.securevault.ui.view.dialogs
 
-import android.app.Activity.RESULT_OK
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.provider.DocumentsContract
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -19,6 +16,8 @@ import com.example.securevault.R
 import com.example.securevault.databinding.DialogImportBinding
 import com.example.securevault.domain.model.ImportState
 import com.example.securevault.ui.viewmodel.dialogs.ImportPasswordViewModel
+import com.example.securevault.utils.FilePicker
+import com.example.securevault.utils.FilePickerType
 import kotlinx.coroutines.launch
 
 class ImportPasswordDialog : DialogFragment() {
@@ -29,32 +28,27 @@ class ImportPasswordDialog : DialogFragment() {
     }
 
     private lateinit var binding: DialogImportBinding
-    private val filePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val uri = result.data?.data
-                uri?.let {
-                    val fileName = getFileNameFromUri(it) ?: it.lastPathSegment ?: ""
-                    val isEncrypted = binding.radioEncrypted.isChecked
-                    val isCsv = binding.radioCsv.isChecked
+    private val filePicker = FilePicker(fragment = this) { uri ->
+        val fileName: String =
+            getFileNameFromUri(uri) ?: uri.lastPathSegment ?: error("File name cant be empty")
+        val isEncrypted = binding.radioEncrypted.isChecked
+        val isCsv = binding.radioCsv.isChecked
 
-                    when {
-                        isEncrypted && !fileName.endsWith(".sv") -> {
-                            showToast(getString(R.string.file_type_sv_error))
-                        }
+        when {
+            isEncrypted && !fileName.endsWith(".sv") -> {
+                showToast(getString(R.string.file_type_sv_error))
+            }
 
-                        isCsv && !fileName.endsWith(".csv") -> {
-                            showToast(getString(R.string.file_type_csv_error))
-                        }
+            isCsv && !fileName.endsWith(".csv") -> {
+                showToast(getString(R.string.file_type_csv_error))
+            }
 
-                        else -> {
-                            fileUri = it
-                            binding.filePathInput.setText(fileName)
-                        }
-                    }
-                }
+            else -> {
+                fileUri = uri
+                binding.filePathInput.setText(fileName)
             }
         }
+    }
 
     private var fileUri: Uri? = null
     private val viewModel: ImportPasswordViewModel by activityViewModels()
@@ -128,11 +122,7 @@ class ImportPasswordDialog : DialogFragment() {
     }
 
     private fun openFile(fileType: String) {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = fileType
-        }
-        filePickerLauncher.launch(intent)
+        filePicker.launch(FilePickerType.FILE, fileType)
     }
 
     private fun handleFile(uri: Uri) {

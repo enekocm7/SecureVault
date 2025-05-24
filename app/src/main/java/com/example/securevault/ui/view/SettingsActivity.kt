@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +14,8 @@ import com.example.securevault.ui.view.dialogs.ChangeMasterPasswordDialog
 import com.example.securevault.ui.view.dialogs.ExportPasswordDialog
 import com.example.securevault.ui.view.dialogs.ImportPasswordDialog
 import com.example.securevault.ui.viewmodel.SettingsViewModel
+import com.example.securevault.utils.FilePicker
+import com.example.securevault.utils.FilePickerType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,34 +24,16 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: SettingsActivityBinding
     private val viewModel: SettingsViewModel by viewModels()
 
-    private val folderPickerLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.data?.let { uri ->
-                val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                contentResolver.takePersistableUriPermission(uri, takeFlags)
-
-                viewModel.setBackupLocation(uri)
-                viewModel.enableBackup()
-                updateBackupLocationText()
-                viewModel.createBackup()
-            }
-        } else {
-            binding.autoBackup.isChecked = false
-        }
+    private val folderPicker = FilePicker(this) { uri ->
+        viewModel.setBackupLocation(uri)
+        viewModel.enableBackup()
+        updateBackupLocationText()
+        viewModel.createBackup()
     }
 
-    private val filePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                result.data?.data?.let { uri ->
-                    viewModel.loadBackup(uri)
-                }
-
-            }
-        }
+    private val filePicker = FilePicker(this) { uri ->
+        viewModel.loadBackup(uri)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,12 +149,7 @@ class SettingsActivity : AppCompatActivity() {
             checkBackupButtons()
             if (isChecked) {
                 if (viewModel.getBackupLocation() == null) {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                        addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                    }
-                    folderPickerLauncher.launch(intent)
+                    folderPicker.launch(FilePickerType.FOLDER)
                 }
             } else {
                 viewModel.disableBackup()
@@ -180,12 +158,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.autoBackupLocation.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-            }
-            folderPickerLauncher.launch(intent)
+            folderPicker.launch(FilePickerType.FOLDER)
         }
 
         binding.createBackup.setOnClickListener {
@@ -193,11 +166,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.loadBackup.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/octet-stream"
-            }
-            filePickerLauncher.launch(intent)
+            filePicker.launch(FilePickerType.FILE, "application/octet-stream")
         }
     }
 

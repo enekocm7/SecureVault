@@ -1,15 +1,12 @@
 package com.example.securevault.ui.view.dialogs
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -18,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.securevault.R
 import com.example.securevault.databinding.DialogExportBinding
 import com.example.securevault.ui.viewmodel.dialogs.ExportPasswordViewModel
+import com.example.securevault.utils.FilePicker
+import com.example.securevault.utils.FilePickerType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,22 +24,11 @@ import kotlinx.coroutines.launch
 class ExportPasswordDialog : DialogFragment() {
 
     private lateinit var binding: DialogExportBinding
-    private val filePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val uri = result.data?.data
-                uri?.let {
-                    val flags = result.data?.flags ?: 0
-                    val takeFlags =
-                        flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                    context?.contentResolver?.takePersistableUriPermission(it, takeFlags)
-
-                    folderUri = it
-                    val fileName = getFolderNameFromUri(it)
-                    binding.pathInput.setText(fileName ?: it.lastPathSegment)
-                }
-            }
-        }
+    private val filePicker = FilePicker(fragment = this) { uri ->
+        folderUri = uri
+        val fileName = getFolderNameFromUri(uri)
+        binding.pathInput.setText(fileName ?: uri.lastPathSegment)
+    }
 
     private var folderUri: Uri? = null
     private val viewModel: ExportPasswordViewModel by activityViewModels()
@@ -113,12 +101,7 @@ class ExportPasswordDialog : DialogFragment() {
     }
 
     private fun selectFolder() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-        }
-        filePickerLauncher.launch(intent)
+        filePicker.launch(FilePickerType.FOLDER)
     }
 
     private fun getFolderNameFromUri(uri: Uri): String? {
