@@ -126,5 +126,7 @@
     <string name="load_backup">Cargar copia de seguridad</string>
     <string name="load_backup_successfully">Se ha cargado la copia de seguridad</string>
     <string name="load_backup_failed">Error al cargar la copia de seguridad</string>
+    <string name="please_select_autofill_service">Selecciona el servicio de autocompletado</string>
+    <string name="enable_autofill_in_settings">Activa el servicio de autocompletado</string>
 </resources>
 

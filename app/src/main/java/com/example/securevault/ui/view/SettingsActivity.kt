@@ -1,12 +1,16 @@
 package com.example.securevault.ui.view
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import android.view.autofill.AutofillManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.example.securevault.R
 import com.example.securevault.databinding.SettingsActivityBinding
@@ -52,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
         observeBackupState()
         updateBackupLocationText()
         checkBackupButtons()
+        checkAutofill()
     }
 
     override fun onResume() {
@@ -60,6 +65,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.autoBackup.isChecked = viewModel.isBackupEnabled()
         updateBackupLocationText()
         checkBackupButtons()
+        checkAutofill()
     }
 
     private fun checkBackupButtons() {
@@ -100,6 +106,10 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun checkAutofill() {
+        binding.switchAutofill.isChecked = hasEnabledAutofill()
     }
 
     private fun checkBiometric() {
@@ -167,6 +177,11 @@ class SettingsActivity : AppCompatActivity() {
         binding.loadBackup.setOnClickListener {
             filePicker.launch(FilePickerType.FILE, "application/octet-stream")
         }
+        binding.switchAutofill.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestAutofillService()
+            }
+        }
     }
 
     private fun updateBackupLocationText() {
@@ -180,5 +195,32 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             binding.backupLocationFile.visibility = View.GONE
         }
+    }
+
+    private fun requestAutofillService() {
+        if (!hasEnabledAutofill()) {
+            try {
+                val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
+                intent.data = "package:${packageName}".toUri()
+                startActivity(intent)
+                Toast.makeText(
+                    this,
+                    getString(R.string.please_select_autofill_service),
+                    Toast.LENGTH_LONG
+                ).show()
+            } catch (_: ActivityNotFoundException) {
+                val fallbackIntent = Intent(Settings.ACTION_SETTINGS)
+                startActivity(fallbackIntent)
+                Toast.makeText(
+                    this,
+                    getString(R.string.enable_autofill_in_settings),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun hasEnabledAutofill(): Boolean {
+        return getSystemService(AutofillManager::class.java).hasEnabledAutofillServices()
     }
 }

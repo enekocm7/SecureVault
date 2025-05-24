@@ -219,19 +219,6 @@
                 app:thumbTint="@drawable/switch_thumb_selector"
                 app:trackTint="@drawable/switch_track_selector" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_browser_connection"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:text="@string/pref_title_browser_connection"
-                android:textColor="@android:color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/switch_autofill"
-                app:thumbTint="@drawable/switch_thumb_selector"
-                app:trackTint="@drawable/switch_track_selector" />
 
             <TextView
                 android:id="@+id/text_app_header"
@@ -244,7 +231,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/switch_browser_connection" />
+                app:layout_constraintTop_toBottomOf="@id/switch_autofill" />
 
 
             <Button
@@ -277,6 +264,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:text="@string/pref_title_app_version"
+                android:textAlignment="center"
                 android:textColor="@android:color/darker_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

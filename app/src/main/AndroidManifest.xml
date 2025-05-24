@@ -36,7 +36,7 @@
         <service
             android:name=".data.autofill.SecureVaultAutofillService"
             android:exported="true"
-            android:label="Secure Vault Autofill Service"
+            android:label="Secure Vault"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService"/>
@@ -48,3 +48,4 @@
     </application>
 
 </manifest>
+

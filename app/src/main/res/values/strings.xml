@@ -129,5 +129,7 @@
     <string name="load_backup">Load Backup</string>
     <string name="load_backup_successfully">Backup Successfully loaded</string>
     <string name="load_backup_failed">Backup loading failed</string>
+    <string name="please_select_autofill_service">Please select autofill service</string>
+    <string name="enable_autofill_in_settings">Enable autofill in settings</string>
 </resources>
 
