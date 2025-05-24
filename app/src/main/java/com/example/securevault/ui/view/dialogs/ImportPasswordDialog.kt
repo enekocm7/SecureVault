@@ -83,12 +83,10 @@ class ImportPasswordDialog : DialogFragment() {
         return dialog
     }
 
-
     private fun setPasswordInput() {
         binding.importMethodGroup.setOnCheckedChangeListener { _, _ ->
             binding.passwordSection.visibility =
                 if (binding.radioEncrypted.isChecked) View.VISIBLE else View.GONE
-
         }
     }
 
@@ -96,7 +94,6 @@ class ImportPasswordDialog : DialogFragment() {
         if (uri.scheme != "content") {
             return uri.path?.substringAfterLast('/')
         }
-
         return context?.contentResolver?.query(
             uri, null, null, null, null
         )?.use { cursor ->
@@ -113,7 +110,6 @@ class ImportPasswordDialog : DialogFragment() {
             val fileType = if (binding.radioEncrypted.isChecked) ENCRYPTED else CSV
             openFile(fileType)
         }
-
         binding.btnImport.setOnClickListener {
             val isEncrypted = binding.radioEncrypted.isChecked
             val password = binding.passwordInput.text.toString()
@@ -126,7 +122,6 @@ class ImportPasswordDialog : DialogFragment() {
                 fileUri!!
             )
         }
-
         binding.btnCancel.setOnClickListener {
             dismiss()
         }
@@ -180,13 +175,10 @@ class ImportPasswordDialog : DialogFragment() {
                         showToast(getString(R.string.import_toast))
                         dismiss()
                     }
-
-
                     null -> {
                         /*Nothing*/
                     }
                 }
-
                 if (state != null) {
                     viewModel.clearError()
                 }

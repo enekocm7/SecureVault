@@ -40,7 +40,7 @@ class GeneratePasswordViewModel @Inject constructor(
         numbers: Boolean,
         symbols: Boolean
     ) {
-        viewModelScope.launch(dispatcherProvider.io) {
+        viewModelScope.launch(dispatcherProvider.default) {
             _isLoading.value = true
             val password = generatePassword(length, lower, upper, numbers, symbols)
             val strength = estimatePassword(password)
@@ -53,7 +53,7 @@ class GeneratePasswordViewModel @Inject constructor(
     }
 
     fun getPassphrase(length: Int, delimiter: String) {
-        viewModelScope.launch(dispatcherProvider.io) {
+        viewModelScope.launch(dispatcherProvider.default) {
             _isLoading.value = true
             val passphrase = generatePassphrase(length, delimiter)
             val strength = estimatePassword(passphrase)

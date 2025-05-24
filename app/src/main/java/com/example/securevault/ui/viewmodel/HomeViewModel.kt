@@ -2,11 +2,11 @@ package com.example.securevault.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.securevault.di.DispatcherProvider
 import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.domain.usecases.password.GetAllPasswords
 import com.example.securevault.domain.usecases.password.GetPasswordsByName
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAllPasswords: GetAllPasswords,
-    private val getPasswordsByName: GetPasswordsByName
+    private val getPasswordsByName: GetPasswordsByName,
+    private val dispatchers: DispatcherProvider
 ) :
     ViewModel() {
 
@@ -34,18 +35,18 @@ class HomeViewModel @Inject constructor(
 
 
     fun loadPasswords(name: String){
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatchers.io) {
             val passwords = getPasswordsByNameIgnoreCase(name)
-            withContext(Dispatchers.Main) {
+            withContext(dispatchers.main) {
                 _passwords.value = passwords
             }
         }
     }
 
     fun loadPasswords() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatchers.io) {
             val passwords = getPasswords()
-            withContext(Dispatchers.Main) {
+            withContext(dispatchers.main) {
                 _passwords.value = passwords
             }
         }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,9 +47,11 @@ class LoginViewModel
     }
 
     fun login(password: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.default) {
             val result = unlockKeyWithPassword(password)
-            _passwordLoginState.value = result
+            withContext(dispatchers.main){
+                _passwordLoginState.value = result
+            }
         }
     }
 
