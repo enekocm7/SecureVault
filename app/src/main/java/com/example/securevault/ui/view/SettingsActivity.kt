@@ -24,14 +24,14 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: SettingsActivityBinding
     private val viewModel: SettingsViewModel by viewModels()
 
-    private val folderPicker = FilePicker(this) { uri ->
+    private val folderPicker = FilePicker(activity = this) { uri ->
         viewModel.setBackupLocation(uri)
         viewModel.enableBackup()
         updateBackupLocationText()
         viewModel.createBackup()
     }
 
-    private val filePicker = FilePicker(this) { uri ->
+    private val filePicker = FilePicker(activity = this) { uri ->
         viewModel.loadBackup(uri)
     }
 
@@ -90,11 +90,11 @@ class SettingsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.loadBackup.collect {
                 it?.let {
-                   val message = if (it){
-                       getString(R.string.load_backup_successfully)
-                   }else{
-                       getString(R.string.load_backup_failed)
-                   }
+                    val message = if (it) {
+                        getString(R.string.load_backup_successfully)
+                    } else {
+                        getString(R.string.load_backup_failed)
+                    }
                     Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -139,7 +139,6 @@ class SettingsActivity : AppCompatActivity() {
                         getString(R.string.passwords_clear_toast),
                         Toast.LENGTH_LONG
                     ).show()
-
                 }
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show()
