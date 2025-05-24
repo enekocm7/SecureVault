@@ -46,7 +46,6 @@ class PasswordRepositoryImpl @Inject constructor(
     override fun insertAllPasswords(passwords: List<Password>) {
         passwords.forEach { insertPasswordCache(it.name, it) }
         savePasswordsFromCache()
-        reloadPasswords()
     }
 
     private fun insertPasswordCache(name: String, password: Password) {

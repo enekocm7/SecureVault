@@ -120,5 +120,14 @@
     <string name="exported_passwords_successfully_toast">Exported passwords successfully</string>
     <string name="file_type_csv_error">The file must be .csv</string>
     <string name="file_type_sv_error">The file must be .sv</string>
+    <string name="backup_created_successfully">Backup created successfully</string>
+    <string name="backup_creation_failed">Backup creation has failed</string>
+    <string name="backup_location">Backup Location:</string>
+    <string name="create_backup">Create Backup</string>
+    <string name="change_backup_location">Change Backup Location</string>
+    <string name="backup">Backup</string>
+    <string name="load_backup">Load Backup</string>
+    <string name="load_backup_successfully">Backup Successfully loaded</string>
+    <string name="load_backup_failed">Backup loading failed</string>
 </resources>
 

@@ -1,6 +1,6 @@
 package com.example.securevault.ui.view.dialogs
 
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -24,14 +24,14 @@ import kotlinx.coroutines.launch
 class ImportPasswordDialog : DialogFragment() {
 
     companion object {
-        private const val ENCRYPTED = "*/*"
+        private const val ENCRYPTED = "application/octet-stream"
         private const val CSV = "text/*"
     }
 
     private lateinit var binding: DialogImportBinding
     private val filePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
                 uri?.let {
                     val fileName = getFileNameFromUri(it) ?: it.lastPathSegment ?: ""
@@ -175,6 +175,7 @@ class ImportPasswordDialog : DialogFragment() {
                         showToast(getString(R.string.import_toast))
                         dismiss()
                     }
+
                     null -> {
                         /*Nothing*/
                     }

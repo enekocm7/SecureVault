@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/auto_backup"
+                android:text="@string/backup"
                 android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -149,34 +149,61 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
-                android:text="@string/auto_backup_file_location"
+                android:visibility="gone"
+                android:text="@string/change_backup_location"
                 android:textColor="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/auto_backup" />
 
-            <TextView
-                android:id="@+id/file_location_text"
+            <Button
+                android:id="@+id/create_backup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:visibility="gone"
+                android:text="@string/create_backup"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/auto_backup_location" />
+            <Button
+                android:id="@+id/load_backup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:visibility="gone"
+                android:text="@string/load_backup"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_backup" />
+
+            <TextView
+                android:id="@+id/backup_location_file"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/file_location"
                 android:textColor="@color/gris"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/auto_backup_location"/>
+                app:layout_constraintTop_toBottomOf="@id/load_backup"/>
 
             <TextView
                 android:id="@+id/text_autofill_header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop= "20dp"
+                android:paddingTop= "16dp"
                 android:text="@string/pref_category_autofill_browser"
                 android:textColor="@color/red"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/file_location_text" />
+                app:layout_constraintTop_toBottomOf="@id/backup_location_file" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_autofill"

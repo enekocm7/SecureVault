@@ -117,5 +117,14 @@
     <string name="exported_passwords_successfully_toast">Contraseñas exportadas correctamente</string>
     <string name="file_type_csv_error">El fichero debe ser .csv</string>
     <string name="file_type_sv_error">El fichero debe ser .sv</string>
+    <string name="backup_created_successfully">La copia de seguridad se ha creado correctamente</string>
+    <string name="backup_creation_failed">La copia de seguridad ha fallado</string>
+    <string name="backup_location">Ubicación copia de seguridad:</string>
+    <string name="create_backup">Crear copia de seguridad</string>
+    <string name="change_backup_location">Cambiar carpeta copia de seguridad</string>
+    <string name="backup">Copia de seguridad</string>
+    <string name="load_backup">Cargar copia de seguridad</string>
+    <string name="load_backup_successfully">Se ha cargado la copia de seguridad</string>
+    <string name="load_backup_failed">Error al cargar la copia de seguridad</string>
 </resources>
 
