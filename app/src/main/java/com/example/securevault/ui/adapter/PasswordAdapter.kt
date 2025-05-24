@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.securevault.R
 import com.example.securevault.domain.model.PasswordDto
-import com.example.securevault.ui.view.fragments.PasswordDetailDialog
+import com.example.securevault.ui.view.dialogs.PasswordDetailDialog
 
 class PasswordAdapter() : RecyclerView.Adapter<PasswordViewHolder>() {
 

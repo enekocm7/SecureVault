@@ -30,7 +30,9 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun createAppKey(password: String) {
-        generateAppKey(password)
+        viewModelScope.launch {
+            generateAppKey(password)
+        }
     }
 
     fun isKeyConfigured(): Boolean {

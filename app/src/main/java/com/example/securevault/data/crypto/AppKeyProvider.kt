@@ -1,30 +1,26 @@
 package com.example.securevault.data.crypto
 
-import javax.inject.Singleton
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-@Singleton
 object AppKeyProvider {
-
     private var appKey: ByteArray? = null
+    private val mutex = Mutex()
 
-    fun generate(): ByteArray {
-        check (appKey != null) {
-            throw IllegalStateException("App key already initialized")
-        }
-
-        appKey = ByteArray(32).apply {
+    suspend fun generate(): ByteArray = mutex.withLock {
+        appKey?.copyOf() ?: ByteArray(32).apply {
             java.security.SecureRandom().nextBytes(this)
+            appKey = this.copyOf()
         }
-
-        return appKey!!
     }
 
-    fun load(decryptedKey: ByteArray) {
-        appKey = decryptedKey
+    suspend fun load(decryptedKey: ByteArray) = mutex.withLock {
+        require(decryptedKey.size == 32) { "Invalid key size" }
+        appKey = decryptedKey.copyOf()
     }
 
-    fun getAppKey(): ByteArray {
-        return appKey ?: throw IllegalStateException("App key not loaded")
+    suspend fun getAppKey(): ByteArray = mutex.withLock {
+        return appKey?.copyOf() ?: throw IllegalStateException("App key not loaded")
     }
 
 }

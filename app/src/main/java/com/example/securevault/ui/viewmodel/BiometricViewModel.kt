@@ -42,7 +42,9 @@ class BiometricViewModel
 
     private fun generateKey(result: BiometricResult) {
         if (authenticationState.value is BiometricResult.AuthenticationSuccess) {
-            generateBiometricKey(result)
+            viewModelScope.launch {
+                generateBiometricKey(result)
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.securevault.ui.view.fragments
+package com.example.securevault.ui.view.dialogs
 
 import android.app.Dialog
 import android.graphics.Color
@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import com.example.securevault.databinding.PasswordDetailBinding
 import com.example.securevault.domain.model.PasswordDto
 import com.example.securevault.ui.view.HomeActivity
-import com.example.securevault.ui.viewmodel.fragments.PasswordDetailViewModel
+import com.example.securevault.ui.viewmodel.dialogs.PasswordDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
