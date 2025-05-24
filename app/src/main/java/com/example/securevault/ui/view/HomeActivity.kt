@@ -1,5 +1,6 @@
 package com.example.securevault.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.securevault.R
 import com.example.securevault.databinding.MainScreenBinding
 import com.example.securevault.ui.adapter.PasswordAdapter
-import com.example.securevault.ui.view.fragments.CreatePasswordDialog
+import com.example.securevault.ui.view.dialogs.CreatePasswordDialog
 import com.example.securevault.ui.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,9 +27,6 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: MainScreenBinding
     private val viewModel: HomeViewModel by viewModels()
-    private val createPasswordDialog by lazy {
-        CreatePasswordDialog(this.supportFragmentManager)
-    }
     private lateinit var passwordAdapter: PasswordAdapter
 
     companion object {
@@ -47,6 +45,11 @@ class HomeActivity : AppCompatActivity() {
         setObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPasswords()
+    }
+
     private fun setObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -59,7 +62,7 @@ class HomeActivity : AppCompatActivity() {
         supportFragmentManager.setFragmentResultListener(
             PASSWORD_RELOAD_REQUEST_KEY,
             this
-        ) { requestKey, bundle ->
+        ) { requestKey, _ ->
             if (requestKey == PASSWORD_RELOAD_REQUEST_KEY) {
                 viewModel.loadPasswords()
             }
@@ -72,7 +75,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setListeners() {
         binding.addIcon.setOnClickListener {
-            createPasswordDialog.show(this.supportFragmentManager, "Create new password")
+            CreatePasswordDialog(supportFragmentManager).show(supportFragmentManager, "Create new password")
         }
 
         binding.search.setOnClickListener {
@@ -82,6 +85,11 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 exitSearchMode()
             }
+        }
+
+        binding.settingIcon.setOnClickListener {
+            val intent = Intent(this,SettingsActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -111,6 +119,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
 }
+
 
 
 

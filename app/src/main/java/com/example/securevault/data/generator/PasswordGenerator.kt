@@ -27,13 +27,13 @@ object PasswordGenerator {
         if (characters.isEmpty()) return null
 
         val secureRandom = SecureRandom()
-        return (0 until length).map { num ->
+        return (0 until length).map {
             characters[secureRandom.nextInt(characters.length)]
         }.joinToString("")
     }
 
     fun generatePassphrase(length: Int = 5, delimiter: String): String {
-        return Generator.generatePassphrase(delimiter,length)
+        return Generator.generatePassphrase(delimiter, length)
     }
 
 }

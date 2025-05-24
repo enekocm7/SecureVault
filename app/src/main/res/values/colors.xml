@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gris">#333333</color>
-    <color name="grisclaro">#767575</color>
+    <color name="gris_claro">#767575</color>
     <color name="azul">#2278F6</color>
     <color name="light_blue">#A0D2FF</color>
     <color name="dark_gray">#212121</color>
