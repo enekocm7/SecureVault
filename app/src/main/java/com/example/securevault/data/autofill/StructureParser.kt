@@ -31,7 +31,7 @@ object StructureParser {
 			}
 		}
 		check(!(usernameId == null || passwordId == null)) {
-			throw IllegalStateException("Did not find username or password fields")
+			error("Did not find username or password fields")
 		}
 
 		return ParsedStructure(usernameId!!, passwordId!!)
