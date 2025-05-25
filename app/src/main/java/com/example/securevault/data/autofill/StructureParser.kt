@@ -5,7 +5,7 @@ import android.view.autofill.AutofillId
 
 object StructureParser {
 
-	fun parseStructure(structure: AssistStructure): ParsedStructure {
+	fun parseStructure(structure: AssistStructure): ParsedStructure? {
 		var usernameId: AutofillId? = null
 		var passwordId: AutofillId? = null
 
@@ -31,7 +31,7 @@ object StructureParser {
 			}
 		}
 		check(!(usernameId == null || passwordId == null)) {
-			error("Did not find username or password fields")
+			return null
 		}
 
 		return ParsedStructure(usernameId!!, passwordId!!)

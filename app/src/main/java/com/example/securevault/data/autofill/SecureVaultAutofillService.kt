@@ -57,7 +57,10 @@ class SecureVaultAutofillService : AutofillService() {
 				return@launch
 			}
 
-			val parsedStructure = StructureParser.parseStructure(structure)
+			val parsedStructure = StructureParser.parseStructure(structure) ?: run {
+				callback.onSuccess(null)
+				return@launch
+			}
 			val (username, password) = Fetch.fetchPassword(
 				structure.activityComponent.packageName,
 				passwordRepository!!
