@@ -9,7 +9,7 @@ object Fetch {
 		val passwords = passwordRepository.getAllPasswords()
 
 		val match = passwords.firstOrNull { password ->
-			val urlTokens = password.url.split('.')
+			val urlTokens = password.url.split('.').dropLast(1)
 			val nameToken = password.name.lowercase()
 
 			urlTokens.any { appPackage.contains(it, ignoreCase = true) } ||
