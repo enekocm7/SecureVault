@@ -94,6 +94,13 @@
         android:clipToPadding="false"
         android:contentDescription="@string/passwords"
         android:paddingBottom="100dp"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbarThumbVertical="@drawable/red_scrollbar_thumb"
+        android:scrollbarTrackVertical="@drawable/red_scrollbar_track"
+        android:scrollbarSize="4dp"
+        android:fadeScrollbars="true"
+        android:scrollbarFadeDuration="1000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBarBackground" />
