@@ -1,0 +1,368 @@
+@startuml
+left to right direction
+package com.example.securevault {
+    package ui.viewmodel {
+    together{
+        class SettingsViewModel {
+            - isBiometricConfigured: IsBiometricConfigured
+            - deleteAllPasswords: DeleteAllPasswords
+            - backupManager: BackupManager
+            - getAllPasswords: GetAllPasswords
+            - dispatchers: DispatcherProvider
+            - _backup: MutableStateFlow<Boolean?>
+            + backup: StateFlow<Boolean?>
+            - _loadBackup: MutableStateFlow<Boolean?>
+            + loadBackup: StateFlow<Boolean?>
+            + isBiometric(): Boolean
+            + clearPasswords()
+            + loadBackup(uri: Uri)
+            + createBackup()
+            + isBackupEnabled(): Boolean
+            + enableBackup()
+            + disableBackup()
+            + getBackupLocation(): Uri?
+            + setBackupLocation(uri: Uri)
+        }
+        class RegisterViewModel {
+            - estimatePassword: EstimatePassword
+            - generateAppKey: GenerateAppKey
+            - isAppKeyConfigured: IsAppKeyConfigured
+            - _passwordStrength: MutableLiveData<PasswordStrength>
+            + passwordStrength: LiveData<PasswordStrength>
+            + calculateStrength(password: String)
+            + createAppKey(password: String)
+            + isKeyConfigured(): Boolean
+        }
+        class MainViewModel {
+            - isAppKeyConfigured: IsAppKeyConfigured
+            + isKeyConfigured(): Boolean
+        }
+        class LoginViewModel {
+            - unlockKeyWithPassword: UnlockKeyWithPassword
+            - unlockKeyWithBiometrics: UnlockKeyWithBiometrics
+            - isBiometricConfigured: IsBiometricConfigured
+            - authenticateBiometrics: AuthenticateBiometrics
+            - getDecryptCryptoObject: GetDecryptCryptoObject
+            - dispatchers: DispatcherProvider
+            - title: String
+            - description: String
+            - _biometricLoginState: MutableStateFlow<Boolean?>
+            + biometricLoginState: StateFlow<Boolean?>
+            - _passwordLoginState: MutableStateFlow<Boolean?>
+            + passwordLoginState: StateFlow<Boolean?>
+            - cryptoObjectDeferred: Lazy<Deferred<CryptoObject?>>
+            + login(password: String)
+            + login(activity: AppCompatActivity)
+            + isBiometricKeyConfigured(): Boolean
+        }
+        class HomeViewModel {
+            - getAllPasswords: GetAllPasswords
+            - getPasswordsByName: GetPasswordsByName
+            - dispatchers: DispatcherProvider
+            - _passwords: MutableStateFlow<List<PasswordDto>>
+            + passwords: StateFlow<List<PasswordDto>>
+            - getPasswords(): List<PasswordDto>
+            + loadPasswords(name: String)
+            + loadPasswords()
+            - getPasswordsByNameIgnoreCase(name: String): List<PasswordDto>
+        }
+        class BiometricViewModel {
+            - generateBiometricKey: GenerateBiometricKey
+            - authenticateBiometrics: AuthenticateBiometrics
+            - getEncryptCryptoObject: GetEncryptCryptoObject
+            - title: String
+            - description: String
+            - _authenticationState: MutableLiveData<BiometricResult?>
+            + authenticationState: LiveData<BiometricResult?>
+            + enableBiometric(activity: AppCompatActivity)
+            - generateKey(result: BiometricResult)
+        }
+        }
+    }
+    package ui.view {
+        together{
+            class SettingsActivity {
+                        - binding: SettingsActivityBinding
+                        - viewModel: SettingsViewModel
+                        - folderPicker: FilePicker
+                        - filePicker: FilePicker
+                        # onCreate(savedInstanceState: Bundle?)
+                        # onResume()
+                        - checkBackupButtons()
+                        - observeBackupState()
+                        - checkAutofill()
+                        - checkBiometric()
+                        - setListeners()
+                        - updateBackupLocationText()
+                        - requestAutofillService()
+                        - hasEnabledAutofill(): Boolean
+                    }
+                    class RegisterActivity {
+                        - binding: CreateMasterPasswordBinding
+                        - viewModel: RegisterViewModel
+                        - label: String
+                        # onCreate(savedInstanceState: Bundle?)
+                        - changeProgressBar(strength: PasswordStrength)
+                        - setObserver()
+                        - setListener()
+                        - setAfterTextChanged()
+                        - biometricActivity()
+                    }
+                    class MainActivity {
+                        - binding: ScreenHomeBinding
+                        - viewModel: MainViewModel
+                        # onCreate(savedInstanceState: Bundle?)
+                        - setListeners()
+                        - isLoggedIn(): Boolean
+                        - login()
+                    }
+                    class LoginActivity {
+                        - binding: LoginScreenBinding
+                        - viewModel: LoginViewModel
+                        # onCreate(savedInstanceState: Bundle?)
+                        - setObserversPassword()
+                        - setObserversBiometric()
+                        - setListeners()
+                        - skip()
+                    }
+                    class HomeActivity {
+                        - isSearchMode: Boolean
+                        - binding: MainScreenBinding
+                        - viewModel: HomeViewModel
+                        - passwordAdapter: PasswordAdapter
+                        + {static} PASSWORD_RELOAD_REQUEST_KEY: String
+                        # onCreate(savedInstanceState: Bundle?)
+                        # onResume()
+                        - setObservers()
+                        - setListeners()
+                        - setupRecyclerView()
+                        - enterSearchMode()
+                        - exitSearchMode()
+                    }
+                    class BiometricActivity {
+                        - binding: BiometricSugestionBinding
+                        - viewModel: BiometricViewModel
+                        # onCreate(savedInstanceState: Bundle?)
+                        - setObservers()
+                        - setListeners()
+                        - skip()
+                    }
+        }
+    }
+    package ui.view.dialogs {
+        together{
+        class ChangeMasterPasswordDialog {
+                    - binding: CreateMasterPasswordBinding
+                    - viewModel: RegisterViewModel
+                    - label: String
+                    + onCreateDialog(savedInstanceState: Bundle?): Dialog
+                    - changeProgressBar(strength: PasswordStrength)
+                    - setObserver()
+                    - setListeners()
+                    - setAfterTextChanged()
+                }
+                class CreatePasswordDialog {
+                    - binding: CreatePasswordDialogBinding
+                    - viewModel: CreatePasswordViewModel
+                    - supportFragmentManager: FragmentManager
+                    + onCreateDialog(savedInstanceState: Bundle?): Dialog
+                    - setListeners()
+                    - getPassword(): PasswordDto?
+                    - showToast(field: String)
+                }
+                class ExportPasswordDialog {
+                    - binding: DialogExportBinding
+                    - filePicker: FilePicker
+                    - folderUri: Uri?
+                    - viewModel: ExportPasswordViewModel
+                    + onCreateDialog(savedInstanceState: Bundle?): Dialog
+                    - setListeners()
+                    - observeLoadingState()
+                    - showToast(message: String)
+                    - handleFile(folderUri: Uri)
+                    - selectFolder()
+                    - getFolderNameFromUri(uri: Uri): String?
+                    - setPasswordInput()
+                    - getPassword(): String?
+                }
+                class GeneratePasswordDialog {
+                    - binding: PasswordGeneratorBinding
+                    - viewModel: GeneratePasswordViewModel
+                    + {static} REQUEST_KEY: String
+                    + onCreateDialog(savedInstanceState: Bundle?): Dialog
+                    - setListeners()
+                    - setUpView()
+                    - setObservers()
+                    - changeStrengthBar(strength: PasswordStrength)
+                    - generatePassword()
+                    - generatePassphrase()
+                }
+                class ImportPasswordDialog {
+                    - binding: DialogImportBinding
+                    - filePicker: FilePicker
+                    - fileUri: Uri?
+                    - viewModel: ImportPasswordViewModel
+                    + {static} - ENCRYPTED: String
+                    + {static} - CSV: String
+                    + onCreateDialog(savedInstanceState: Bundle?): Dialog
+                    - setPasswordInput()
+                    - getFileNameFromUri(uri: Uri): String?
+                    - setListeners()
+                    - openFile(fileType: String)
+                    - handleFile(uri: Uri)
+                    - observeLoadingState()
+                    - observeErrorState()
+                    - showToast(message: String)
+                }
+                class PasswordDetailDialog {
+                    - binding: PasswordDetailBinding
+                    - viewModel: PasswordDetailViewModel
+                    - passwordDto: PasswordDto
+                    + onCreateDialog(savedInstanceState: Bundle?): Dialog
+                    - setContent()
+                    - setListeners()
+                    - getPassword(): PasswordDto?
+                    - showToast(field: String)
+                }
+        }
+    }
+
+    package ui.viewmodel.dialogs {
+       together{
+        class PasswordDetailViewModel {
+                   - addPassword: AddPassword
+                   - deletePassword: DeletePassword
+                   + savePassword(password: PasswordDto)
+                   + savePassword(previousName: String, password: PasswordDto)
+                   + removePassword(password: PasswordDto)
+               }
+               class ImportPasswordViewModel {
+                   - getPasswordsFromEncrypted: GetPasswordsFromEncrypted
+                   - readCsv: ReadCsv
+                   - saveAllPasswords: InsertAllPasswords
+                   - dispatcherProvider: DispatcherProvider
+                   - _loading: MutableStateFlow<Boolean>
+                   + loading: StateFlow<Boolean>
+                   - _importState: MutableStateFlow<ImportState?>
+                   + importState: StateFlow<ImportState?>
+                   - insertAllPasswords(passwords: List<PasswordDto>)
+                   + insertAllPasswords(encryptedPasswords: String, key: String)
+                   + insertAllPasswords(uri: Uri)
+                   + clearError()
+               }
+               class GeneratePasswordViewModel {
+                   - generatePassword: GeneratePassword
+                   - generatePassphrase: GeneratePassphrase
+                   - estimatePassword: EstimatePassword
+                   - dispatcherProvider: DispatcherProvider
+                   - _password: MutableStateFlow<String>
+                   + password: StateFlow<String>
+                   - _passwordStrength: MutableStateFlow<PasswordStrength>
+                   + passwordStrength: StateFlow<PasswordStrength>
+                   - _isLoading: MutableStateFlow<Boolean>
+                   + isLoading: StateFlow<Boolean>
+                   + getPassword(length: Int, lower: Boolean, upper: Boolean, numbers: Boolean, symbols: Boolean)
+                   + getPassphrase(length: Int, delimiter: String)
+               }
+               class ExportPasswordViewModel {
+                   - context: Context
+                   - writeCsv: WriteCsv
+                   - writeSv: WriteSv
+                   - getAllPasswords: GetAllPasswords
+                   - dispatchers: DispatcherProvider
+                   - fileNameCsv: String
+                   - fileNameSv: String
+                   - _loading: MutableStateFlow<Boolean>
+                   + loading: StateFlow<Boolean>
+                   + createCsv(folderUri: Uri)
+                   + createSv(folderUri: Uri, password: String)
+                   - createFileInFolder(folderUri: Uri, fileName: String, mimeType: String): Uri?
+               }
+               class CreatePasswordViewModel {
+                   - addPassword: AddPassword
+                   + savePassword(passwordDto: PasswordDto)
+               }
+       }
+    }
+    package data.autofill {
+        class SecureVaultAutofillService {
+            - passwordRepository: PasswordRepository?
+            + storage: PasswordStorage
+            + encryptor: FileEncryptor
+            + onFillRequest(request: FillRequest, cancellationSignal: CancellationSignal, callback: FillCallback)
+            + onSaveRequest(request: SaveRequest, callback: SaveCallback)
+        }
+    }
+    package data.generator {
+        object PasswordGenerator {
+            + {static} LOWER: String
+            + {static} UPPER: String
+            + {static} NUMBERS: String
+            + {static} SYMBOL: String
+            + {static} generatePassword(length: Int = 16, lower: Boolean = true, upper: Boolean = true, numbers: Boolean = true, symbols: Boolean = true): String?
+            + {static} generatePassphrase(length: Int = 5, delimiter: String): String
+        }
+    }
+    package data.json {
+        package crypto {
+            class FileEncryptor {
+                - type: java.lang.reflect.Type
+                - adapter: JsonAdapter<List<Password>>
+                - encryptFile(content: String, password: String): String
+                - decryptFile(encryptedFile: String, password: String): String
+                + encryptPasswords(passwords: List<Password>, userPassword: String): String
+                + decryptPasswords(encryptedPasswords: String, userPassword: String): List<Password>
+            }
+        }
+        package model {
+            class Password {
+                + name: String
+                + url: String
+                + username: String
+                + value: String
+            }
+        }
+    }
+    package data.repository {
+        class MasterPasswordRepositoryImpl {
+            - storage: AppKeyStorage
+            + generateAndStoreAppKey(password: String)
+            + generateAndStoreAppKeyBio(result: BiometricResult)
+            + unlockAppKeyWithPassword(password: String): Boolean
+            + unlockAppKeyWithBiometrics(result: BiometricResult): Boolean
+            + isAppKeyConfigured(): Boolean
+            + isBiometricConfigured(): Boolean
+            + getIv(): ByteArray
+        }
+        class PasswordRepositoryImpl {
+            - storage: PasswordStorage
+            - encryptor: FileEncryptor
+            - cachePasswords: MutableList<Password>
+            + getAllPasswords(): List<Password>
+            - getAppKey(): String
+            + getPasswordByName(name: String): Password?
+            + getPasswordByNameContainingIgnoreCase(name: String): List<Password>
+            + insertPassword(password: Password)
+            + insertAllPasswords(passwords: List<Password>)
+            - insertPasswordCache(name: String, password: Password)
+            + insertPassword(previousName: String, password: Password)
+            + deletePassword(password: Password)
+            + deleteAllPasswords()
+            - loadPasswords(): List<Password>
+            + reloadPasswords()
+            - savePasswordsFromCache()
+        }
+    }
+    package ui.biometrics {
+        class BiometricPromptManager {
+            - activity: AppCompatActivity
+            - resultChannel: Channel<BiometricResult>
+            + promptResults: Flow<BiometricResult>
+            + showBiometricPrompt(title: String, description: String, cryptoObject: BiometricPrompt.CryptoObject?)
+        }
+    }
+
+class SecureVaultApp
+
+}
+@enduml
