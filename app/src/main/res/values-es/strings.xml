@@ -128,5 +128,11 @@
     <string name="load_backup_failed">Error al cargar la copia de seguridad</string>
     <string name="please_select_autofill_service">Selecciona el servicio de autocompletado</string>
     <string name="enable_autofill_in_settings">Activa el servicio de autocompletado</string>
+    <string name="save_password_activity_title">Guardar Contraseña</string>
+    <string name="save_password_website_app_label">Url:</string>
+    <string name="save_password_name_hint">Introduce un nombre para la contraseña</string>
+    <string name="save_password_username_label">Usuario:</string>
+    <string name="save_password_username_hint">Introduce usuario</string>
+    <string name="save_password_password_hint">Introduce contraseña</string>
 </resources>
 

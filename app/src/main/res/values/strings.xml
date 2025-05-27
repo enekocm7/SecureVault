@@ -131,5 +131,11 @@
     <string name="load_backup_failed">Backup loading failed</string>
     <string name="please_select_autofill_service">Please select autofill service</string>
     <string name="enable_autofill_in_settings">Enable autofill in settings</string>
+    <string name="save_password_activity_title">Save Password</string>
+    <string name="save_password_website_app_label">Website/App:</string>
+    <string name="save_password_name_hint">Enter a name for this password</string>
+    <string name="save_password_username_label">Username:</string>
+    <string name="save_password_username_hint">Enter username</string>
+    <string name="save_password_password_hint">Enter password</string>
 </resources>
 
