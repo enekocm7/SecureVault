@@ -30,6 +30,10 @@
         <activity android:name=".ui.view.BiometricActivity" android:exported="false"/>
         <activity android:name=".ui.view.LoginActivity" android:exported="false"/>
         <activity android:name=".ui.view.SettingsActivity" android:exported="false"/>
+        <activity
+            android:name=".ui.view.SavePasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

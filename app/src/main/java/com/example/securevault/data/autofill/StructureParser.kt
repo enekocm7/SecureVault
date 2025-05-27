@@ -37,7 +37,7 @@ object StructureParser {
 		return ParsedStructure(usernameId!!, passwordId!!)
 	}
 
-	private fun traverseViewNode(
+	fun traverseViewNode(
 		node: AssistStructure.ViewNode,
 		action: (AssistStructure.ViewNode) -> Unit
 	) {

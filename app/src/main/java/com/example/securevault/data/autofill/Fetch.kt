@@ -5,7 +5,7 @@ import com.example.securevault.domain.repository.PasswordRepository
 object Fetch {
 	fun fetchPassword(
 		appPackage: String, passwordRepository: PasswordRepository
-	): Pair<String, String>? {
+	): Pair<String?, String?> {
 		val passwords = passwordRepository.getAllPasswords()
 
 		val match = passwords.firstOrNull { password ->
@@ -14,7 +14,7 @@ object Fetch {
 
 			urlTokens.any { appPackage.contains(it, ignoreCase = true) } ||
 					appPackage.contains(nameToken, ignoreCase = true)
-		} ?: return null
+		} ?: return Pair(null,null)
 
 		return Pair(match.username, match.value)
 	}
