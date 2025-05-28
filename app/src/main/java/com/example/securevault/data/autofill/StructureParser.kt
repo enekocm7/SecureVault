@@ -18,8 +18,10 @@ object StructureParser {
 				val idEntry = node.idEntry?.lowercase() ?: ""
 				val autofillHints = node.autofillHints?.map { it.lowercase() } ?: emptyList()
 
-				if (usernameId == null && hint.contains("user") || hint.contains("email") ||
-					idEntry.contains("user") || autofillHints.contains("username") || autofillHints.contains("email")
+				if (usernameId == null && (hint.contains("user") || hint.contains("email") ||
+							idEntry.contains("user") || autofillHints.contains("username") || autofillHints.contains(
+						"email"
+					))
 				) {
 					usernameId = node.autofillId
 				}
