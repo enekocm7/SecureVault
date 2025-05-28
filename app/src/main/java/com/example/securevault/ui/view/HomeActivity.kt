@@ -54,7 +54,9 @@ class HomeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.passwords.collect { passwordList ->
-                    passwordAdapter.updatePasswords(passwordList)
+                    passwordAdapter.updatePasswords(passwordList.sortedBy {
+                        it.name
+                    })
                 }
             }
         }
