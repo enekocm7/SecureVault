@@ -32,7 +32,7 @@ object StructureParser {
 				}
 			}
 		}
-		check(!(usernameId == null || passwordId == null)) {
+		if(usernameId == null || passwordId == null) {
 			return null
 		}
 

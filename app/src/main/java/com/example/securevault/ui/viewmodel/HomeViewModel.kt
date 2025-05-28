@@ -29,11 +29,6 @@ class HomeViewModel @Inject constructor(
         loadPasswords()
     }
 
-    private fun getPasswords(): List<PasswordDto> {
-        return getAllPasswords()
-    }
-
-
     fun loadPasswords(name: String){
         viewModelScope.launch(dispatchers.io) {
             val passwords = getPasswordsByNameIgnoreCase(name)
@@ -45,16 +40,14 @@ class HomeViewModel @Inject constructor(
 
     fun loadPasswords() {
         viewModelScope.launch(dispatchers.io) {
-            val passwords = getPasswords()
+            val passwords = getAllPasswords()
             withContext(dispatchers.main) {
                 _passwords.value = passwords
             }
         }
     }
 
-
     private fun getPasswordsByNameIgnoreCase(name: String): List<PasswordDto>{
         return getPasswordsByName(name)
     }
-
 }

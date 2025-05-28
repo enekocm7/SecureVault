@@ -40,7 +40,6 @@ class PasswordRepositoryImpl @Inject constructor(
 
     override fun insertPassword(password: Password) {
         insertPassword(password.name, password)
-        reloadPasswords()
     }
 
     override fun insertAllPasswords(passwords: List<Password>) {

@@ -1,8 +1,6 @@
 package com.example.securevault.data.autofill
 
-import android.app.PendingIntent
 import android.app.assist.AssistStructure
-import android.content.Intent
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
 import android.service.autofill.Dataset
@@ -17,10 +15,10 @@ import android.widget.RemoteViews
 import com.example.securevault.data.autofill.StructureParser.traverseViewNode
 import com.example.securevault.data.crypto.AppKeyProvider
 import com.example.securevault.data.json.crypto.FileEncryptor
+import com.example.securevault.data.json.model.Password
 import com.example.securevault.data.json.storage.PasswordStorage
 import com.example.securevault.data.repository.PasswordRepositoryImpl
 import com.example.securevault.domain.repository.PasswordRepository
-import com.example.securevault.ui.view.SavePasswordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,7 +57,10 @@ class SecureVaultAutofillService : AutofillService() {
 			val parsedStructure = StructureParser.parseStructure(structure) ?: run {
 				return@launch
 			}
-			val (username, password) = Fetch.fetchPassword(structure.activityComponent.packageName,passwordRepository!!)
+			val (username, password) = Fetch.fetchPassword(
+				structure.activityComponent.packageName,
+				passwordRepository!!
+			)
 
 			val usernamePresentation =
 				RemoteViews(packageName, android.R.layout.simple_list_item_1).apply {
@@ -89,7 +90,7 @@ class SecureVaultAutofillService : AutofillService() {
 				.setSaveInfo(
 					SaveInfo.Builder(
 						SaveInfo.SAVE_DATA_TYPE_USERNAME or SaveInfo.SAVE_DATA_TYPE_PASSWORD,
-						arrayOf(parsedStructure.usernameId,parsedStructure.passwordId)
+						arrayOf(parsedStructure.usernameId, parsedStructure.passwordId)
 					).build()
 				)
 				.build()
@@ -111,21 +112,18 @@ class SecureVaultAutofillService : AutofillService() {
 
 		if (credentials.isValid()) {
 			try {
-				val intent = Intent(this, SavePasswordActivity::class.java).apply {
-					flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-					putExtra("url", packageName)
-					putExtra("username", credentials.username)
-					putExtra("password", credentials.password)
-				}
-
-				val pendingIntent = PendingIntent.getActivity(
-					this,
-					SavePasswordActivity.REQUEST_SAVE_PASSWORD,
-					intent,
-					PendingIntent.FLAG_IMMUTABLE
-				).intentSender
-
-				callback.onSuccess(pendingIntent)
+				val name = packageName.split('.').getOrNull(1)?.replaceFirstChar {
+					it.uppercase()
+				} ?: packageName.replaceFirstChar { it.uppercase() }
+				val password = Password(
+					name = name,
+					url = packageName,
+					username = credentials.username.toString(),
+					value = credentials.password.toString()
+				)
+				passwordRepository = PasswordRepositoryImpl(storage, encryptor)
+				passwordRepository?.insertPassword(password)
+				callback.onSuccess()
 			} catch (e: Exception) {
 				callback.onFailure("Failed to show save password dialog: ${e.message}")
 			}
@@ -161,7 +159,6 @@ class SecureVaultAutofillService : AutofillService() {
 			) {
 				username = node.text?.toString()
 			}
-
 			if (password == null && (hint.contains("pass") || idEntry.contains("pass"))) {
 				password = node.text?.toString()
 			}

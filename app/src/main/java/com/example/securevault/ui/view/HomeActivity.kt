@@ -117,7 +117,6 @@ class HomeActivity : AppCompatActivity() {
         binding.search.setImageResource(R.drawable.ic_search)
         binding.searchEditText.text.clear()
     }
-
 }
 
 
