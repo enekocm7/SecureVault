@@ -63,18 +63,15 @@ class LoginViewModel
                 biometricAuth.promptResults.collect { result ->
                     when (result) {
                         is BiometricResult.AuthenticationSuccess -> {
-                            val authResult = unlockKeyWithBiometrics(result)
+                            val authResult: Boolean = unlockKeyWithBiometrics(result)
                             _biometricLoginState.value = authResult
                         }
 
                         is BiometricResult.AuthenticationError,
                         is BiometricResult.AuthenticationFailed,
-                        is BiometricResult.AuthenticationNotRecognized -> {
-                            _biometricLoginState.value = false
-                        }
-
-                        BiometricResult.FeatureUnavailable,
-                        BiometricResult.HardwareNotAvailable -> {
+                        is BiometricResult.AuthenticationNotRecognized,
+                        is BiometricResult.FeatureUnavailable,
+                        is BiometricResult.HardwareNotAvailable -> {
                             _biometricLoginState.value = false
                         }
                     }
