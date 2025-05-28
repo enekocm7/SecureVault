@@ -153,9 +153,8 @@ class SecureVaultAutofillService : AutofillService() {
 			val hint = node.hint?.lowercase() ?: ""
 			val idEntry = node.idEntry?.lowercase() ?: ""
 
-			if (username == null && (hint.contains("user") || hint.contains("email") || idEntry.contains(
-					"user"
-				))
+			if (username == null && (hint.contains("user") ||
+						hint.contains("email") || idEntry.contains("user"))
 			) {
 				username = node.text?.toString()
 			}
