@@ -50,7 +50,7 @@ By using SecureVault (the "App"), you agree to the following terms and condition
 Questions? Contact us at:
 
 SecureVault Support  
-Email: 
+Email: enekocanedo@gmail.com
 
 ---
 
