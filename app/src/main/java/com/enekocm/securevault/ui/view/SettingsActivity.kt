@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.enekocm.securevault.BuildConfig
 import com.enekocm.securevault.R
 import com.enekocm.securevault.databinding.SettingsActivityBinding
 import com.enekocm.securevault.ui.view.dialogs.ChangeMasterPasswordDialog
@@ -57,6 +58,10 @@ class SettingsActivity : AppCompatActivity() {
         updateBackupLocationText()
         checkBackupButtons()
         checkAutofill()
+        binding.textAppVersion.text = buildString {
+            append("App Version: ")
+            append(BuildConfig.VERSION_NAME)
+        }
     }
 
     override fun onResume() {
@@ -181,6 +186,12 @@ class SettingsActivity : AppCompatActivity() {
             if (isChecked) {
                 requestAutofillService()
             }
+        }
+        binding.btnPrivacyPolicy.setOnClickListener {
+            val url = "https://github.com/enekocm7/SecureVault/tree/master/legal"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = url.toUri()
+            startActivity(intent)
         }
     }
 
