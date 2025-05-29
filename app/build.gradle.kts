@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.securevault"
-    compileSdk = 35
+    namespace = "com.enekocm.securevault"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.securevault"
+        applicationId = "com.enekocm.securevault"
         minSdk = 30
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -21,7 +21,9 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -49,7 +51,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.material.v1110)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.nbvcxz)
