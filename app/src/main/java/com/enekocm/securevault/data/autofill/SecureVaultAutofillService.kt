@@ -49,8 +49,7 @@ class SecureVaultAutofillService : AutofillService() {
 
 			passwordRepository = PasswordRepositoryImpl(storage, encryptor)
 
-			val structure = request.fillContexts.lastOrNull()?.structure
-			if (structure == null) {
+			val structure = request.fillContexts.lastOrNull()?.structure ?: run {
 				return@launch
 			}
 
@@ -102,8 +101,7 @@ class SecureVaultAutofillService : AutofillService() {
 		request: SaveRequest,
 		callback: SaveCallback
 	) {
-		val structure = request.fillContexts.lastOrNull()?.structure
-		if (structure == null) {
+		val structure = request.fillContexts.lastOrNull()?.structure ?: run {
 			return
 		}
 
