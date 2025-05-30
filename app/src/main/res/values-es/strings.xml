@@ -128,5 +128,7 @@
     <string name="load_backup_failed">Error al cargar la copia de seguridad</string>
     <string name="please_select_autofill_service">Selecciona el servicio de autocompletado</string>
     <string name="enable_autofill_in_settings">Activa el servicio de autocompletado</string>
+    <string name="biometric_authentication">Autenticación biométrica</string>
+    <string name="enable_biometric_authentication_to_secure_your_vault">Habilita la autenticación biométrica para asegurar tu bóveda.</string>
 </resources>
 

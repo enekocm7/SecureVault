@@ -40,7 +40,6 @@ class HomeActivity : AppCompatActivity() {
         binding = MainScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
-
         setListeners()
         setObservers()
     }
@@ -120,7 +119,3 @@ class HomeActivity : AppCompatActivity() {
         binding.searchEditText.text.clear()
     }
 }
-
-
-
-
