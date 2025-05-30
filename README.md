@@ -2,6 +2,9 @@
 
 # Secure Vault
 
+[![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)]([https://play.google.com/store/apps/details?id=com.tuapp](https://play.google.com/store/apps/details?id=com.enekocm.securevault))
+
+
 **SecureVault** is an open-source Android application meticulously designed to provide users with a secure, efficient, and user-friendly solution for managing their digital passwords and sensitive credentials.
 
 SecureVault is currently under active development and not yet available on the Google Play Store, you can get the latest .apk file directly from our Releases page.
