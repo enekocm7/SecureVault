@@ -1,12 +1,14 @@
 package com.enekocm.securevault.ui.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import com.enekocm.securevault.R
 import com.enekocm.securevault.databinding.LoginScreenBinding
 import com.enekocm.securevault.ui.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +25,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
             true
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            @Suppress("DEPRECATION")
+            window.statusBarColor = getColor(R.color.light_red)
+        }
         binding = LoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

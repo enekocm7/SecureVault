@@ -1,6 +1,7 @@
 package com.enekocm.securevault.ui.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -37,6 +38,11 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
             true
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            @Suppress("DEPRECATION")
+            window.statusBarColor = getColor(R.color.light_red)
+        }
+
         binding = MainScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()

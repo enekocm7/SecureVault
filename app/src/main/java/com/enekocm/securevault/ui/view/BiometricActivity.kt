@@ -1,6 +1,7 @@
 package com.enekocm.securevault.ui.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,10 @@ class BiometricActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
             true
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            @Suppress("DEPRECATION")
+            window.statusBarColor = getColor(R.color.light_red)
+        }
         binding = BiometricSugestionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

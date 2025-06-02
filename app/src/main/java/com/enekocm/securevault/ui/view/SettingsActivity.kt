@@ -2,6 +2,7 @@ package com.enekocm.securevault.ui.view
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
@@ -44,6 +45,11 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            @Suppress("DEPRECATION")
+            window.statusBarColor = getColor(R.color.light_red)
+        }
 
         setSupportActionBar(binding.toolbarSettings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
