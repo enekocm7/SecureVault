@@ -132,5 +132,6 @@
     <string name="enable_biometric_authentication_to_secure_your_vault">Habilita la autenticación biométrica para asegurar tu bóveda.</string>
     <string name="invalid_biometric_authentication">Error en la autenticación</string>
     <string name="biometric_authentication_not_configured">Autenticación biométrica no configurada</string>
+    <string name="invalid_password">Contraseña incorrecta</string>
 </resources>
 
