@@ -11,29 +11,43 @@ import com.enekocm.securevault.data.autofill.Fetch
 import com.enekocm.securevault.data.autofill.StructureParser
 import com.enekocm.securevault.data.autofill.entities.ParsedStructure
 import com.enekocm.securevault.data.autofill.utils.Utils
+import com.enekocm.securevault.data.autofill.utils.Utils.isAppKeyAvailable
+import com.enekocm.securevault.data.json.crypto.FileEncryptor
+import com.enekocm.securevault.data.json.storage.PasswordStorage
+import com.enekocm.securevault.data.repository.PasswordRepositoryImpl
 import com.enekocm.securevault.domain.repository.PasswordRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Suppress("DEPRECATION")
-class FillRequestHandler(private val context: Context) {
+class FillRequestHandler @Inject constructor(@ApplicationContext private val context: Context) {
 
     fun handleFillRequest(
         request: FillRequest,
         callback: FillCallback,
-        passwordRepository: PasswordRepository?
+        storage: PasswordStorage,
+        encryptor: FileEncryptor
     ) {
         val structure = request.fillContexts.lastOrNull()?.structure ?: return
         val parsedStructure = StructureParser.parseStructure(structure) ?: return
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (!Utils.isAppKeyAvailable()) {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (!isAppKeyAvailable()) {
                 handleUnauthenticatedFill(request, structure, parsedStructure, callback)
                 return@launch
             }
 
-            handleAuthenticatedFill(request, structure, parsedStructure, callback, passwordRepository)
+
+            handleAuthenticatedFill(
+                request,
+                structure,
+                parsedStructure,
+                callback,
+                PasswordRepositoryImpl(storage,encryptor)
+            )
         }
     }
 
