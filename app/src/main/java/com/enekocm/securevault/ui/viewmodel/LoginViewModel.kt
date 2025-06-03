@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enekocm.securevault.R
+import com.enekocm.securevault.data.json.model.Password
+import com.enekocm.securevault.data.mapper.PasswordMapper
 import com.enekocm.securevault.di.DispatcherProvider
 import com.enekocm.securevault.domain.model.BiometricResult
 import com.enekocm.securevault.domain.usecases.auth.AuthenticateBiometrics
@@ -12,7 +14,9 @@ import com.enekocm.securevault.domain.usecases.auth.GetDecryptCryptoObject
 import com.enekocm.securevault.domain.usecases.auth.IsBiometricConfigured
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithBiometrics
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithPassword
+import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import com.enekocm.securevault.ui.biometrics.BiometricPromptManager
+import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
@@ -32,11 +36,13 @@ class LoginViewModel
     private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val getDecryptCryptoObject: GetDecryptCryptoObject,
+    private val getAllPasswords: Lazy<GetAllPasswords>,
     private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
     private val title = context.getString(R.string.biometric_authentication)
-    private val description = context.getString(R.string.enable_biometric_authentication_to_secure_your_vault)
+    private val description =
+        context.getString(R.string.enable_biometric_authentication_to_secure_your_vault)
 
     private val _biometricLoginState = MutableStateFlow<Boolean?>(null)
     val biometricLoginState = _biometricLoginState.asStateFlow()
@@ -53,7 +59,7 @@ class LoginViewModel
     fun login(password: String) {
         viewModelScope.launch(dispatchers.default) {
             val result = unlockKeyWithPassword(password)
-            withContext(dispatchers.main){
+            withContext(dispatchers.main) {
                 _passwordLoginState.value = result
             }
         }
@@ -96,6 +102,10 @@ class LoginViewModel
 
     fun isBiometricKeyConfigured(): Boolean {
         return isBiometricConfigured()
+    }
+
+    fun getPasswords(): List<Password> {
+        return getAllPasswords.get()().map { PasswordMapper.mapToEntity(it) }
     }
 
 }

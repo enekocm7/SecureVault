@@ -3,12 +3,17 @@ package com.enekocm.securevault.ui.view
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.service.autofill.Dataset
+import android.view.autofill.AutofillId
+import android.view.autofill.AutofillManager
+import android.view.autofill.AutofillValue
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.enekocm.securevault.R
+import com.enekocm.securevault.data.autofill.Fetch
 import com.enekocm.securevault.databinding.LoginScreenBinding
 import com.enekocm.securevault.ui.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +26,12 @@ class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
 
+    private lateinit var usernameId: AutofillId
+    private lateinit var passwordId: AutofillId
+    private lateinit var appPackage: String
+
+    private var isAutofill : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
@@ -31,6 +42,16 @@ class LoginActivity : AppCompatActivity() {
         }
         binding = LoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        @Suppress("DEPRECATION")
+        isAutofill = try {
+            usernameId = intent.getParcelableExtra("usernameId")!!
+            passwordId = intent.getParcelableExtra("passwordId")!!
+            appPackage = intent.getStringExtra("package")!!
+            true
+        }catch (_: Exception){
+            false
+        }
 
         if (viewModel.isBiometricKeyConfigured()) {
             viewModel.login(this)
@@ -45,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.passwordLoginState
                 .collect { success ->
                     if (success == true) {
-                        skip()
+                        if(isAutofill) autofill() else skip()
                     } else if (success == false) {
                         Toast.makeText(
                             this@LoginActivity,
@@ -61,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.biometricLoginState.collect { success ->
                 if (success == true) {
-                    skip()
+                    if(isAutofill) autofill() else skip()
                 } else if (success == false) {
                     Toast.makeText(
                         this@LoginActivity,
@@ -93,5 +114,22 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         finishAffinity()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun autofill(){
+        val (username, password) = Fetch.fetchPassword(appPackage,viewModel.getPasswords())
+
+        val dataset = Dataset.Builder()
+            .setValue(usernameId, AutofillValue.forText(username))
+            .setValue(passwordId, AutofillValue.forText(password))
+            .build()
+
+        val resultIntent = Intent().apply {
+            putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, dataset)
+        }
+
+        setResult(RESULT_OK, resultIntent)
+        finish()
     }
 }
