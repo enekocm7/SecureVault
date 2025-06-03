@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.app.assist.AssistStructure
 import android.content.Intent
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
 import android.service.autofill.Dataset
@@ -18,7 +17,6 @@ import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.view.inputmethod.InlineSuggestionsRequest
-import androidx.annotation.RequiresApi
 import androidx.autofill.inline.v1.InlineSuggestionUi
 import com.enekocm.securevault.R
 import com.enekocm.securevault.data.autofill.StructureParser.traverseViewNode
@@ -46,7 +44,6 @@ class SecureVaultAutofillService : AutofillService() {
     @Inject
     lateinit var encryptor: FileEncryptor
 
-    @RequiresApi(Build.VERSION_CODES.S)
     @Suppress("DEPRECATION")
     override fun onFillRequest(
         request: FillRequest,
