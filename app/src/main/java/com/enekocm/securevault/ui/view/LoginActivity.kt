@@ -82,7 +82,8 @@ class LoginActivity : AppCompatActivity() {
             if (viewModel.isBiometricKeyConfigured()) {
                 viewModel.login(this)
             } else {
-                Toast.makeText(this, "Biometric authentication not configured", Toast.LENGTH_SHORT)
+                Toast.makeText(this,
+                    getString(R.string.biometric_authentication_not_configured), Toast.LENGTH_SHORT)
                     .show()
             }
         }
