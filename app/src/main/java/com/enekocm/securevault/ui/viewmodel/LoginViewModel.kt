@@ -1,8 +1,10 @@
 package com.enekocm.securevault.ui.viewmodel
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enekocm.securevault.R
 import com.enekocm.securevault.di.DispatcherProvider
 import com.enekocm.securevault.domain.model.BiometricResult
 import com.enekocm.securevault.domain.usecases.auth.AuthenticateBiometrics
@@ -12,6 +14,7 @@ import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithBiometrics
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithPassword
 import com.enekocm.securevault.ui.biometrics.BiometricPromptManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel
 @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val unlockKeyWithPassword: UnlockKeyWithPassword,
     private val unlockKeyWithBiometrics: UnlockKeyWithBiometrics,
     private val isBiometricConfigured: IsBiometricConfigured,
@@ -31,8 +35,8 @@ class LoginViewModel
     private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
-    private val title = "Biometric Authentication"
-    private val description = "Enable biometric authentication to secure your vault."
+    private val title = context.getString(R.string.biometric_authentication)
+    private val description = context.getString(R.string.enable_biometric_authentication_to_secure_your_vault)
 
     private val _biometricLoginState = MutableStateFlow<Boolean?>(null)
     val biometricLoginState = _biometricLoginState.asStateFlow()
