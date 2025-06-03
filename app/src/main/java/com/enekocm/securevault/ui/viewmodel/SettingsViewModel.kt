@@ -10,8 +10,8 @@ import com.enekocm.securevault.domain.usecases.auth.IsBiometricConfigured
 import com.enekocm.securevault.domain.usecases.password.DeleteAllPasswords
 import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,11 +25,11 @@ class SettingsViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _backup = MutableStateFlow<Boolean?>(null)
-    val backup = _backup.asStateFlow()
+    private val _backup = MutableSharedFlow<Boolean>()
+    val backup = _backup.asSharedFlow()
 
-    private val _loadBackup = MutableStateFlow<Boolean?>(null)
-    val loadBackup = _loadBackup.asStateFlow()
+    private val _loadBackup = MutableSharedFlow<Boolean>()
+    val loadBackup = _loadBackup.asSharedFlow()
 
     fun isBiometric(): Boolean {
         return isBiometricConfigured()
@@ -43,9 +43,9 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch{
             try {
                 backupManager.loadBackup(uri)
-                _loadBackup.value = true
+                _loadBackup.emit(true)
             }catch (_: Exception){
-                _loadBackup.value = false
+                _loadBackup.emit(false)
             }
         }
     }
@@ -53,7 +53,7 @@ class SettingsViewModel @Inject constructor(
     fun createBackup() {
         viewModelScope.launch(dispatchers.io) {
             val passwords = getAllPasswords().map { PasswordMapper.mapToEntity(it) }
-            _backup.value = backupManager.createBackupIfEnabled(passwords)
+            _backup.emit(backupManager.createBackupIfEnabled(passwords))
         }
     }
 

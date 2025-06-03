@@ -93,27 +93,23 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun observeBackupState() {
         lifecycleScope.launch {
-            viewModel.backup.collect { success ->
-                success?.let {
-                    val message = if (it) {
-                        getString(R.string.backup_created_successfully)
-                    } else {
-                        getString(R.string.backup_creation_failed)
-                    }
-                    Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_LONG).show()
+            viewModel.backup.collect {
+                val message = if (it) {
+                    getString(R.string.backup_created_successfully)
+                } else {
+                    getString(R.string.backup_creation_failed)
                 }
+                Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_LONG).show()
             }
         }
         lifecycleScope.launch {
             viewModel.loadBackup.collect {
-                it?.let {
-                    val message = if (it) {
-                        getString(R.string.load_backup_successfully)
-                    } else {
-                        getString(R.string.load_backup_failed)
-                    }
-                    Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_LONG).show()
+                val message = if (it) {
+                    getString(R.string.load_backup_successfully)
+                } else {
+                    getString(R.string.load_backup_failed)
                 }
+                Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_LONG).show()
             }
         }
 
