@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.moshi.kotlin)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.autofill)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

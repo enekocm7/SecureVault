@@ -28,7 +28,7 @@
         <activity android:name=".ui.view.RegisterActivity" android:exported="false"/>
         <activity android:name=".ui.view.HomeActivity" android:exported="false"/>
         <activity android:name=".ui.view.BiometricActivity" android:exported="false"/>
-        <activity android:name=".ui.view.LoginActivity" android:exported="false"/>
+        <activity android:name=".ui.view.LoginActivity" android:exported="true"/>
         <activity android:name=".ui.view.SettingsActivity" android:exported="false"/>
         <meta-data
             android:name="preloaded_fonts"

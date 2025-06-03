@@ -17,6 +17,7 @@ constraintlayout = "2.2.1"
 moshiKotlin = "1.15.2"
 nbvcxz = "1.5.1"
 preferenceKtx = "1.2.1"
+autofill = "1.1.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -36,6 +37,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
 nbvcxz = { module = "me.gosimple:nbvcxz", version.ref = "nbvcxz" }
+androidx-autofill = { group = "androidx.autofill", name = "autofill", version.ref = "autofill" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

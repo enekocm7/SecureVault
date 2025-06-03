@@ -1,3 +1,4 @@
 <autofill-service
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:supportsInlineSuggestions="true"
     android:settingsActivity="com.example.securevault.ui.view.SettingsActivity" />
