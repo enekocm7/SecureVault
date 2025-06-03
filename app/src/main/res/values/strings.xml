@@ -133,5 +133,6 @@
     <string name="enable_autofill_in_settings">Enable autofill in settings</string>
     <string name="biometric_authentication">Biometric Authentication</string>
     <string name="enable_biometric_authentication_to_secure_your_vault">Enable biometric authentication to secure your vault.</string>
+    <string name="invalid_biometric_authentication">Invalid biometric authentication</string>
 </resources>
 

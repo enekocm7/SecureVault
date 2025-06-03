@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                 } else if (success == false) {
                     Toast.makeText(
                         this@LoginActivity,
-                        "Invalid biometric authentication",
+                        getString(R.string.invalid_biometric_authentication),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
