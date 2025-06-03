@@ -2,6 +2,8 @@ package com.enekocm.securevault.data.autofill
 
 import android.app.assist.AssistStructure
 import android.view.autofill.AutofillId
+import com.enekocm.securevault.data.autofill.entities.Credentials
+import com.enekocm.securevault.data.autofill.entities.ParsedStructure
 
 object StructureParser {
 
@@ -49,7 +51,35 @@ object StructureParser {
 		}
 	}
 
+	fun extractCredentialsFromStructure(structure: AssistStructure): Credentials {
+		var username: String? = null
+		var password: String? = null
 
+		for (i in 0 until structure.windowNodeCount) {
+			val windowNode = structure.getWindowNodeAt(i)
+			traverseViewNode(windowNode.rootViewNode) { node ->
+				val autofillValue = node.autofillValue
+				if (autofillValue != null && autofillValue.isText) {
+					val hint = node.hint?.lowercase() ?: ""
+					val idEntry = node.idEntry?.lowercase() ?: ""
+					val autofillHints = node.autofillHints?.map { it.lowercase() } ?: emptyList()
+
+					if (username == null && (hint.contains("user") || hint.contains("email") ||
+								idEntry.contains("user") || autofillHints.contains("username") ||
+								autofillHints.contains("email"))
+					) {
+						username = autofillValue.textValue.toString()
+					}
+
+					if (password == null && (hint.contains("pass") ||
+								idEntry.contains("pass") || autofillHints.contains("password"))
+					) {
+						password = autofillValue.textValue.toString()
+					}
+				}
+			}
+		}
+
+		return Credentials(username, password)
+	}
 }
-
-data class ParsedStructure(val usernameId: AutofillId, val passwordId: AutofillId)

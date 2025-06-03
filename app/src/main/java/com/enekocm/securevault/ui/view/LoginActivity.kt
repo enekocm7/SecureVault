@@ -130,6 +130,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setResult(RESULT_OK, resultIntent)
-        finish()
+        finishAndRemoveTask()
     }
 }
