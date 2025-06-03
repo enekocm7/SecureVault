@@ -135,5 +135,6 @@
     <string name="enable_biometric_authentication_to_secure_your_vault">Enable biometric authentication to secure your vault.</string>
     <string name="invalid_biometric_authentication">Invalid biometric authentication</string>
     <string name="biometric_authentication_not_configured">Biometric authentication not configured</string>
+    <string name="invalid_password">Invalid password</string>
 </resources>
 

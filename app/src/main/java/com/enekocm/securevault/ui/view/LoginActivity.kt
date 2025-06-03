@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                     } else if (success == false) {
                         Toast.makeText(
                             this@LoginActivity,
-                            "Invalid password",
+                            getString(R.string.invalid_password),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
