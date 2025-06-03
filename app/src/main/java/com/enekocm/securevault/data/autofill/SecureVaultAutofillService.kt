@@ -60,6 +60,7 @@ class SecureVaultAutofillService : AutofillService() {
             } else null
 
             if (!isAppKeyAvailable()) {
+
                 val loginInlinePresentation = createInlinePresentation(
                     request.inlineSuggestionsRequest,
                     "Login to Secure Vault"
@@ -69,24 +70,28 @@ class SecureVaultAutofillService : AutofillService() {
                     val dataset = Dataset.Builder()
                         .setInlinePresentation(loginInlinePresentation)
 
-                    dataset.setValue(
-                        parsedStructure.usernameId,
-                        AutofillValue.forText(""),
-                    )
+                        .setValue(
+                            parsedStructure.usernameId,
+                            AutofillValue.forText(""),
+                        )
 
-                    dataset.setValue(
-                        parsedStructure.passwordId,
-                        AutofillValue.forText(""),
-                    )
+                        .setValue(
+                            parsedStructure.passwordId,
+                            AutofillValue.forText(""),
+                        )
+                        .setAuthentication(createLoginIntent().intentSender)
+                        .build()
 
+                    val response = FillResponse.Builder()
+                        .addDataset(dataset)
+                        .build()
                     callback.onSuccess(
-                        FillResponse.Builder()
-                            .addDataset(dataset.build())
-                            .build()
+                        response
                     )
                 } else {
                     callback.onSuccess(null)
                 }
+                return@launch
             }
 
             passwordRepository = PasswordRepositoryImpl(storage, encryptor)
@@ -218,7 +223,8 @@ class SecureVaultAutofillService : AutofillService() {
     @SuppressLint("RestrictedApi")
     private fun createInlinePresentation(
         request: InlineSuggestionsRequest?,
-        text: String
+        text: String,
+        pendingIntent: PendingIntent = createLoginIntent()
     ): InlinePresentation? {
         request ?: return null
 
@@ -226,17 +232,9 @@ class SecureVaultAutofillService : AutofillService() {
 
         val spec = request.inlinePresentationSpecs.firstOrNull() ?: return null
 
-        val loginIntent = PendingIntent.getActivity(
-            this,
-            0,
-            Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
 
         return InlinePresentation(
-            InlineSuggestionUi.newContentBuilder(loginIntent).apply {
+            InlineSuggestionUi.newContentBuilder(pendingIntent).apply {
                 setTitle(text)
                 setStartIcon(
                     Icon.createWithResource(
@@ -247,6 +245,17 @@ class SecureVaultAutofillService : AutofillService() {
             }.build().slice,
             spec,
             false
+        )
+    }
+
+    private fun createLoginIntent(): PendingIntent {
+        return PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
