@@ -15,6 +15,7 @@ import android.service.autofill.InlinePresentation
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
+import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.view.inputmethod.InlineSuggestionsRequest
 import androidx.autofill.inline.v1.InlineSuggestionUi
@@ -27,13 +28,11 @@ import com.enekocm.securevault.data.json.storage.PasswordStorage
 import com.enekocm.securevault.data.repository.PasswordRepositoryImpl
 import com.enekocm.securevault.domain.repository.PasswordRepository
 import com.enekocm.securevault.ui.view.LoginActivity
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class SecureVaultAutofillService : AutofillService() {
 
     private var passwordRepository: PasswordRepository? = null
@@ -57,12 +56,10 @@ class SecureVaultAutofillService : AutofillService() {
             } else null
 
             if (!isAppKeyAvailable()) {
-
                 val loginInlinePresentation = createInlinePresentation(
                     request.inlineSuggestionsRequest,
                     "Login to Secure Vault"
                 )
-
                 if (loginInlinePresentation != null && parsedStructure != null) {
                     val dataset = Dataset.Builder()
                         .setInlinePresentation(loginInlinePresentation)
@@ -71,95 +68,19 @@ class SecureVaultAutofillService : AutofillService() {
                             parsedStructure.usernameId,
                             AutofillValue.forText(""),
                         )
-                        /*
-
-How to do this correctly:
-
-    In your AutofillService — create a Dataset with:
-
-        empty or placeholder values for username/password
-
-        inline presentation (the UI snippet shown to user)
-
-        set the authentication intent pointing to your login activity's PendingIntent
-
-val loginIntent = createLoginPendingIntent()
-
-val dataset = Dataset.Builder()
-    .setInlinePresentation(loginInlinePresentation)
-    .setValue(parsedStructure.usernameId, AutofillValue.forText("")) // empty for now
-    .setValue(parsedStructure.passwordId, AutofillValue.forText("")) // empty for now
-    .setAuthentication(loginIntent.intentSender) // fires login activity when tapped
-    .build()
-
-callback.onSuccess(FillResponse.Builder().addDataset(dataset).build())
-
-    In your LoginActivity — after user logs in:
-
-    Build a Dataset with the real username/password values
-
-    Pack that into an Intent extra with key AutofillManager.EXTRA_AUTHENTICATION_RESULT
-
-    Set that Intent as the activity result
-
-    Call finish() to close the login activity and send the data back to the autofill framework
-
-Example:
-
-import android.view.autofill.AutofillManager
-
-// after successful login
-val username = "realUser"
-val password = "realPass"
-
-val resultDataset = Dataset.Builder()
-    .setValue(parsedStructure.usernameId, AutofillValue.forText(username))
-    .setValue(parsedStructure.passwordId, AutofillValue.forText(password))
-    .build()
-
-val resultIntent = Intent().apply {
-    putExtra(
-        AutofillManager.EXTRA_AUTHENTICATION_RESULT,
-        resultDataset
-    )
-}
-
-setResult(Activity.RESULT_OK, resultIntent)
-finish()
-
-What happens next?
-
-    Android receives your Dataset from LoginActivity
-
-    Autofill UI automatically fills the username and password fields in the original app (Netflix, etc.)
-
-Important:
-
-    parsedStructure.usernameId and passwordId need to be accessible or passed to your login activity so you can set them correctly in the result Dataset.
-
-    Alternatively, you can pass the IDs in the intent extras when launching LoginActivity.
-
-    The autofill framework requires the exact field IDs used by the app for correct filling.
-
-Summary:
-AutofillService Dataset	Has empty values + .setAuthentication() pointing to login activity
-LoginActivity result Dataset	Has real username/password values returned via setResult()
-Android framework	Autofills the original app with the real credentials
-
-If you want, I can help with:
-
-    Passing the autofill field IDs safely to your login activity
-
-    Sample code for LoginActivity receiving those IDs and returning the result
-
-Would you like me to?
-                         */
 
                         .setValue(
                             parsedStructure.passwordId,
                             AutofillValue.forText(""),
                         )
-                        .setAuthentication(createLoginIntent().intentSender)
+                        .setAuthentication(
+                            createLoginIntent(
+                                structure?.activityComponent?.packageName
+                                    ?: "",
+                                parsedStructure.usernameId,
+                                parsedStructure.passwordId
+                            ).intentSender
+                        )
                         .build()
 
                     val response = FillResponse.Builder()
@@ -307,7 +228,6 @@ Would you like me to?
         pendingIntent: PendingIntent = createLoginIntent()
     ): InlinePresentation? {
         request ?: return null
-
         if (request.maxSuggestionCount <= 0) return null
 
         val spec = request.inlinePresentationSpecs.firstOrNull() ?: return null
@@ -328,15 +248,21 @@ Would you like me to?
         )
     }
 
-    private fun createLoginIntent(): PendingIntent {
+    private fun createLoginIntent(
+        appPackage: String = "",
+        usernameId: AutofillId? = null,
+        passwordId: AutofillId? = null
+    ): PendingIntent {
         return PendingIntent.getActivity(
             this,
             0,
             Intent(this, LoginActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra("package", appPackage)
+                putExtra("usernameId", usernameId)
+                putExtra("passwordId", passwordId)
             },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
-
 }
