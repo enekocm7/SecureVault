@@ -1,12 +1,11 @@
 package com.enekocm.securevault.data.autofill
 
-import com.enekocm.securevault.domain.repository.PasswordRepository
+import com.enekocm.securevault.data.json.model.Password
 
 object Fetch {
 	fun fetchPassword(
-		appPackage: String, passwordRepository: PasswordRepository
+		appPackage: String, passwords: List<Password>
 	): Pair<String?, String?> {
-		val passwords = passwordRepository.getAllPasswords()
 
 		val match = passwords.firstOrNull { password ->
 			val urlTokens = password.url.split('.').dropLast(1)

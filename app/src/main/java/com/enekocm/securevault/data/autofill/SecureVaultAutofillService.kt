@@ -58,7 +58,7 @@ class SecureVaultAutofillService : AutofillService() {
 			}
 			val (username, password) = Fetch.fetchPassword(
 				structure.activityComponent.packageName,
-				passwordRepository!!
+				passwordRepository!!.getAllPasswords()
 			)
 
 			val usernamePresentation =
