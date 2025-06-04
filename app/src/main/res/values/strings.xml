@@ -138,5 +138,8 @@
     <string name="invalid_password">Invalid password</string>
     <string name="no_matching_passwords">No matching passwords</string>
     <string name="login_to_secure_vault">Login to Secure Vault</string>
+    <string name="browser_autofill_already_enabled">Browser autofill is already enabled</string>
+    <string name="autofill_service_already_enabled">Autofill service is already enabled</string>
 </resources>
+
 

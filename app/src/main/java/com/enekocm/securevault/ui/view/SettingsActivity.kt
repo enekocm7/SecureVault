@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: SettingsActivityBinding
     private val viewModel: SettingsViewModel by viewModels()
+    private var isInitialSetup = true
 
     private val folderPicker = FilePicker(activity = this) { uri ->
         viewModel.setBackupLocation(uri)
@@ -124,6 +125,13 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             binding.switchBrowserAutofill.visibility = View.GONE
         }
+        if (checkBrowserAutofillEnabled()) {
+            binding.switchBrowserAutofill.isChecked = true
+        } else {
+            binding.switchBrowserAutofill.isChecked = false
+        }
+
+        isInitialSetup = false
     }
 
     private fun checkBrowserAutofillEnabled(): Boolean {
@@ -231,12 +239,26 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchAutofill.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 requestAutofillService()
+                if (!isInitialSetup) {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.autofill_service_already_enabled),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
         binding.switchBrowserAutofill.setOnCheckedChangeListener { _, isChecked ->
-            if (!checkBrowserAutofillEnabled()) {
+            if (isChecked) {
                 openChromeAutofillSettings()
+                if (!isInitialSetup) {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.browser_autofill_already_enabled),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -289,20 +311,22 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun openChromeAutofillSettings() {
-        val autofillSettingsIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
-        autofillSettingsIntent.addCategory(Intent.CATEGORY_DEFAULT)
-        autofillSettingsIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
-        autofillSettingsIntent.addCategory(Intent.CATEGORY_PREFERENCE)
-        autofillSettingsIntent.setPackage("com.android.chrome")
-        val chooser = Intent.createChooser(autofillSettingsIntent, "Pick Chrome Channel")
-        startActivity(chooser)
+        if (!checkBrowserAutofillEnabled()) {
+            val autofillSettingsIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
+            autofillSettingsIntent.addCategory(Intent.CATEGORY_DEFAULT)
+            autofillSettingsIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
+            autofillSettingsIntent.addCategory(Intent.CATEGORY_PREFERENCE)
+            autofillSettingsIntent.setPackage("com.android.chrome")
+            val chooser = Intent.createChooser(autofillSettingsIntent, "Pick Chrome Channel")
+            startActivity(chooser)
 
-        val specificChromeIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
-        specificChromeIntent.addCategory(Intent.CATEGORY_DEFAULT)
-        specificChromeIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
-        specificChromeIntent.addCategory(Intent.CATEGORY_PREFERENCE)
-        specificChromeIntent.setPackage("com.android.chrome")
-        startActivity(specificChromeIntent)
+            val specificChromeIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
+            specificChromeIntent.addCategory(Intent.CATEGORY_DEFAULT)
+            specificChromeIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
+            specificChromeIntent.addCategory(Intent.CATEGORY_PREFERENCE)
+            specificChromeIntent.setPackage("com.android.chrome")
+            startActivity(specificChromeIntent)
+        }
     }
 
 
