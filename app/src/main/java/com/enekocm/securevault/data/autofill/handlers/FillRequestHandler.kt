@@ -40,16 +40,15 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         CoroutineScope(Dispatchers.IO).launch {
             if (!isAppKeyAvailable()) {
                 handleUnauthenticatedFill(request, packageName, parsedStructure, callback)
-                return@launch
+            }else{
+                handleAuthenticatedFill(
+                    request,
+                    packageName,
+                    parsedStructure,
+                    callback,
+                    PasswordRepositoryImpl(storage, encryptor)
+                )
             }
-
-            handleAuthenticatedFill(
-                request,
-                packageName,
-                parsedStructure,
-                callback,
-                PasswordRepositoryImpl(storage, encryptor)
-            )
         }
     }
 
