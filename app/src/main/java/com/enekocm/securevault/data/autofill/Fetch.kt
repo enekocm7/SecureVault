@@ -11,10 +11,8 @@ object Fetch {
 	): Credentials? {
 		if (!webDomain.isNullOrEmpty()) {
 			return findMatchByDomain(webDomain, passwords)
-
 		}
-		val match = findMatchByPackage(appPackage, passwords) ?: return null
-		return Credentials(match.username, match.value)
+		return findMatchByPackage(appPackage, passwords)
 	}
 
 	private fun findMatchByDomain(domain: String, passwords: List<Password>): Credentials? {
@@ -51,14 +49,15 @@ object Fetch {
 		return null
 	}
 
-	private fun findMatchByPackage(appPackage: String, passwords: List<Password>): Password? {
-		return passwords.firstOrNull { password ->
+	private fun findMatchByPackage(appPackage: String, passwords: List<Password>): Credentials? {
+		val password = passwords.firstOrNull { password ->
 			val urlTokens = password.url.split('.').dropLast(1)
 			val nameToken = password.name.lowercase()
 
 			urlTokens.any { appPackage.contains(it, ignoreCase = true) } ||
 					appPackage.contains(nameToken, ignoreCase = true)
 		}
+		return password?.let { Credentials(it.username, it.value) }
 	}
 }
 

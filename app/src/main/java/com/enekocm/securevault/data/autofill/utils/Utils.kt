@@ -49,7 +49,6 @@ object Utils {
 
         val spec = request.inlinePresentationSpecs.firstOrNull() ?: return null
 
-
         return InlinePresentation(
             InlineSuggestionUi.newContentBuilder(pendingIntent).apply {
                 setTitle(text)

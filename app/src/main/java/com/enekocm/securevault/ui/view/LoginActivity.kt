@@ -120,19 +120,15 @@ class LoginActivity : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     private fun autofill(){
-        val credentials = if (webDomain.isNotEmpty()) {
-            Fetch.fetchPassword(appPackage,viewModel.getPasswords(),webDomain)?: run {
-                Toast.makeText(this, getString(R.string.no_matching_passwords), Toast.LENGTH_SHORT).show()
-                finishAndRemoveTask()
-                return
-            }
-        }else if (appPackage.isNotEmpty()){
-            Fetch.fetchPassword(appPackage,viewModel.getPasswords())?: run {
-                Toast.makeText(this, getString(R.string.no_matching_passwords), Toast.LENGTH_SHORT).show()
-                finishAndRemoveTask()
-                return
-            }
-        }else{
+        val domain = webDomain.takeIf { it.isNotEmpty() }
+
+        val credentials = Fetch.fetchPassword(appPackage,viewModel.getPasswords(),domain) ?: run {
+            Toast.makeText(
+                this,
+                getString(R.string.no_matching_passwords),
+                Toast.LENGTH_SHORT
+            ).show()
+            finishAndRemoveTask()
             return
         }
 
