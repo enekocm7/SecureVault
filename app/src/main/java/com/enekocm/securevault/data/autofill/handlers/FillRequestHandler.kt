@@ -1,6 +1,5 @@
 package com.enekocm.securevault.data.autofill.handlers
 
-import android.app.assist.AssistStructure
 import android.content.Context
 import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
@@ -32,21 +31,22 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         encryptor: FileEncryptor
     ) {
         val structure = request.fillContexts.lastOrNull()?.structure ?: return
+        val packageName = structure.activityComponent.packageName
         val parsedStructure = StructureParser.parseStructure(structure) ?: return
 
         CoroutineScope(Dispatchers.IO).launch {
             if (!isAppKeyAvailable()) {
-                handleUnauthenticatedFill(request, structure, parsedStructure, callback)
+                handleUnauthenticatedFill(request, packageName, parsedStructure, callback)
                 return@launch
             }
 
 
             handleAuthenticatedFill(
                 request,
-                structure,
+                packageName,
                 parsedStructure,
                 callback,
-                PasswordRepositoryImpl(storage,encryptor)
+                PasswordRepositoryImpl(storage, encryptor)
             )
         }
     }
@@ -54,7 +54,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
     @Suppress("DEPRECATION")
     private fun handleUnauthenticatedFill(
         request: FillRequest,
-        structure: AssistStructure,
+        packageName: String,
         parsedStructure: ParsedStructure,
         callback: FillCallback
     ) {
@@ -65,7 +65,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         )
         val loginIntent = Utils.createLoginIntent(
             context,
-            structure.activityComponent?.packageName ?: "",
+            packageName,
             parsedStructure.usernameId,
             parsedStructure.passwordId
         ).intentSender
@@ -100,7 +100,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
     @Suppress("DEPRECATION")
     private fun handleAuthenticatedFill(
         request: FillRequest,
-        structure: AssistStructure,
+        packageName: String,
         parsedStructure: ParsedStructure,
         callback: FillCallback,
         passwordRepository: PasswordRepository?
@@ -111,9 +111,9 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         }
 
         val credentials = Fetch.fetchPassword(
-            structure.activityComponent.packageName,
+            packageName,
             passwordRepository.getAllPasswords()
-        )?: return
+        ) ?: return
 
         val inlinePresentation = Utils.createInlinePresentation(
             context,
