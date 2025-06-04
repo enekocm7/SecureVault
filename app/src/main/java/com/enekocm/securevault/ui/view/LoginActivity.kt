@@ -124,8 +124,6 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-
-
         val dataset = Dataset.Builder()
             .setValue(usernameId, AutofillValue.forText(credentials.username))
             .setValue(passwordId, AutofillValue.forText(credentials.password))
