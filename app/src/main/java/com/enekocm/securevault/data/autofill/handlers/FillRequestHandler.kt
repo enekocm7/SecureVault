@@ -109,29 +109,29 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
             return
         }
 
-        val (username, password) = Fetch.fetchPassword(
+        val credentials = Fetch.fetchPassword(
             structure.activityComponent.packageName,
             passwordRepository.getAllPasswords()
-        )
+        )?: return
 
         val inlinePresentation = Utils.createInlinePresentation(
             context,
             request.inlineSuggestionsRequest,
-            username ?: return
+            credentials.username ?: return
         ) ?: run {
             callback.onSuccess(null)
             return
         }
 
-        if (password != null) {
+        if (credentials.isValid()) {
             val dataset = Dataset.Builder()
                 .setValue(
                     parsedStructure.usernameId,
-                    AutofillValue.forText(username)
+                    AutofillValue.forText(credentials.username)
                 )
                 .setValue(
                     parsedStructure.passwordId,
-                    AutofillValue.forText(password)
+                    AutofillValue.forText(credentials.password)
                 )
                 .setInlinePresentation(inlinePresentation)
                 .build()

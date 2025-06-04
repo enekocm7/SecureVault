@@ -133,5 +133,6 @@
     <string name="invalid_biometric_authentication">Error en la autenticación</string>
     <string name="biometric_authentication_not_configured">Autenticación biométrica no configurada</string>
     <string name="invalid_password">Contraseña incorrecta</string>
+    <string name="no_matching_passwords">No se encontró contraseña</string>
 </resources>
 

@@ -118,11 +118,17 @@ class LoginActivity : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     private fun autofill(){
-        val (username, password) = Fetch.fetchPassword(appPackage,viewModel.getPasswords())
+        val credentials = Fetch.fetchPassword(appPackage,viewModel.getPasswords())?: run {
+            Toast.makeText(this, getString(R.string.no_matching_passwords), Toast.LENGTH_SHORT).show()
+            finishAndRemoveTask()
+            return
+        }
+
+
 
         val dataset = Dataset.Builder()
-            .setValue(usernameId, AutofillValue.forText(username))
-            .setValue(passwordId, AutofillValue.forText(password))
+            .setValue(usernameId, AutofillValue.forText(credentials.username))
+            .setValue(passwordId, AutofillValue.forText(credentials.password))
             .build()
 
         val resultIntent = Intent().apply {
