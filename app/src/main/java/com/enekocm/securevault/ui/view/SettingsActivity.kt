@@ -1,7 +1,9 @@
 package com.enekocm.securevault.ui.view
 
 import android.content.ActivityNotFoundException
+import android.content.ContentResolver
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -117,7 +119,49 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun checkAutofill() {
         binding.switchAutofill.isChecked = hasEnabledAutofill()
+        if (hasEnabledAutofill() && binding.switchAutofill.isChecked) {
+            binding.switchBrowserAutofill.visibility = View.VISIBLE
+        } else {
+            binding.switchBrowserAutofill.visibility = View.GONE
+        }
     }
+
+    private fun checkBrowserAutofillEnabled(): Boolean {
+        val chromePackage = "com.android.chrome"
+        val contentProvider = ".AutofillThirdPartyModeContentProvider"
+        val thirdPartyState = "autofill_third_party_state"
+        val thirdPartyMode = "autofill_third_party_mode"
+
+        val uri = Uri.Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(chromePackage + contentProvider)
+            .path(thirdPartyMode)
+            .build()
+
+        val cursor = contentResolver.query(
+            uri,
+            arrayOf(thirdPartyState),
+            null,
+            null,
+            null
+        )
+
+        if (cursor == null) {
+            return false
+        }
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndex(thirdPartyState)
+                if (index != -1) {
+                    val value = it.getInt(index)
+                    return 0 != value
+                }
+            }
+        }
+        return false
+    }
+
 
     private fun checkBiometric() {
         if (viewModel.isBiometric()) {
@@ -189,6 +233,13 @@ class SettingsActivity : AppCompatActivity() {
                 requestAutofillService()
             }
         }
+
+        binding.switchBrowserAutofill.setOnCheckedChangeListener { _, isChecked ->
+            if (!checkBrowserAutofillEnabled()) {
+                openChromeAutofillSettings()
+            }
+        }
+
         binding.btnPrivacyPolicy.setOnClickListener {
             val url = "https://github.com/enekocm7/SecureVault/tree/master/legal"
             val intent = Intent(Intent.ACTION_VIEW)
@@ -236,4 +287,23 @@ class SettingsActivity : AppCompatActivity() {
     private fun hasEnabledAutofill(): Boolean {
         return getSystemService(AutofillManager::class.java).hasEnabledAutofillServices()
     }
+
+    private fun openChromeAutofillSettings() {
+        val autofillSettingsIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
+        autofillSettingsIntent.addCategory(Intent.CATEGORY_DEFAULT)
+        autofillSettingsIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
+        autofillSettingsIntent.addCategory(Intent.CATEGORY_PREFERENCE)
+        autofillSettingsIntent.setPackage("com.android.chrome")
+        val chooser = Intent.createChooser(autofillSettingsIntent, "Pick Chrome Channel")
+        startActivity(chooser)
+
+        val specificChromeIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
+        specificChromeIntent.addCategory(Intent.CATEGORY_DEFAULT)
+        specificChromeIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
+        specificChromeIntent.addCategory(Intent.CATEGORY_PREFERENCE)
+        specificChromeIntent.setPackage("com.android.chrome")
+        startActivity(specificChromeIntent)
+    }
+
+
 }
