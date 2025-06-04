@@ -22,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("DEPRECATION")
 class FillRequestHandler @Inject constructor(@ApplicationContext private val context: Context) {
 
     fun handleFillRequest(
@@ -51,6 +50,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun handleUnauthenticatedFill(
         request: FillRequest,
         structure: AssistStructure,
@@ -96,6 +96,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun handleAuthenticatedFill(
         request: FillRequest,
         structure: AssistStructure,

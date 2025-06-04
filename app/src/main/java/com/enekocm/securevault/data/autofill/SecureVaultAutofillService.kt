@@ -28,7 +28,6 @@ class SecureVaultAutofillService : AutofillService() {
     @Inject
     lateinit var encryptor: FileEncryptor
 
-    @Suppress("DEPRECATION")
     override fun onFillRequest(
         request: FillRequest,
         cancellationSignal: CancellationSignal,
