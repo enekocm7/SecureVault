@@ -7,8 +7,8 @@ import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.view.autofill.AutofillValue
 import com.enekocm.securevault.R
-import com.enekocm.securevault.data.autofill.Fetch
-import com.enekocm.securevault.data.autofill.StructureParser
+import com.enekocm.securevault.data.autofill.utils.Fetch
+import com.enekocm.securevault.data.autofill.utils.StructureParser
 import com.enekocm.securevault.data.autofill.entities.ParsedStructure
 import com.enekocm.securevault.data.autofill.utils.Utils
 import com.enekocm.securevault.data.autofill.utils.Utils.isAppKeyAvailable

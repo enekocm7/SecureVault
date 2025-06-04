@@ -1,18 +1,19 @@
-package com.enekocm.securevault.data.autofill
+package com.enekocm.securevault.data.autofill.utils
 
 import com.enekocm.securevault.data.autofill.entities.Credentials
 import com.enekocm.securevault.data.json.model.Password
 
 object Fetch {
 	fun fetchPassword(
-		appPackage: String,
-		passwords: List<Password>,
-		webDomain: String? = null
+        appPackage: String,
+        passwords: List<Password>,
+        webDomain: String? = null
 	): Credentials? {
-		if (!webDomain.isNullOrEmpty()) {
-			return findMatchByDomain(webDomain, passwords)
+		return if (!webDomain.isNullOrEmpty()) {
+			findMatchByDomain(webDomain, passwords)
+		}else{
+			findMatchByPackage(appPackage, passwords)
 		}
-		return findMatchByPackage(appPackage, passwords)
 	}
 
 	private fun findMatchByDomain(domain: String, passwords: List<Password>): Credentials? {
@@ -60,4 +61,3 @@ object Fetch {
 		return password?.let { Credentials(it.username, it.value) }
 	}
 }
-

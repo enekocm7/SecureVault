@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.enekocm.securevault.R
-import com.enekocm.securevault.data.autofill.Fetch
+import com.enekocm.securevault.data.autofill.utils.Fetch
 import com.enekocm.securevault.databinding.LoginScreenBinding
 import com.enekocm.securevault.ui.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint

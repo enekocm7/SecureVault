@@ -1,11 +1,11 @@
-package com.enekocm.securevault.data.autofill
+package com.enekocm.securevault.data.autofill.utils
 
 import android.app.assist.AssistStructure
 import android.view.autofill.AutofillId
 import android.webkit.WebView
 import com.enekocm.securevault.data.autofill.entities.Credentials
 import com.enekocm.securevault.data.autofill.entities.ParsedStructure
-import kotlin.text.contains
+import java.net.URL
 
 object StructureParser {
 
@@ -40,8 +40,8 @@ object StructureParser {
 	}
 
 	fun traverseViewNode(
-		node: AssistStructure.ViewNode,
-		action: (AssistStructure.ViewNode) -> Unit
+        node: AssistStructure.ViewNode,
+        action: (AssistStructure.ViewNode) -> Unit
 	) {
 		action(node)
 		for (i in 0 until node.childCount) {
@@ -71,7 +71,7 @@ object StructureParser {
 
 		return Credentials(username, password)
 	}
-	
+
 	private fun isUsernameField(node: AssistStructure.ViewNode): Boolean {
 		val hint = node.hint?.lowercase() ?: ""
 		val idEntry = node.idEntry?.lowercase() ?: ""
@@ -91,7 +91,7 @@ object StructureParser {
 				autofillHints.contains("usuario") || autofillHints.contains("correo") ||
 				isWebUsername
 	}
-	
+
 	private fun isPasswordField(node: AssistStructure.ViewNode): Boolean {
 		val hint = node.hint?.lowercase() ?: ""
 		val idEntry = node.idEntry?.lowercase() ?: ""
@@ -126,35 +126,35 @@ object StructureParser {
 		traverseViewNode(rootNode) { node ->
 			if (node.className == WebView::class.java.name) {
 				webDomain = node.webDomain
-				return@traverseViewNode
+				if (!webDomain.isNullOrEmpty()) return@traverseViewNode
 			}
 
-			if (webDomain == null && node.htmlInfo != null) {
+			if (webDomain.isNullOrEmpty() && node.htmlInfo != null) {
 				val htmlAttributes = getHtmlAttributes(node)
 				if (htmlAttributes.containsKey("action")) {
 					val action = htmlAttributes["action"] ?: ""
 					if (action.startsWith("http")) {
 						try {
-							val url = java.net.URL(action)
+							val url = URL(action)
 							webDomain = url.host
-							return@traverseViewNode
+							if (!webDomain.isNullOrEmpty()) return@traverseViewNode
 						} catch (_: Exception) { }
 					}
 				}
 
-				if (webDomain == null && node.webDomain != null) {
+				if (webDomain.isNullOrEmpty() && node.webDomain != null) {
 					webDomain = node.webDomain
-					return@traverseViewNode
+					if (!webDomain.isNullOrEmpty()) return@traverseViewNode
 				}
 			}
 
-			if (webDomain == null && node.text != null) {
+			if (webDomain.isNullOrEmpty() && node.text != null) {
 				val text = node.text.toString()
 				if (text.startsWith("http")) {
 					try {
-						val url = java.net.URL(text)
+						val url = URL(text)
 						webDomain = url.host
-						return@traverseViewNode
+						if (!webDomain.isNullOrEmpty()) return@traverseViewNode
 					} catch (_: Exception) { }
 				}
 			}
@@ -162,5 +162,3 @@ object StructureParser {
 		return webDomain
 	}
 }
-
-

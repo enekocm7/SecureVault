@@ -2,7 +2,7 @@ package com.enekocm.securevault.data.autofill.handlers
 
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
-import com.enekocm.securevault.data.autofill.StructureParser
+import com.enekocm.securevault.data.autofill.utils.StructureParser
 import com.enekocm.securevault.data.json.crypto.FileEncryptor
 import com.enekocm.securevault.data.json.model.Password
 import com.enekocm.securevault.data.json.storage.PasswordStorage
