@@ -137,5 +137,6 @@
     <string name="biometric_authentication_not_configured">Biometric authentication not configured</string>
     <string name="invalid_password">Invalid password</string>
     <string name="no_matching_passwords">No matching passwords</string>
+    <string name="login_to_secure_vault">Login to Secure Vault</string>
 </resources>
 

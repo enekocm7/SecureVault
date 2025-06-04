@@ -4,6 +4,7 @@ import android.app.assist.AssistStructure
 import android.view.autofill.AutofillId
 import com.enekocm.securevault.data.autofill.entities.Credentials
 import com.enekocm.securevault.data.autofill.entities.ParsedStructure
+import kotlin.text.contains
 
 object StructureParser {
 
@@ -16,20 +17,10 @@ object StructureParser {
 			val windowNode = structure.getWindowNodeAt(i)
 			val viewNode = windowNode.rootViewNode
 			traverseViewNode(viewNode) { node ->
-				val hint = node.hint?.lowercase() ?: ""
-				val idEntry = node.idEntry?.lowercase() ?: ""
-				val autofillHints = node.autofillHints?.map { it.lowercase() } ?: emptyList()
-
-				if (usernameId == null && (hint.contains("user") || hint.contains("email") ||
-							idEntry.contains("user") || autofillHints.contains("username") || autofillHints.contains(
-						"email"
-					))
-				) {
+				if (isUsernameField(node) && usernameId == null) {
 					usernameId = node.autofillId
 				}
-				if (passwordId == null && (hint.contains("pass") ||
-							idEntry.contains("pass") || autofillHints.contains("password"))
-				) {
+				if (isPasswordField(node) && passwordId == null) {
 					passwordId = node.autofillId
 				}
 			}
@@ -60,20 +51,11 @@ object StructureParser {
 			traverseViewNode(windowNode.rootViewNode) { node ->
 				val autofillValue = node.autofillValue
 				if (autofillValue != null && autofillValue.isText) {
-					val hint = node.hint?.lowercase() ?: ""
-					val idEntry = node.idEntry?.lowercase() ?: ""
-					val autofillHints = node.autofillHints?.map { it.lowercase() } ?: emptyList()
-
-					if (username == null && (hint.contains("user") || hint.contains("email") ||
-								idEntry.contains("user") || autofillHints.contains("username") ||
-								autofillHints.contains("email"))
-					) {
+					if (isUsernameField(node) && username == null) {
 						username = autofillValue.textValue.toString()
 					}
 
-					if (password == null && (hint.contains("pass") ||
-								idEntry.contains("pass") || autofillHints.contains("password"))
-					) {
+					if (isPasswordField(node) && password == null) {
 						password = autofillValue.textValue.toString()
 					}
 				}
@@ -81,5 +63,25 @@ object StructureParser {
 		}
 
 		return Credentials(username, password)
+	}
+	
+	private fun isUsernameField(node: AssistStructure.ViewNode): Boolean {
+		val hint = node.hint?.lowercase() ?: ""
+		val idEntry = node.idEntry?.lowercase() ?: ""
+		val autofillHints = node.autofillHints?.map { it.lowercase() } ?: emptyList()
+		return hint.contains("user") || hint.contains("email") ||
+				hint.contains("usuario") || hint.contains("correo") ||
+				idEntry.contains("user") || idEntry.contains("usuario") ||
+				autofillHints.contains("username") || autofillHints.contains("email") ||
+				autofillHints.contains("usuario") || autofillHints.contains("correo")
+	}
+	
+	private fun isPasswordField(node: AssistStructure.ViewNode): Boolean {
+		val hint = node.hint?.lowercase() ?: ""
+		val idEntry = node.idEntry?.lowercase() ?: ""
+		val autofillHints = node.autofillHints?.map { it.lowercase() } ?: emptyList()
+		return hint.contains("pass") || hint.contains("contraseña") ||
+				idEntry.contains("pass") || idEntry.contains("contraseña") ||
+				autofillHints.contains("password") || autofillHints.contains("contraseña")
 	}
 }

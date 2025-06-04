@@ -7,6 +7,7 @@ import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.view.autofill.AutofillValue
+import com.enekocm.securevault.R
 import com.enekocm.securevault.data.autofill.Fetch
 import com.enekocm.securevault.data.autofill.StructureParser
 import com.enekocm.securevault.data.autofill.entities.ParsedStructure
@@ -60,7 +61,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         val loginInlinePresentation = Utils.createInlinePresentation(
             context,
             request.inlineSuggestionsRequest,
-            "Login to Secure Vault"
+            context.getString(R.string.login_to_secure_vault)
         )
         val loginIntent = Utils.createLoginIntent(
             context,
