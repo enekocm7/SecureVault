@@ -72,7 +72,7 @@
     <string name="pref_summary_clear_passwords">Eliminar todas las contraseñas guardadas</string>
     <string name="pref_title_autofill_service">Autocompletar</string>
     <string name="pref_summary_autofill_service">Permitir que la aplicación complete contraseñas</string>
-    <string name="pref_title_browser_connection">Conectar con el navegador</string>
+    <string name="pref_title_browser_connection">Conectar con Chrome</string>
     <string name="pref_summary_browser_connection">Habilitar la integración con el navegador</string>
     <string name="pref_title_language_settings">Idioma</string>
     <string name="pref_title_app_version">Ver versión de la aplicación</string>

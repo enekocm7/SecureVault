@@ -75,7 +75,7 @@
     <string name="pref_summary_clear_passwords">Delete all saved passwords</string>
     <string name="pref_title_autofill_service">Autofill</string>
     <string name="pref_summary_autofill_service">Allow the app to fill passwords</string>
-    <string name="pref_title_browser_connection">Connect with Browser</string>
+    <string name="pref_title_browser_connection">Connect with Chrome</string>
     <string name="pref_summary_browser_connection">Enable browser integration</string>
     <string name="pref_title_language_settings">Language</string>
     <string name="pref_title_app_version">View App Version</string>
