@@ -32,14 +32,18 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
     ) {
         val structure = request.fillContexts.lastOrNull()?.structure ?: return
         val packageName = structure.activityComponent.packageName
-        val parsedStructure = StructureParser.parseStructure(structure) ?: return
+        val parsedStructure = StructureParser.parseStructure(structure)
+
+        if (parsedStructure == null) {
+            callback.onSuccess(null)
+            return
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             if (!isAppKeyAvailable()) {
                 handleUnauthenticatedFill(request, packageName, parsedStructure, callback)
                 return@launch
             }
-
 
             handleAuthenticatedFill(
                 request,
@@ -67,7 +71,8 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
             context,
             packageName,
             parsedStructure.usernameId,
-            parsedStructure.passwordId
+            parsedStructure.passwordId,
+            parsedStructure.webDomain
         ).intentSender
 
         if (loginInlinePresentation != null) {
@@ -112,7 +117,8 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
 
         val credentials = Fetch.fetchPassword(
             packageName,
-            passwordRepository.getAllPasswords()
+            passwordRepository.getAllPasswords(),
+            parsedStructure.webDomain
         ) ?: return
 
         val inlinePresentation = Utils.createInlinePresentation(
@@ -124,7 +130,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
             return
         }
 
-        if (credentials.isValid()) {
+        if (credentials.password != null) {
             val dataset = Dataset.Builder()
                 .setValue(
                     parsedStructure.usernameId,

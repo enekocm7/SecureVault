@@ -21,7 +21,8 @@ object Utils {
         context: Context,
         appPackage: String = "",
         usernameId: AutofillId? = null,
-        passwordId: AutofillId? = null
+        passwordId: AutofillId? = null,
+        webDomain: String? = null
     ): PendingIntent {
         return PendingIntent.getActivity(
             context,
@@ -30,6 +31,7 @@ object Utils {
                 putExtra("package", appPackage)
                 putExtra("usernameId", usernameId)
                 putExtra("passwordId", passwordId)
+                putExtra("webDomain", webDomain)
             },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -79,3 +81,4 @@ object Utils {
         }
     }
 }
+

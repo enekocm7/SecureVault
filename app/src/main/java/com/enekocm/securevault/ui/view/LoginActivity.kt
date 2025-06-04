@@ -29,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var usernameId: AutofillId
     private lateinit var passwordId: AutofillId
     private lateinit var appPackage: String
+    private lateinit var webDomain: String
 
     private var isAutofill : Boolean = false
 
@@ -47,7 +48,8 @@ class LoginActivity : AppCompatActivity() {
         isAutofill = try {
             usernameId = intent.getParcelableExtra("usernameId")!!
             passwordId = intent.getParcelableExtra("passwordId")!!
-            appPackage = intent.getStringExtra("package")!!
+            appPackage = intent.getStringExtra("package") ?: ""
+            webDomain = intent.getStringExtra("webDomain") ?: ""
             true
         }catch (_: Exception){
             false
@@ -118,9 +120,19 @@ class LoginActivity : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     private fun autofill(){
-        val credentials = Fetch.fetchPassword(appPackage,viewModel.getPasswords())?: run {
-            Toast.makeText(this, getString(R.string.no_matching_passwords), Toast.LENGTH_SHORT).show()
-            finishAndRemoveTask()
+        val credentials = if (webDomain.isNotEmpty()) {
+            Fetch.fetchPassword(appPackage,viewModel.getPasswords(),webDomain)?: run {
+                Toast.makeText(this, getString(R.string.no_matching_passwords), Toast.LENGTH_SHORT).show()
+                finishAndRemoveTask()
+                return
+            }
+        }else if (appPackage.isNotEmpty()){
+            Fetch.fetchPassword(appPackage,viewModel.getPasswords())?: run {
+                Toast.makeText(this, getString(R.string.no_matching_passwords), Toast.LENGTH_SHORT).show()
+                finishAndRemoveTask()
+                return
+            }
+        }else{
             return
         }
 
