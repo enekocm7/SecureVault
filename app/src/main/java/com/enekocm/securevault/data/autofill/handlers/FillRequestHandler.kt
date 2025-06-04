@@ -7,9 +7,9 @@ import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.view.autofill.AutofillValue
 import com.enekocm.securevault.R
+import com.enekocm.securevault.data.autofill.entities.ParsedStructure
 import com.enekocm.securevault.data.autofill.utils.Fetch
 import com.enekocm.securevault.data.autofill.utils.StructureParser
-import com.enekocm.securevault.data.autofill.entities.ParsedStructure
 import com.enekocm.securevault.data.autofill.utils.Utils
 import com.enekocm.securevault.data.autofill.utils.Utils.isAppKeyAvailable
 import com.enekocm.securevault.data.json.crypto.FileEncryptor
@@ -22,17 +22,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FillRequestHandler @Inject constructor(@ApplicationContext private val context: Context) {
+class FillRequestHandler @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val storage: PasswordStorage,
+    private val encryptor: FileEncryptor
+) {
 
     fun handleFillRequest(
         request: FillRequest,
-        callback: FillCallback,
-        storage: PasswordStorage,
-        encryptor: FileEncryptor
+        callback: FillCallback
     ) {
         val structure = request.fillContexts.lastOrNull()?.structure ?: return
         val packageName = structure.activityComponent.packageName
-        val parsedStructure = StructureParser.parseStructure(structure)?: run {
+        val parsedStructure = StructureParser.parseStructure(structure) ?: run {
             callback.onSuccess(null)
             return
         }
@@ -40,7 +42,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
         CoroutineScope(Dispatchers.IO).launch {
             if (!isAppKeyAvailable()) {
                 handleUnauthenticatedFill(request, packageName, parsedStructure, callback)
-            }else{
+            } else {
                 handleAuthenticatedFill(
                     request,
                     packageName,

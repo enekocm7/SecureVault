@@ -9,13 +9,14 @@ import com.enekocm.securevault.data.json.storage.PasswordStorage
 import com.enekocm.securevault.data.repository.PasswordRepositoryImpl
 import javax.inject.Inject
 
-class SaveRequestHandler @Inject constructor() {
+class SaveRequestHandler @Inject constructor(
+    private val storage: PasswordStorage,
+    private val encryptor: FileEncryptor
+) {
 
     fun handleSaveRequest(
         request: SaveRequest,
-        callback: SaveCallback,
-        storage: PasswordStorage,
-        encryptor: FileEncryptor
+        callback: SaveCallback
     ) {
         val structure = request.fillContexts.lastOrNull()?.structure ?: run {
             return
@@ -37,7 +38,7 @@ class SaveRequestHandler @Inject constructor() {
                     value = credentials.password.toString()
                 )
 
-                PasswordRepositoryImpl(storage,encryptor).insertPassword(password)
+                PasswordRepositoryImpl(storage, encryptor).insertPassword(password)
                 callback.onSuccess()
             } catch (e: Exception) {
                 callback.onFailure("Failed to show save password dialog: ${e.message}")
