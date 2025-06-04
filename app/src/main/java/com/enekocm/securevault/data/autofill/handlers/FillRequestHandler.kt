@@ -32,9 +32,7 @@ class FillRequestHandler @Inject constructor(@ApplicationContext private val con
     ) {
         val structure = request.fillContexts.lastOrNull()?.structure ?: return
         val packageName = structure.activityComponent.packageName
-        val parsedStructure = StructureParser.parseStructure(structure)
-
-        if (parsedStructure == null) {
+        val parsedStructure = StructureParser.parseStructure(structure)?: run {
             callback.onSuccess(null)
             return
         }
