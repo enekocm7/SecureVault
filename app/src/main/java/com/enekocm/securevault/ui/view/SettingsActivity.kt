@@ -321,6 +321,4 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(chooser)
         }
     }
-
-
 }
