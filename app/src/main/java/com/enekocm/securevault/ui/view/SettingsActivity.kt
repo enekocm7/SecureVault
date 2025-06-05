@@ -319,13 +319,6 @@ class SettingsActivity : AppCompatActivity() {
             autofillSettingsIntent.setPackage("com.android.chrome")
             val chooser = Intent.createChooser(autofillSettingsIntent, "Pick Chrome Channel")
             startActivity(chooser)
-
-            val specificChromeIntent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
-            specificChromeIntent.addCategory(Intent.CATEGORY_DEFAULT)
-            specificChromeIntent.addCategory(Intent.CATEGORY_APP_BROWSER)
-            specificChromeIntent.addCategory(Intent.CATEGORY_PREFERENCE)
-            specificChromeIntent.setPackage("com.android.chrome")
-            startActivity(specificChromeIntent)
         }
     }
 
