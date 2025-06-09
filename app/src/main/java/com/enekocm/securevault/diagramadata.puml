@@ -1,0 +1,73 @@
+@startuml
+    left to right direction
+    package data.autofill {
+        class SecureVaultAutofillService {
+            - passwordRepository: PasswordRepository?
+            + storage: PasswordStorage
+            + encryptor: FileEncryptor
+            + onFillRequest(request: FillRequest, cancellationSignal: CancellationSignal, callback: FillCallback)
+            + onSaveRequest(request: SaveRequest, callback: SaveCallback)
+        }
+    }
+    package data.generator {
+        object PasswordGenerator {
+            + {static} LOWER: String
+            + {static} UPPER: String
+            + {static} NUMBERS: String
+            + {static} SYMBOL: String
+            + {static} generatePassword(length: Int = 16, lower: Boolean = true, upper: Boolean = true, numbers: Boolean = true, symbols: Boolean = true): String?
+            + {static} generatePassphrase(length: Int = 5, delimiter: String): String
+        }
+    }
+    package data.json {
+        package crypto {
+            class FileEncryptor {
+                - type: java.lang.reflect.Type
+                - adapter: JsonAdapter<List<Password>>
+                - encryptFile(content: String, password: String): String
+                - decryptFile(encryptedFile: String, password: String): String
+                + encryptPasswords(passwords: List<Password>, userPassword: String): String
+                + decryptPasswords(encryptedPasswords: String, userPassword: String): List<Password>
+            }
+        }
+        package model {
+            class Password {
+                + name: String
+                + url: String
+                + username: String
+                + value: String
+            }
+        }
+    }
+    package data.repository {
+        class MasterPasswordRepositoryImpl {
+            - storage: AppKeyStorage
+            + generateAndStoreAppKey(password: String)
+            + generateAndStoreAppKeyBio(result: BiometricResult)
+            + unlockAppKeyWithPassword(password: String): Boolean
+            + unlockAppKeyWithBiometrics(result: BiometricResult): Boolean
+            + isAppKeyConfigured(): Boolean
+            + isBiometricConfigured(): Boolean
+            + getIv(): ByteArray
+        }
+        class PasswordRepositoryImpl {
+            - storage: PasswordStorage
+            - encryptor: FileEncryptor
+            - cachePasswords: MutableList<Password>
+            + getAllPasswords(): List<Password>
+            - getAppKey(): String
+            + getPasswordByName(name: String): Password?
+            + getPasswordByNameContainingIgnoreCase(name: String): List<Password>
+            + insertPassword(password: Password)
+            + insertAllPasswords(passwords: List<Password>)
+            - insertPasswordCache(name: String, password: Password)
+            + insertPassword(previousName: String, password: Password)
+            + deletePassword(password: Password)
+            + deleteAllPasswords()
+            - loadPasswords(): List<Password>
+            + reloadPasswords()
+            - savePasswordsFromCache()
+        }
+    }
+
+@enduml

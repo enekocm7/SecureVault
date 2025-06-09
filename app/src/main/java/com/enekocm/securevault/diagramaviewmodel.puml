@@ -1,0 +1,139 @@
+@startuml
+left to right direction
+package ui.viewmodel {
+    together{
+        class SettingsViewModel {
+            - isBiometricConfigured: IsBiometricConfigured
+            - deleteAllPasswords: DeleteAllPasswords
+            - backupManager: BackupManager
+            - getAllPasswords: GetAllPasswords
+            - dispatchers: DispatcherProvider
+            - _backup: MutableStateFlow<Boolean?>
+            + backup: StateFlow<Boolean?>
+            - _loadBackup: MutableStateFlow<Boolean?>
+            + loadBackup: StateFlow<Boolean?>
+            + isBiometric(): Boolean
+            + clearPasswords()
+            + loadBackup(uri: Uri)
+            + createBackup()
+            + isBackupEnabled(): Boolean
+            + enableBackup()
+            + disableBackup()
+            + getBackupLocation(): Uri?
+            + setBackupLocation(uri: Uri)
+        }
+        class RegisterViewModel {
+            - estimatePassword: EstimatePassword
+            - generateAppKey: GenerateAppKey
+            - isAppKeyConfigured: IsAppKeyConfigured
+            - _passwordStrength: MutableLiveData<PasswordStrength>
+            + passwordStrength: LiveData<PasswordStrength>
+            + calculateStrength(password: String)
+            + createAppKey(password: String)
+            + isKeyConfigured(): Boolean
+        }
+        class MainViewModel {
+            - isAppKeyConfigured: IsAppKeyConfigured
+            + isKeyConfigured(): Boolean
+        }
+        class LoginViewModel {
+            - unlockKeyWithPassword: UnlockKeyWithPassword
+            - unlockKeyWithBiometrics: UnlockKeyWithBiometrics
+            - isBiometricConfigured: IsBiometricConfigured
+            - authenticateBiometrics: AuthenticateBiometrics
+            - getDecryptCryptoObject: GetDecryptCryptoObject
+            - dispatchers: DispatcherProvider
+            - title: String
+            - description: String
+            - _biometricLoginState: MutableStateFlow<Boolean?>
+            + biometricLoginState: StateFlow<Boolean?>
+            - _passwordLoginState: MutableStateFlow<Boolean?>
+            + passwordLoginState: StateFlow<Boolean?>
+            - cryptoObjectDeferred: Lazy<Deferred<CryptoObject?>>
+            + login(password: String)
+            + login(activity: AppCompatActivity)
+            + isBiometricKeyConfigured(): Boolean
+        }
+        class HomeViewModel {
+            - getAllPasswords: GetAllPasswords
+            - getPasswordsByName: GetPasswordsByName
+            - dispatchers: DispatcherProvider
+            - _passwords: MutableStateFlow<List<PasswordDto>>
+            + passwords: StateFlow<List<PasswordDto>>
+            - getPasswords(): List<PasswordDto>
+            + loadPasswords(name: String)
+            + loadPasswords()
+            - getPasswordsByNameIgnoreCase(name: String): List<PasswordDto>
+        }
+        class BiometricViewModel {
+            - generateBiometricKey: GenerateBiometricKey
+            - authenticateBiometrics: AuthenticateBiometrics
+            - getEncryptCryptoObject: GetEncryptCryptoObject
+            - title: String
+            - description: String
+            - _authenticationState: MutableLiveData<BiometricResult?>
+            + authenticationState: LiveData<BiometricResult?>
+            + enableBiometric(activity: AppCompatActivity)
+            - generateKey(result: BiometricResult)
+        }
+        }
+    }
+    package ui.viewmodel.dialogs {
+           together{
+            class PasswordDetailViewModel {
+                       - addPassword: AddPassword
+                       - deletePassword: DeletePassword
+                       + savePassword(password: PasswordDto)
+                       + savePassword(previousName: String, password: PasswordDto)
+                       + removePassword(password: PasswordDto)
+                   }
+                   class ImportPasswordViewModel {
+                       - getPasswordsFromEncrypted: GetPasswordsFromEncrypted
+                       - readCsv: ReadCsv
+                       - saveAllPasswords: InsertAllPasswords
+                       - dispatcherProvider: DispatcherProvider
+                       - _loading: MutableStateFlow<Boolean>
+                       + loading: StateFlow<Boolean>
+                       - _importState: MutableStateFlow<ImportState?>
+                       + importState: StateFlow<ImportState?>
+                       - insertAllPasswords(passwords: List<PasswordDto>)
+                       + insertAllPasswords(encryptedPasswords: String, key: String)
+                       + insertAllPasswords(uri: Uri)
+                       + clearError()
+                   }
+                   class GeneratePasswordViewModel {
+                       - generatePassword: GeneratePassword
+                       - generatePassphrase: GeneratePassphrase
+                       - estimatePassword: EstimatePassword
+                       - dispatcherProvider: DispatcherProvider
+                       - _password: MutableStateFlow<String>
+                       + password: StateFlow<String>
+                       - _passwordStrength: MutableStateFlow<PasswordStrength>
+                       + passwordStrength: StateFlow<PasswordStrength>
+                       - _isLoading: MutableStateFlow<Boolean>
+                       + isLoading: StateFlow<Boolean>
+                       + getPassword(length: Int, lower: Boolean, upper: Boolean, numbers: Boolean, symbols: Boolean)
+                       + getPassphrase(length: Int, delimiter: String)
+                   }
+                   class ExportPasswordViewModel {
+                       - context: Context
+                       - writeCsv: WriteCsv
+                       - writeSv: WriteSv
+                       - getAllPasswords: GetAllPasswords
+                       - dispatchers: DispatcherProvider
+                       - fileNameCsv: String
+                       - fileNameSv: String
+                       - _loading: MutableStateFlow<Boolean>
+                       + loading: StateFlow<Boolean>
+                       + createCsv(folderUri: Uri)
+                       + createSv(folderUri: Uri, password: String)
+                       - createFileInFolder(folderUri: Uri, fileName: String, mimeType: String): Uri?
+                   }
+                   class CreatePasswordViewModel {
+                       - addPassword: AddPassword
+                       + savePassword(passwordDto: PasswordDto)
+                   }
+           }
+        }
+
+@enduml
