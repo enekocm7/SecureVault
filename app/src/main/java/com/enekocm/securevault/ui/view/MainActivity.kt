@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (isLoggedIn()){
+            login()
+        }
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
             true
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
@@ -28,22 +31,17 @@ class MainActivity : AppCompatActivity() {
         binding = ScreenHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (isLoggedIn()) {
-            login()
-        } else {
-            setListeners()
-        }
-
+        setListeners()
     }
 
     private fun setListeners() {
         binding.registerButton.setOnClickListener {
-            if (isLoggedIn()) {
-                login()
-            } else {
-                startActivity(Intent(this, RegisterActivity::class.java))
-                finishAffinity()
-            }
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+        binding.loginButton.setOnClickListener {
+            val intent = Intent(this, CloudActivity::class.java)
+            intent.putExtra("login",true)
+            startActivity(intent)
         }
     }
 

@@ -154,5 +154,7 @@
     <string name="sync_error">Error de sincronización</string>
     <string name="unknown_user">Usuario desconocido</string>
     <string name="sign_out_confirmation">Estas seguro que quieres cerrar sesion?</string>
+    <string name="master_password_warning">¡Recuerda esta contraseña! Sin ella, NO puedes acceder a tus contraseñas.</string>
+    <string name="login_description">Inicia sesión para acceder a tu bóveda segura</string>
 </resources>
 

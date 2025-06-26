@@ -159,4 +159,6 @@
     <string name="unknown_user">Unknown user</string>
     <string name="no_email" translatable="false">No email</string>
     <string name="sign_out_confirmation">Are you sure you want to log out?</string>
+    <string name="master_password_warning">Remember this password! Without it, you CANNOT access your passwords.</string>
+    <string name="login_description">Sign in to access your secure vault</string>
 </resources>

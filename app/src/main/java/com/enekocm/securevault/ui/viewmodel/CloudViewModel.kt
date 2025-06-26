@@ -39,12 +39,12 @@ class CloudViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun signInWithGoogle(activity: AppCompatActivity) {
+    fun signInWithGoogle(activity: AppCompatActivity, allowNewAccounts : Boolean) {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
                 _errorMessage.value = null
-                val result = GoogleLogin(activity).signIn()
+                val result = GoogleLogin(activity).signIn(allowNewAccounts)
 
                 result?.user?.let { user ->
                     _authState.value = AuthState.Authenticated(user)

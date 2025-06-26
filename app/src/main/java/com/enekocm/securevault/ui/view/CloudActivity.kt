@@ -3,6 +3,7 @@ package com.enekocm.securevault.ui.view
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,8 @@ class CloudActivity : AppCompatActivity() {
 
     private val viewModel: CloudViewModel by viewModels()
 
+    private var login: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
@@ -32,9 +35,27 @@ class CloudActivity : AppCompatActivity() {
         }
         binding = CloudSuggestionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        login = intent.getBooleanExtra("login",false)
+
+        if (login){
+            changeLoginAppearance()
+        }
 
         setListeners()
         observeViewModel()
+    }
+
+    private fun changeLoginAppearance() {
+        binding.cloudIcon.visibility = View.INVISIBLE
+
+        binding.titleText.text = getString(R.string.login)
+        binding.titleText.textSize = 48f
+
+        binding.descriptionText.visibility = View.VISIBLE
+        binding.descriptionText.textSize = 24f
+        binding.descriptionText.text = getString(R.string.login_description)
+
+        binding.skipTextButton.text = getString(R.string.cancel)
     }
 
     private fun setListeners() {
@@ -42,7 +63,7 @@ class CloudActivity : AppCompatActivity() {
             skip()
         }
         binding.googleSignInButton.setOnClickListener {
-            viewModel.signInWithGoogle(this)
+            viewModel.signInWithGoogle(this, allowNewAccounts = !login)
         }
     }
 
@@ -56,7 +77,11 @@ class CloudActivity : AppCompatActivity() {
                             "Successfully signed in with Google!",
                             Toast.LENGTH_SHORT
                         ).show()
-                        skip()
+                        if (login){
+                            loginIntent()
+                        }else{
+                            skip()
+                        }
                     }
 
                     is AuthState.Unauthenticated -> {
@@ -88,7 +113,17 @@ class CloudActivity : AppCompatActivity() {
 
 
     private fun skip() {
-        val intent = Intent(this, HomeActivity::class.java)
+        if (login){
+            finish()
+        }else{
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finishAffinity()
+        }
+    }
+
+    private fun loginIntent(){
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finishAffinity()
     }

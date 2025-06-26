@@ -25,9 +25,9 @@ class GoogleLogin(private val activity: AppCompatActivity) {
     private val context = activity.baseContext
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 
-    suspend fun signIn(): AuthResult? {
+    suspend fun signIn(allowNewAccounts : Boolean = true): AuthResult? {
         val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
+            .setFilterByAuthorizedAccounts(!allowNewAccounts)
             .setServerClientId(context.getString(R.string.default_web_client_id))
             .build()
 
@@ -42,13 +42,8 @@ class GoogleLogin(private val activity: AppCompatActivity) {
             )
             return handleSignIn(result.credential)
         } catch (_: GetCredentialException) {
-            Toast.makeText(
-                activity,
-                "Sign-in was cancelled or failed",
-                Toast.LENGTH_SHORT
-            ).show()
+            return null
         }
-        return null
     }
 
     private suspend fun handleSignIn(credential: Credential): AuthResult? {
