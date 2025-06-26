@@ -1,0 +1,73 @@
+package com.enekocm.securevault.utils
+
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.credentials.Credential
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
+import com.enekocm.securevault.R
+import com.enekocm.securevault.di.DispatcherProvider
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+class GoogleLogin(private val activity: AppCompatActivity) {
+    @Inject lateinit var dispatcherProvider: DispatcherProvider
+    private val auth = FirebaseAuth.getInstance()
+    private val context = activity.baseContext
+    private val credentialManager: CredentialManager = CredentialManager.create(context)
+
+    suspend fun signIn(): AuthResult? {
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(context.getString(R.string.default_web_client_id))
+            .build()
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        try {
+            val result: GetCredentialResponse = credentialManager.getCredential(
+                request = request,
+                context = activity,
+            )
+            return handleSignIn(result.credential)
+        } catch (_: GetCredentialException) {
+            Toast.makeText(
+                activity,
+                "Sign-in was cancelled or failed",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return null
+    }
+
+    private suspend fun handleSignIn(credential: Credential): AuthResult? {
+        if (credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            try {
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                val idToken = googleIdTokenCredential.idToken
+                val credential = GoogleAuthProvider.getCredential(idToken, null)
+                return withContext(dispatcherProvider.io) {
+                    auth.signInWithCredential(credential).await()
+                }
+            } catch (_: GoogleIdTokenParsingException) {
+                Toast.makeText(activity, "Failed to parse Google ID token", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        } else {
+            Toast.makeText(activity, "Unexpected credential type", Toast.LENGTH_SHORT).show()
+        }
+        return null
+    }
+}

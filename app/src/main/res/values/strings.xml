@@ -145,4 +145,15 @@
     <string name="autofill_service_already_enabled">Autofill service is already enabled</string>
     <string name="no_biometric_key">No biometric available in device</string>
     <string name="continue_with_google">Continue with Google</string>
+    <string name="account">Account</string>
+    <string name="not_signed_in">Not signed in</string>
+    <string name="sign_in_to_sync">Sign in to sync your passwords</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_out">Sign out</string>
+    <string name="manage_google_account">Manage Google Account</string>
+    <string name="sync_disabled">Sync disabled</string>
+    <string name="sync_enabled">Sync enabled</string>
+    <string name="syncing">Syncing…</string>
+    <string name="sync_complete">Sync complete</string>
+    <string name="sync_error">Sync error</string>
 </resources>
