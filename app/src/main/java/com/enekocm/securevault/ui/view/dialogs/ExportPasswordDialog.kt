@@ -64,8 +64,7 @@ class ExportPasswordDialog : DialogFragment() {
             dismiss()
         }
         binding.btnExport.setOnClickListener {
-            val uri = folderUri
-            if (uri == null) showToast(getString(R.string.missing_folder_toast)) else handleFile(uri)
+            if (folderUri == null) showToast(getString(R.string.missing_folder_toast)) else handleFile(folderUri!!)
         }
     }
 
