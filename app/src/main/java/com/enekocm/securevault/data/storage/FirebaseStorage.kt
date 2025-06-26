@@ -35,9 +35,9 @@ class FirebaseStorage @Inject constructor(
                 FirestoreModel(
                     uid = uid,
                     passwords = doc.getString(PASSWORDS)!!,
-                    derivedKey = doc.getString(KEY)!!,
-                    salt = doc.getString(SALT)!!,
-                    iv = doc.getString(IV)!!
+                    derivedKey = doc.getBlob(KEY)!!,
+                    salt = doc.getBlob(SALT)!!,
+                    iv = doc.getBlob(IV)!!
                 )
             } else {
                 null
@@ -48,9 +48,9 @@ class FirebaseStorage @Inject constructor(
     }
 
     fun savePreferences(model: FirestoreModel){
-        appKeyStorage.save("salt", model.salt.toByteArray())
-        appKeyStorage.save("encrypted_app_key_pw", model.derivedKey.toByteArray())
-        appKeyStorage.save("iv_pw", model.iv.toByteArray())
+        appKeyStorage.save("salt", model.salt.toBytes())
+        appKeyStorage.save("encrypted_app_key_pw", model.derivedKey.toBytes())
+        appKeyStorage.save("iv_pw", model.iv.toBytes())
     }
 
 }

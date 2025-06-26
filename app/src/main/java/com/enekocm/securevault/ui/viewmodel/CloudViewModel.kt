@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,8 +73,8 @@ class CloudViewModel @Inject constructor(
     }
 
     fun loadPreferences() {
-        viewModelScope.launch {
-            val model = getModel() ?: return@launch
+        runBlocking {
+            val model = getModel() ?: return@runBlocking
             savePreferences(model)
         }
     }

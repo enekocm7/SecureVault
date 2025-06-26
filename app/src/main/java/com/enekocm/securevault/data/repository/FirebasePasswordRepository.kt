@@ -8,6 +8,7 @@ import com.enekocm.securevault.data.storage.AppKeyStorage
 import com.enekocm.securevault.data.storage.FirebaseStorage
 import com.enekocm.securevault.domain.repository.PasswordRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Blob
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlin.collections.emptyList
@@ -67,9 +68,9 @@ class FirebasePasswordRepository @Inject constructor(
     }
 
     private fun passwordsToModel(passwords: List<Password>): FirestoreModel {
-        val key = String(appKeyStorage.getFromSharedPreferences("encrypted_app_key_pw"))
-        val salt = String(appKeyStorage.getFromSharedPreferences("salt"))
-        val iv = String(appKeyStorage.getFromSharedPreferences("iv_pw"))
+        val key = Blob.fromBytes(appKeyStorage.getFromSharedPreferences("encrypted_app_key_pw"))
+        val salt = Blob.fromBytes(appKeyStorage.getFromSharedPreferences("salt"))
+        val iv = Blob.fromBytes(appKeyStorage.getFromSharedPreferences("iv_pw"))
         val passwords = fileEncryptor.encryptPasswords(passwords, getAppKey())
         val uid = firebaseAuth.uid ?: ""
         return FirestoreModel(
