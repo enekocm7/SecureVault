@@ -37,8 +37,5 @@ class RegisterViewModel @Inject constructor(
 
     fun isKeyConfigured(): Boolean {
         return isAppKeyConfigured()
-
     }
-
-
 }

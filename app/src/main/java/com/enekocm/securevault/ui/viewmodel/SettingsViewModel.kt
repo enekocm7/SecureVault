@@ -39,12 +39,12 @@ class SettingsViewModel @Inject constructor(
         deleteAllPasswords()
     }
 
-    fun loadBackup(uri: Uri){
-        viewModelScope.launch{
+    fun loadBackup(uri: Uri) {
+        viewModelScope.launch {
             try {
                 backupManager.loadBackup(uri)
                 _loadBackup.emit(true)
-            }catch (_: Exception){
+            } catch (_: Exception) {
                 _loadBackup.emit(false)
             }
         }

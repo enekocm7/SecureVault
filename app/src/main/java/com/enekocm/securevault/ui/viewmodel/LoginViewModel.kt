@@ -107,5 +107,4 @@ class LoginViewModel
     fun getPasswords(): List<Password> {
         return getAllPasswords.get()().map { PasswordMapper.mapToEntity(it) }
     }
-
 }

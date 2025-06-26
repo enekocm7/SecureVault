@@ -13,5 +13,4 @@ class MainViewModel @Inject constructor(
     fun isKeyConfigured(): Boolean {
         return isAppKeyConfigured()
     }
-
 }

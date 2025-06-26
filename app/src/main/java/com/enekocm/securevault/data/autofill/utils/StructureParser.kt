@@ -79,14 +79,14 @@ object StructureParser {
 
 		val htmlAttributes = getHtmlAttributes(node)
 		val isWebUsername = htmlAttributes["type"] == "email" ||
-			htmlAttributes["name"]?.contains("user") == true ||
-			htmlAttributes["name"]?.contains("email") == true ||
-			htmlAttributes["id"]?.contains("user") == true ||
-			htmlAttributes["id"]?.contains("email") == true
+			htmlAttributes["name"]?.contains("user", ignoreCase = true) == true ||
+			htmlAttributes["name"]?.contains("email", ignoreCase = true) == true ||
+			htmlAttributes["id"]?.contains("user", ignoreCase = true) == true ||
+			htmlAttributes["id"]?.contains("email", ignoreCase = true) == true
 
-		return hint.contains("user") || hint.contains("email") ||
-				hint.contains("usuario") || hint.contains("correo") ||
-				idEntry.contains("user") || idEntry.contains("usuario") ||
+		return hint.contains("user", ignoreCase = true) || hint.contains("email", ignoreCase = true) ||
+				hint.contains("usuario", ignoreCase = true) || hint.contains("correo", ignoreCase = true) ||
+				idEntry.contains("user", ignoreCase = true) || idEntry.contains("usuario", ignoreCase = true) ||
 				autofillHints.contains("username") || autofillHints.contains("email") ||
 				autofillHints.contains("usuario") || autofillHints.contains("correo") ||
 				isWebUsername
@@ -99,11 +99,11 @@ object StructureParser {
 
 		val htmlAttributes = getHtmlAttributes(node)
 		val isWebPassword = htmlAttributes["type"] == "password" ||
-			htmlAttributes["name"]?.contains("pass") == true ||
-			htmlAttributes["id"]?.contains("pass") == true
+			htmlAttributes["name"]?.contains("pass", ignoreCase = true) == true ||
+			htmlAttributes["id"]?.contains("pass", ignoreCase = true) == true
 
-		return hint.contains("pass") || hint.contains("contraseña") ||
-				idEntry.contains("pass") || idEntry.contains("contraseña") ||
+		return hint.contains("pass", ignoreCase = true) || hint.contains("contraseña", ignoreCase = true) ||
+				idEntry.contains("pass", ignoreCase = true) || idEntry.contains("contraseña", ignoreCase = true) ||
 				autofillHints.contains("password") || autofillHints.contains("contraseña") ||
 				isWebPassword
 	}
