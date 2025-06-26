@@ -3,6 +3,7 @@ package com.enekocm.securevault.ui.view
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -75,7 +76,10 @@ class BiometricActivity : AppCompatActivity() {
 
     private fun setListeners() {
         binding.enableButton.setOnClickListener {
-            viewModel.enableBiometric(this)
+            if (!viewModel.enableBiometric(this)){
+                Toast.makeText(this,R.string.no_biometric_key,Toast.LENGTH_LONG).show()
+                skip()
+            }
         }
 
         binding.skipTextButton.setOnClickListener {

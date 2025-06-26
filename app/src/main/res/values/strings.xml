@@ -140,6 +140,7 @@
     <string name="login_to_secure_vault">Login to Secure Vault</string>
     <string name="browser_autofill_already_enabled">Browser autofill is already enabled</string>
     <string name="autofill_service_already_enabled">Autofill service is already enabled</string>
+    <string name="no_biometric_key">No biometric available in device</string>
 </resources>
 
 

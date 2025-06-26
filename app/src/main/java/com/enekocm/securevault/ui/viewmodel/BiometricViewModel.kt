@@ -1,6 +1,5 @@
 package com.enekocm.securevault.ui.viewmodel
 
-
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -33,7 +32,7 @@ class BiometricViewModel
     private val _authenticationState = MutableLiveData<BiometricResult?>(null)
     val authenticationState: LiveData<BiometricResult?> = _authenticationState
 
-    fun enableBiometric(activity: AppCompatActivity) {
+    fun enableBiometric(activity: AppCompatActivity): Boolean {
         val biometricAuth = BiometricPromptManager(activity)
         viewModelScope.launch {
             biometricAuth.promptResults.collect { result ->
@@ -41,7 +40,12 @@ class BiometricViewModel
                 generateKey(result)
             }
         }
-        authenticateBiometrics(biometricAuth, title, description, getEncryptCryptoObject())
+        return try {
+            authenticateBiometrics(biometricAuth, title, description, getEncryptCryptoObject())
+            true
+        }catch (_: Exception){
+            false
+        }
     }
 
     private fun generateKey(result: BiometricResult) {
