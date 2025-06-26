@@ -13,7 +13,7 @@ object BiometricKeyManager {
     private const val KEY_ALIAS = "biometric_key"
     private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 
-    fun generateKey() {
+    fun generateKey(){
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
         if (keyStore.containsAlias(KEY_ALIAS)) {
             return

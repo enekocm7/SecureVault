@@ -137,5 +137,6 @@
     <string name="login_to_secure_vault">Iniciar sesion</string>
     <string name="browser_autofill_already_enabled">El autocompletado del navegador ya está activado</string>
     <string name="autofill_service_already_enabled">El servicio de autocompletado ya está activado</string>
+    <string name="no_biometric_key">No hay clave biometrica en el dispositivo</string>
 </resources>
 
