@@ -4,9 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enekocm.securevault.domain.model.AuthState
+import com.enekocm.securevault.domain.usecases.firestore.GetModel
+import com.enekocm.securevault.domain.usecases.firestore.SavePreferences
 import com.enekocm.securevault.utils.GoogleLogin
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CloudViewModel @Inject constructor() : ViewModel() {
-    private val auth = Firebase.auth
+class CloudViewModel @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val savePreferences: SavePreferences,
+    private val getModel: GetModel
+) : ViewModel() {
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Initial)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
@@ -40,7 +44,7 @@ class CloudViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun signInWithGoogle(activity: AppCompatActivity, allowNewAccounts : Boolean) {
+    fun signInWithGoogle(activity: AppCompatActivity, allowNewAccounts: Boolean) {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
@@ -65,6 +69,13 @@ class CloudViewModel @Inject constructor() : ViewModel() {
 
     fun clearError() {
         _errorMessage.value = null
+    }
+
+    fun loadPreferences() {
+        viewModelScope.launch {
+            val model = getModel() ?: return@launch
+            savePreferences(model)
+        }
     }
 
 

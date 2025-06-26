@@ -78,6 +78,7 @@ class CloudActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                         if (login){
+                            loadPreferences()
                             loginIntent()
                         }else{
                             skip()
@@ -126,5 +127,8 @@ class CloudActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finishAffinity()
+    }
+    private fun loadPreferences(){
+        viewModel.loadPreferences()
     }
 }

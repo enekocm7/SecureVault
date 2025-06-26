@@ -6,7 +6,8 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseStorage @Inject constructor(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val appKeyStorage: AppKeyStorage
 ) {
     companion object {
         const val COLLECTION = "users"
@@ -44,6 +45,12 @@ class FirebaseStorage @Inject constructor(
         } catch (_: Exception) {
             null
         }
+    }
+
+    fun savePreferences(model: FirestoreModel){
+        appKeyStorage.save("salt", model.salt.toByteArray())
+        appKeyStorage.save("encrypted_app_key_pw", model.derivedKey.toByteArray())
+        appKeyStorage.save("iv_pw", model.iv.toByteArray())
     }
 
 }

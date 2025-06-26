@@ -25,24 +25,35 @@ class HomeViewModel @Inject constructor(
     private val _passwords = MutableStateFlow<List<PasswordDto>>(emptyList())
     val passwords: StateFlow<List<PasswordDto>> = _passwords.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     init {
         loadPasswords()
     }
 
     fun loadPasswords(name: String) {
         viewModelScope.launch(dispatchers.io) {
+            withContext(dispatchers.main) {
+                _isLoading.value = true
+            }
             val passwords = getPasswordsByNameIgnoreCase(name)
             withContext(dispatchers.main) {
                 _passwords.value = passwords
+                _isLoading.value = false
             }
         }
     }
 
     fun loadPasswords() {
         viewModelScope.launch(dispatchers.io) {
+            withContext(dispatchers.main) {
+                _isLoading.value = true
+            }
             val passwords = getAllPasswords()
             withContext(dispatchers.main) {
                 _passwords.value = passwords
+                _isLoading.value = false
             }
         }
     }

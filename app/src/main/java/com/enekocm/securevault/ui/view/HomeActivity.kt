@@ -66,6 +66,14 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLoading.collect { isLoading ->
+                    binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                }
+            }
+        }
+
         supportFragmentManager.setFragmentResultListener(
             PASSWORD_RELOAD_REQUEST_KEY,
             this
