@@ -13,17 +13,21 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.enekocm.securevault.BuildConfig
 import com.enekocm.securevault.R
 import com.enekocm.securevault.databinding.SettingsActivityBinding
+import com.enekocm.securevault.domain.model.AuthState
 import com.enekocm.securevault.ui.view.dialogs.ChangeMasterPasswordDialog
 import com.enekocm.securevault.ui.view.dialogs.ExportPasswordDialog
 import com.enekocm.securevault.ui.view.dialogs.ImportPasswordDialog
 import com.enekocm.securevault.ui.viewmodel.SettingsViewModel
 import com.enekocm.securevault.utils.FilePicker
 import com.enekocm.securevault.utils.FilePickerType
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,6 +36,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: SettingsActivityBinding
     private val viewModel: SettingsViewModel by viewModels()
     private var isInitialSetup = true
+    private val auth = FirebaseAuth.getInstance()
 
     private val folderPicker = FilePicker(activity = this) { uri ->
         viewModel.setBackupLocation(uri)
@@ -64,12 +69,53 @@ class SettingsActivity : AppCompatActivity() {
         setListeners()
         checkBiometric()
         observeBackupState()
+        observeLogin()
         updateBackupLocationText()
         checkBackupButtons()
         checkAutofill()
+        loadUserData()
         binding.textAppVersion.text = buildString {
             append("App Version: ")
             append(BuildConfig.VERSION_NAME)
+        }
+    }
+
+    private fun loadUserData() {
+        val image = binding.userProfileImage
+        val name = binding.userName
+        val email = binding.userEmail
+        val signInButton = binding.btnSignIn
+        val signOutButton = binding.btnSignOut
+        val syncText = binding.syncStatusText
+
+        auth.currentUser?.let { user ->
+            name.text = user.displayName ?: getString(R.string.unknown_user)
+            email.text = user.email ?: getString(R.string.no_email)
+
+            user.photoUrl?.let {
+                Glide.with(this).load(it).into(image)
+            }
+
+            signInButton.visibility = View.GONE
+            signOutButton.visibility = View.VISIBLE
+
+            syncText.text = getString(R.string.sync_enabled)
+
+        } ?: run {
+            name.text = getString(R.string.not_signed_in)
+            email.text = getString(R.string.sign_in_to_sync)
+
+            image.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.ic_account_circle
+                )
+            )
+
+            signInButton.visibility = View.VISIBLE
+            signOutButton.visibility = View.GONE
+
+            syncText.text = getString(R.string.sync_disabled)
         }
     }
 
@@ -115,7 +161,39 @@ class SettingsActivity : AppCompatActivity() {
                 Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_LONG).show()
             }
         }
+    }
 
+    private fun observeLogin() {
+        lifecycleScope.launch {
+            viewModel.authState.collect { state ->
+                when (state) {
+                    is AuthState.Authenticated -> {
+                        Toast.makeText(
+                            this@SettingsActivity,
+                            "Successfully signed in with Google!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        loadUserData()
+                    }
+
+                    is AuthState.Unauthenticated -> {
+                        // User is not signed in, stay on current screen
+                    }
+
+                    is AuthState.Initial -> {
+                        // Initial state, do nothing
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.errorMessage.collect { error ->
+                error?.let {
+                    Toast.makeText(this@SettingsActivity, it, Toast.LENGTH_LONG).show()
+                    viewModel.clearError()
+                }
+            }
+        }
     }
 
     private fun checkAutofill() {
@@ -182,6 +260,23 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
+
+        binding.btnSignIn.setOnClickListener {
+            viewModel.signInWithGoogle(this)
+        }
+
+        binding.btnSignOut.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.sign_out))
+                .setMessage(getString(R.string.sign_out_confirmation))
+                .setPositiveButton(getString(R.string.sign_out)) { _, _ ->
+                    auth.signOut()
+                    loadUserData()
+                }
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show()
+        }
+
         binding.btnChangeMasterPassword.setOnClickListener {
             ChangeMasterPasswordDialog().show(supportFragmentManager, "ChangeMasterPasswordDialog")
         }

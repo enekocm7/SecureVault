@@ -156,4 +156,7 @@
     <string name="syncing">Syncing…</string>
     <string name="sync_complete">Sync complete</string>
     <string name="sync_error">Sync error</string>
+    <string name="unknown_user">Unknown user</string>
+    <string name="no_email" translatable="false">No email</string>
+    <string name="sign_out_confirmation">Are you sure you want to log out?</string>
 </resources>

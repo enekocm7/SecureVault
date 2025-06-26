@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.nbvcxz)
     implementation(libs.circleimageview)
+    implementation(libs.glide)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
