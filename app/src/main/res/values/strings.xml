@@ -49,6 +49,9 @@
     <string name="delete">Delete Password</string>
     <string name="close">Close</string>
     <string name="password_generator">Password Generator</string>
+    <string name="enable_cloud_sync">Enable Cloud Sync</string>
+    <string name="cloud_description">Sync your passwords across all your devices securely. Your data will be encrypted before being stored in the cloud.</string>
+    <string name="cloud_icon" translatable="false">Cloud sync icon</string>
     <string name="generated_password_will_appear_here">Generated password will appear here</string>
     <string name="toggle_visibility">Toggle visibility</string>
     <string name="regenerate_password">Regenerate password</string>
@@ -141,6 +144,5 @@
     <string name="browser_autofill_already_enabled">Browser autofill is already enabled</string>
     <string name="autofill_service_already_enabled">Autofill service is already enabled</string>
     <string name="no_biometric_key">No biometric available in device</string>
+    <string name="continue_with_google">Continue with Google</string>
 </resources>
-
-

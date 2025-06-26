@@ -12,7 +12,20 @@
           "package_name": "com.enekocm.securevault"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "733223963023-0p51jeorscjgk2g6hrah30f4f391ga04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enekocm.securevault",
+            "certificate_hash": "70b1e93ec850415e9ecae05588218e8252e00971"
+          }
+        },
+        {
+          "client_id": "733223963023-8t6alkns5o0h632m4amm0r2mkamb27sb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDje2cPqlx1oSgVDXOifjUc7J_doO-mvNs"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733223963023-8t6alkns5o0h632m4amm0r2mkamb27sb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

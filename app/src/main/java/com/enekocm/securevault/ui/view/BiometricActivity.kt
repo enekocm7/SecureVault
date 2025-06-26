@@ -76,8 +76,8 @@ class BiometricActivity : AppCompatActivity() {
 
     private fun setListeners() {
         binding.enableButton.setOnClickListener {
-            if (!viewModel.enableBiometric(this)){
-                Toast.makeText(this,R.string.no_biometric_key,Toast.LENGTH_LONG).show()
+            if (!viewModel.enableBiometric(this)) {
+                Toast.makeText(this, R.string.no_biometric_key, Toast.LENGTH_LONG).show()
                 skip()
             }
         }
@@ -88,7 +88,7 @@ class BiometricActivity : AppCompatActivity() {
     }
 
     private fun skip() {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, CloudActivity::class.java)
         startActivity(intent)
         finishAffinity()
     }

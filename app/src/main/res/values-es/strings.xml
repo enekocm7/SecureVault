@@ -138,5 +138,8 @@
     <string name="browser_autofill_already_enabled">El autocompletado del navegador ya está activado</string>
     <string name="autofill_service_already_enabled">El servicio de autocompletado ya está activado</string>
     <string name="no_biometric_key">No hay clave biometrica en el dispositivo</string>
+    <string name="enable_cloud_sync">Activar sincronización en la nube</string>
+    <string name="cloud_description">Sincroniza tus contraseñas en todos tus dispositivos de forma segura. Tus datos serán cifrados antes de almacenarse en la nube.</string>
+    <string name="continue_with_google">Continua con Google</string>
 </resources>
 
