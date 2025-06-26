@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hiltAndroid)
+    id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
 }
 
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.moshi.kotlin)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.autofill)
+    implementation(platform(libs.firebase.bom))
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

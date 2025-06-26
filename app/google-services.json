@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "733223963023",
+    "project_id": "vault-9cbbd",
+    "storage_bucket": "vault-9cbbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733223963023:android:254ac31842dc70fcf7e3fa",
+        "android_client_info": {
+          "package_name": "com.enekocm.securevault"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDje2cPqlx1oSgVDXOifjUc7J_doO-mvNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
