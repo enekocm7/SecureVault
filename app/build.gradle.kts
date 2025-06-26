@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hiltAndroid)
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -62,6 +63,8 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.autofill)
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
