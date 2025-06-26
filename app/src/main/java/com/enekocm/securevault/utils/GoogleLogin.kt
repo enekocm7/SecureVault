@@ -14,14 +14,15 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class GoogleLogin(private val activity: AppCompatActivity) {
     private val dispatcherProvider = DefaultDispatcherProvider()
-    private val auth = FirebaseAuth.getInstance()
+    private val auth = Firebase.auth
     private val context = activity.baseContext
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 

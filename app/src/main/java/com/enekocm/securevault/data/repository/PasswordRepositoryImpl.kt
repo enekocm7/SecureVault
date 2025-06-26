@@ -10,19 +10,16 @@ import javax.inject.Inject
 
 class PasswordRepositoryImpl @Inject constructor(
     private val storage: PasswordStorage,
-    private val encryptor: FileEncryptor
+    private val encryptor: FileEncryptor,
+    private val passwords: LocalPasswords
 ) : PasswordRepository {
 
-    private lateinit var cachePasswords: MutableList<Password>
-
     init {
-        runBlocking {
-            reloadPasswords()
-        }
+        reloadPasswords()
     }
 
     override fun getAllPasswords(): List<Password> {
-        return cachePasswords
+        return passwords.getAllPasswords()
     }
 
     private fun getAppKey(): String = runBlocking {
@@ -31,11 +28,11 @@ class PasswordRepositoryImpl @Inject constructor(
 
 
     override fun getPasswordByName(name: String): Password? {
-        return cachePasswords.find { it.name == name }
+        return passwords.getPasswordByName(name)
     }
 
     override fun getPasswordByNameContainingIgnoreCase(name: String): List<Password> {
-        return cachePasswords.filter { it.name.contains(name, ignoreCase = true) }
+        return passwords.getPasswordByNameContainingIgnoreCase(name)
     }
 
     override fun insertPassword(password: Password) {
@@ -43,46 +40,30 @@ class PasswordRepositoryImpl @Inject constructor(
     }
 
     override fun insertAllPasswords(passwords: List<Password>) {
-        passwords.forEach { insertPasswordCache(it.name, it) }
+        this.passwords.insertAllPasswords(passwords)
         savePasswordsFromCache()
-    }
-
-    private fun insertPasswordCache(name: String, password: Password) {
-        val existingIndex = cachePasswords.indexOfFirst { it.name == name }
-
-        if (existingIndex >= 0) {
-            cachePasswords[existingIndex] = password
-        } else {
-            cachePasswords.add(password)
-        }
     }
 
     override fun insertPassword(
         previousName: String,
         password: Password
     ) {
-        val existingIndex = cachePasswords.indexOfFirst { it.name == previousName }
-
-        if (existingIndex >= 0) {
-            cachePasswords[existingIndex] = password
-        } else {
-            cachePasswords.add(password)
-        }
-        val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, getAppKey())
+        passwords.insertPassword(previousName,password)
+        val encryptedPasswords: String = encryptor.encryptPasswords(getAllPasswords(), getAppKey())
         storage.saveEncryptedFile(encryptedPasswords)
         reloadPasswords()
     }
 
     override fun deletePassword(password: Password) {
-        cachePasswords.removeIf { it.name == password.name }
-        val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, getAppKey())
+        passwords.deletePassword(password)
+        val encryptedPasswords: String = encryptor.encryptPasswords(getAllPasswords(), getAppKey())
         storage.saveEncryptedFile(encryptedPasswords)
         reloadPasswords()
     }
 
     override fun deleteAllPasswords() {
-        cachePasswords.clear()
-        val encryptedPasswords: String = encryptor.encryptPasswords(cachePasswords, getAppKey())
+        passwords.deleteAllPasswords()
+        val encryptedPasswords: String = encryptor.encryptPasswords(getAllPasswords(), getAppKey())
         storage.saveEncryptedFile(encryptedPasswords)
         reloadPasswords()
     }
@@ -93,12 +74,12 @@ class PasswordRepositoryImpl @Inject constructor(
         return encryptor.decryptPasswords(encryptedPasswords, getAppKey())
     }
 
-    fun reloadPasswords() {
-        cachePasswords = loadPasswords().toMutableList()
+    private fun reloadPasswords() {
+        passwords.insertAllPasswords(loadPasswords())
     }
 
     private fun savePasswordsFromCache(){
-        storage.saveEncryptedFile(encryptor.encryptPasswords(cachePasswords,getAppKey()))
+        storage.saveEncryptedFile(encryptor.encryptPasswords(getAllPasswords(),getAppKey()))
     }
 
 }

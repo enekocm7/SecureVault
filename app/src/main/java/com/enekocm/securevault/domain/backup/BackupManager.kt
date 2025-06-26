@@ -7,9 +7,9 @@ import com.enekocm.securevault.data.crypto.AppKeyProvider
 import com.enekocm.securevault.data.json.crypto.FileEncryptor
 import com.enekocm.securevault.data.json.model.Password
 import com.enekocm.securevault.data.mapper.PasswordMapper
+import com.enekocm.securevault.data.repository.factory.PasswordRepositoryFactory
 import com.enekocm.securevault.data.storage.BackupStorage
 import com.enekocm.securevault.di.DispatcherProvider
-import com.enekocm.securevault.domain.repository.PasswordRepository
 import com.enekocm.securevault.domain.usecases.sv.ReadSv
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
@@ -25,7 +25,7 @@ class BackupManager @Inject constructor(
     private val backupStorage: BackupStorage,
     private val encryptor: FileEncryptor,
     private val readSv: ReadSv,
-    private val passwordRepository: PasswordRepository,
+    private val passwordRepositoryFactory: PasswordRepositoryFactory,
     private val dispatchers: DispatcherProvider
 ) {
     companion object {
@@ -70,7 +70,7 @@ class BackupManager @Inject constructor(
     suspend fun loadBackup(uri: Uri) {
         val passwords =
             readSv(uri, String(AppKeyProvider.getAppKey())).map { PasswordMapper.mapToEntity(it) }
-        passwordRepository.insertAllPasswords(passwords)
+        passwordRepositoryFactory.getPasswordRepository().insertAllPasswords(passwords)
     }
 
     private suspend fun createBackup(folderUri: Uri, passwords: List<Password>): Boolean =

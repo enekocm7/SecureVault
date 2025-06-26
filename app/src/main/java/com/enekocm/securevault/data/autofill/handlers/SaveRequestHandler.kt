@@ -3,15 +3,12 @@ package com.enekocm.securevault.data.autofill.handlers
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import com.enekocm.securevault.data.autofill.utils.StructureParser
-import com.enekocm.securevault.data.json.crypto.FileEncryptor
 import com.enekocm.securevault.data.json.model.Password
-import com.enekocm.securevault.data.json.storage.PasswordStorage
-import com.enekocm.securevault.data.repository.PasswordRepositoryImpl
+import com.enekocm.securevault.data.repository.factory.PasswordRepositoryFactory
 import javax.inject.Inject
 
 class SaveRequestHandler @Inject constructor(
-    private val storage: PasswordStorage,
-    private val encryptor: FileEncryptor
+    private val passwordRepositoryFactory: PasswordRepositoryFactory
 ) {
 
     fun handleSaveRequest(
@@ -38,7 +35,7 @@ class SaveRequestHandler @Inject constructor(
                     value = credentials.password.toString()
                 )
 
-                PasswordRepositoryImpl(storage, encryptor).insertPassword(password)
+                passwordRepositoryFactory.getPasswordRepository().insertPassword(password)
                 callback.onSuccess()
             } catch (e: Exception) {
                 callback.onFailure("Failed to show save password dialog: ${e.message}")

@@ -12,10 +12,7 @@ import com.enekocm.securevault.data.autofill.utils.Fetch
 import com.enekocm.securevault.data.autofill.utils.StructureParser
 import com.enekocm.securevault.data.autofill.utils.Utils
 import com.enekocm.securevault.data.autofill.utils.Utils.isAppKeyAvailable
-import com.enekocm.securevault.data.json.crypto.FileEncryptor
-import com.enekocm.securevault.data.json.storage.PasswordStorage
-import com.enekocm.securevault.data.repository.PasswordRepositoryImpl
-import com.enekocm.securevault.domain.repository.PasswordRepository
+import com.enekocm.securevault.data.repository.factory.PasswordRepositoryFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +21,7 @@ import javax.inject.Inject
 
 class FillRequestHandler @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val storage: PasswordStorage,
-    private val encryptor: FileEncryptor
+    private val passwordRepositoryFactory: PasswordRepositoryFactory
 ) {
 
     fun handleFillRequest(
@@ -47,8 +43,7 @@ class FillRequestHandler @Inject constructor(
                     request,
                     packageName,
                     parsedStructure,
-                    callback,
-                    PasswordRepositoryImpl(storage, encryptor)
+                    callback
                 )
             }
         }
@@ -106,17 +101,11 @@ class FillRequestHandler @Inject constructor(
         request: FillRequest,
         packageName: String,
         parsedStructure: ParsedStructure,
-        callback: FillCallback,
-        passwordRepository: PasswordRepository?
+        callback: FillCallback
     ) {
-        if (passwordRepository == null) {
-            callback.onSuccess(null)
-            return
-        }
-
         val credentials = Fetch.fetchPassword(
             packageName,
-            passwordRepository.getAllPasswords(),
+            passwordRepositoryFactory.getPasswordRepository().getAllPasswords(),
             parsedStructure.webDomain
         ) ?: return
 
