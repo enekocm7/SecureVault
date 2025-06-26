@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.service.autofill.Dataset
+import android.view.View
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillManager
 import android.view.autofill.AutofillValue
@@ -57,6 +58,8 @@ class LoginActivity : AppCompatActivity() {
 
         if (viewModel.isBiometricKeyConfigured()) {
             viewModel.login(this)
+        }else{
+            binding.biometricButton.visibility = View.GONE
         }
         setListeners()
         setObserversPassword()
