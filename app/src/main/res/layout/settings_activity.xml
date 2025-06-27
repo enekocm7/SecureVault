@@ -158,20 +158,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/account_info_card" />
 
-            <Button
-                android:id="@+id/btn_sign_up"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/white"
-                android:text="@string/sign_up_with_google"
-                android:textColor="@color/red"
-                android:drawableStart="@drawable/ic_google"
-                android:drawablePadding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_sign_in" />
-
 
             <Button
                 android:id="@+id/btn_sign_out"
@@ -184,7 +170,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_sign_up" />
+                app:layout_constraintTop_toBottomOf="@id/btn_sign_in" />
 
 
             <TextView

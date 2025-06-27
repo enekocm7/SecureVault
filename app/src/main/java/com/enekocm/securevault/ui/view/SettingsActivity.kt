@@ -86,7 +86,6 @@ class SettingsActivity : AppCompatActivity() {
         val email = binding.userEmail
         val signInButton = binding.btnSignIn
         val signOutButton = binding.btnSignOut
-        val signUpButton = binding.btnSignUp
         val syncText = binding.syncStatusText
 
         auth.currentUser?.let { user ->
@@ -99,7 +98,6 @@ class SettingsActivity : AppCompatActivity() {
 
             signInButton.visibility = View.GONE
             signOutButton.visibility = View.VISIBLE
-            signUpButton.visibility = View.GONE
 
             syncText.text = getString(R.string.sync_enabled)
 
@@ -116,7 +114,6 @@ class SettingsActivity : AppCompatActivity() {
 
             signInButton.visibility = View.VISIBLE
             signOutButton.visibility = View.GONE
-            signUpButton.visibility = View.VISIBLE
 
             syncText.text = getString(R.string.sync_disabled)
         }
@@ -266,10 +263,6 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.btnSignIn.setOnClickListener {
             viewModel.signInWithGoogle(this)
-        }
-
-        binding.btnSignUp.setOnClickListener {
-            viewModel.signUpWithGoogle(this)
         }
 
         binding.btnSignOut.setOnClickListener {

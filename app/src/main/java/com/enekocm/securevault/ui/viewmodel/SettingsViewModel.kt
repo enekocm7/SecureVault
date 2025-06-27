@@ -93,7 +93,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _errorMessage.value = null
-                val result = GoogleLogin(activity).signIn(false)
+                val result = GoogleLogin(activity).signIn(allowNewAccounts = true)
 
                 result?.user?.let { user ->
                     _authState.value = AuthState.Authenticated(user)
@@ -111,26 +111,6 @@ class SettingsViewModel @Inject constructor(
     fun clearError() {
         _errorMessage.value = null
     }
-
-    fun signUpWithGoogle(activity: AppCompatActivity) {
-        viewModelScope.launch {
-            try {
-                _errorMessage.value = null
-                val result = GoogleLogin(activity).signIn(true)
-
-                result?.user?.let { user ->
-                    _authState.value = AuthState.Authenticated(user)
-                } ?: run {
-                    _errorMessage.value = "Failed to sign in with Google"
-                    _authState.value = AuthState.Unauthenticated
-                }
-            } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Unknown error occurred"
-                _authState.value = AuthState.Unauthenticated
-            }
-        }
-    }
-
 
 }
 
