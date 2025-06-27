@@ -7,8 +7,6 @@
 
 **SecureVault** is an open-source Android application meticulously designed to provide users with a secure, efficient, and user-friendly solution for managing their digital passwords and sensitive credentials.
 
-SecureVault is currently under active development and not yet available on the Google Play Store, you can get the latest .apk file directly from our Releases page.
-
 ---
 
 ### 🚀 Installation
