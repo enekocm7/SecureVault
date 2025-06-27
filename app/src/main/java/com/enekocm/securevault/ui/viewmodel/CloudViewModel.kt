@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enekocm.securevault.domain.model.AuthState
-import com.enekocm.securevault.domain.usecases.firestore.GetModel
-import com.enekocm.securevault.domain.usecases.firestore.SavePreferences
 import com.enekocm.securevault.utils.GoogleLogin
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,14 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class CloudViewModel @Inject constructor(
-    private val auth: FirebaseAuth,
-    private val savePreferences: SavePreferences,
-    private val getModel: GetModel
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Initial)
@@ -72,12 +67,7 @@ class CloudViewModel @Inject constructor(
         _errorMessage.value = null
     }
 
-    fun loadPreferences() {
-        runBlocking {
-            val model = getModel() ?: return@runBlocking
-            savePreferences(model)
-        }
-    }
+
 
 
 }

@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var webDomain: String
 
     private var isAutofill : Boolean = false
+    private var hasSuccessfulLogin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.passwordLoginState
                 .collect { success ->
                     if (success == true) {
+                        hasSuccessfulLogin = true
                         if(isAutofill) autofill() else skip()
                     } else if (success == false) {
                         Toast.makeText(
@@ -87,6 +89,7 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.biometricLoginState.collect { success ->
                 if (success == true) {
+                    hasSuccessfulLogin = true
                     if(isAutofill) autofill() else skip()
                 } else if (success == false) {
                     Toast.makeText(

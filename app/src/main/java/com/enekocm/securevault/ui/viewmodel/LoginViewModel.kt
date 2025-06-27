@@ -14,6 +14,8 @@ import com.enekocm.securevault.domain.usecases.auth.GetDecryptCryptoObject
 import com.enekocm.securevault.domain.usecases.auth.IsBiometricConfigured
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithBiometrics
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithPassword
+import com.enekocm.securevault.domain.usecases.firestore.GetModel
+import com.enekocm.securevault.domain.usecases.firestore.SavePreferences
 import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import com.enekocm.securevault.ui.biometrics.BiometricPromptManager
 import dagger.Lazy
@@ -24,6 +26,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -36,6 +39,8 @@ class LoginViewModel
     private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val getDecryptCryptoObject: GetDecryptCryptoObject,
+    private val savePreferences: SavePreferences,
+    private val getModel: GetModel,
     private val getAllPasswords: Lazy<GetAllPasswords>,
     private val dispatchers: DispatcherProvider
 ) : ViewModel() {
@@ -57,6 +62,7 @@ class LoginViewModel
     }
 
     fun login(password: String) {
+        loadPreferences()
         viewModelScope.launch(dispatchers.default) {
             val result = unlockKeyWithPassword(password)
             withContext(dispatchers.main) {
@@ -106,5 +112,12 @@ class LoginViewModel
 
     fun getPasswords(): List<Password> {
         return getAllPasswords.get()().map { PasswordMapper.mapToEntity(it) }
+    }
+
+    fun loadPreferences() {
+        runBlocking {
+            val model = getModel() ?: return@runBlocking
+            savePreferences(model)
+        }
     }
 }
