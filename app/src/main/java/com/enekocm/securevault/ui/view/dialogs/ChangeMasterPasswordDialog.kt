@@ -84,6 +84,7 @@ class ChangeMasterPasswordDialog: DialogFragment() {
                 else -> {
                     viewModel.createAppKey(masterPassword)
                     if (viewModel.isKeyConfigured()) {
+                        viewModel.reloadFirebaseCredentials()
                         dismiss()
                         Toast.makeText(context,getString(R.string.password_changed),Toast.LENGTH_LONG).show()
                     }

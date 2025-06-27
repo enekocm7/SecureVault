@@ -157,5 +157,12 @@
     <string name="master_password_warning">¡Recuerda esta contraseña! Sin ella, NO puedes acceder a tus contraseñas.</string>
     <string name="login_description">Inicia sesión para acceder a tu bóveda segura</string>
     <string name="delete_passwords">Borra las contraseñas de la nube</string>
+    <string name="select_account">Cuenta</string>
+    <string name="switch_account">Cambiar Cuenta</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="no_account">Sin Cuenta</string>
+    <string name="please_login">Porfavor inicie sesión</string>
+    <string name="sign_up_with_google">Registrate con Google</string>
+    <string name="no_passwords_found">No hay contraseñas</string>
 </resources>
 

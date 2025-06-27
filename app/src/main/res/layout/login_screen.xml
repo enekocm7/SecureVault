@@ -6,11 +6,29 @@
     android:padding="24dp"
     android:background="@color/light_red">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/accountCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="4dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:src="@drawable/ic_account_circle" />
+    </com.google.android.material.card.MaterialCardView>
+
     <TextView
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="90dp"
         android:text="@string/login_to_your_vault"
         android:textAlignment="center"
         android:textSize="24sp"

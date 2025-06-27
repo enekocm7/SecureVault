@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enekocm.securevault.domain.model.PasswordDto
 import com.enekocm.securevault.domain.model.PasswordStrength
 import com.enekocm.securevault.domain.usecases.EstimatePassword
 import com.enekocm.securevault.domain.usecases.auth.GenerateAppKey
 import com.enekocm.securevault.domain.usecases.auth.IsAppKeyConfigured
+import com.enekocm.securevault.domain.usecases.password.AddPassword
+import com.enekocm.securevault.domain.usecases.password.DeletePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,6 +19,8 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val estimatePassword: EstimatePassword,
     private val generateAppKey: GenerateAppKey,
+    private val addPassword: AddPassword,
+    private val deletePassword: DeletePassword,
     private val isAppKeyConfigured: IsAppKeyConfigured,
 ) : ViewModel() {
 
@@ -37,5 +42,11 @@ class RegisterViewModel @Inject constructor(
 
     fun isKeyConfigured(): Boolean {
         return isAppKeyConfigured()
+    }
+
+    fun reloadFirebaseCredentials() {
+        val model = PasswordDto("a","a","a","a")
+        addPassword(model)
+        deletePassword(model)
     }
 }

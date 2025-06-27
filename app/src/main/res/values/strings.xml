@@ -162,4 +162,12 @@
     <string name="master_password_warning">Remember this password! Without it, you CANNOT access your passwords.</string>
     <string name="login_description">Sign in to access your secure vault</string>
     <string name="delete_passwords">Delete passwords from the cloud</string>
+    <string name="select_account">Account</string>
+    <string name="switch_account">Switch Account</string>
+    <string name="logout">Logout</string>
+    <string name="check" translatable="false">Check</string>
+    <string name="no_account">No Account</string>
+    <string name="please_login">Please login</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
+    <string name="no_passwords_found">No passwords found</string>
 </resources>

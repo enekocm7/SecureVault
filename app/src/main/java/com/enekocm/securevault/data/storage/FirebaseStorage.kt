@@ -1,13 +1,13 @@
 package com.enekocm.securevault.data.storage
 
 import com.enekocm.securevault.data.firestore.FirestoreModel
+import com.enekocm.securevault.domain.model.Preferences
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseStorage @Inject constructor(
-    private val db: FirebaseFirestore,
-    private val appKeyStorage: AppKeyStorage
+    private val db: FirebaseFirestore
 ) {
     companion object {
         const val COLLECTION = "users"
@@ -47,10 +47,8 @@ class FirebaseStorage @Inject constructor(
         }
     }
 
-    fun savePreferences(model: FirestoreModel){
-        appKeyStorage.save("salt", model.salt.toBytes())
-        appKeyStorage.save("encrypted_app_key_pw", model.derivedKey.toBytes())
-        appKeyStorage.save("iv_pw", model.iv.toBytes())
+    fun modelToPreferences(model: FirestoreModel): Preferences {
+        return Preferences(key = model.derivedKey, salt = model.salt, iv = model.iv)
     }
 
 }

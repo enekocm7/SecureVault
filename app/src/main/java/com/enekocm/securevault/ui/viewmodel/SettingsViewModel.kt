@@ -12,8 +12,6 @@ import com.enekocm.securevault.domain.usecases.auth.IsBiometricConfigured
 import com.enekocm.securevault.domain.usecases.password.DeleteAllPasswords
 import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import com.enekocm.securevault.utils.GoogleLogin
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +27,6 @@ class SettingsViewModel @Inject constructor(
     private val deleteAllPasswords: DeleteAllPasswords,
     private val backupManager: BackupManager,
     private val getAllPasswords: GetAllPasswords,
-    private val firestore: FirebaseFirestore,
-    private val auth: FirebaseAuth,
     private val dispatchers: DispatcherProvider
 ) :
     ViewModel() {
@@ -97,7 +93,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _errorMessage.value = null
-                val result = GoogleLogin(activity).signIn()
+                val result = GoogleLogin(activity).signIn(false)
 
                 result?.user?.let { user ->
                     _authState.value = AuthState.Authenticated(user)
@@ -116,12 +112,25 @@ class SettingsViewModel @Inject constructor(
         _errorMessage.value = null
     }
 
-    fun deletePasswordsFromCloud() {
-        viewModelScope.launch(dispatchers.io) {
-            val userId = auth.uid ?: return@launch
-            firestore.collection("users")
-                .document(userId).delete()
+    fun signUpWithGoogle(activity: AppCompatActivity) {
+        viewModelScope.launch {
+            try {
+                _errorMessage.value = null
+                val result = GoogleLogin(activity).signIn(true)
+
+                result?.user?.let { user ->
+                    _authState.value = AuthState.Authenticated(user)
+                } ?: run {
+                    _errorMessage.value = "Failed to sign in with Google"
+                    _authState.value = AuthState.Unauthenticated
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Unknown error occurred"
+                _authState.value = AuthState.Unauthenticated
+            }
         }
     }
+
+
 }
 

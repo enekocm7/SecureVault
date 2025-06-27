@@ -6,7 +6,9 @@ import com.enekocm.securevault.data.crypto.BiometricKeyManager
 import com.enekocm.securevault.data.crypto.PasswordKeyManager
 import com.enekocm.securevault.data.storage.AppKeyStorage
 import com.enekocm.securevault.domain.model.BiometricResult
+import com.enekocm.securevault.domain.model.Preferences
 import com.enekocm.securevault.domain.repository.MasterPasswordRepository
+import com.google.firebase.firestore.Blob
 import javax.crypto.Cipher
 import javax.inject.Singleton
 
@@ -38,12 +40,24 @@ class MasterPasswordRepositoryImpl(private val storage: AppKeyStorage) : MasterP
     }
 
     override suspend fun unlockAppKeyWithPassword(password: String): Boolean {
-        val salt = storage.getFromSharedPreferences("salt")
-        val encryptedData = storage.getFromSharedPreferences("encrypted_app_key_pw")
-        val iv = storage.getFromSharedPreferences("iv_pw")
-        val passwordKey = PasswordKeyManager.deriveKey(password, salt)
+        val salt = Blob.fromBytes(storage.getFromSharedPreferences("salt"))
+        val encryptedData = Blob.fromBytes(storage.getFromSharedPreferences("encrypted_app_key_pw"))
+        val iv = Blob.fromBytes(storage.getFromSharedPreferences("iv_pw"))
+        val preferences = Preferences(key = encryptedData, salt = salt, iv = iv)
+        return unlockAppKeyWithFirebase(password, preferences)
+    }
+
+    override suspend fun unlockAppKeyWithFirebase(
+        password: String,
+        preferences: Preferences
+    ): Boolean {
+        val passwordKey = PasswordKeyManager.deriveKey(password, preferences.salt.toBytes())
         try {
-            AppKeyProvider.load(AppKeyEncryptor.decrypt(encryptedData, passwordKey, iv))
+            AppKeyProvider.load(
+                AppKeyEncryptor.decrypt(
+                    preferences.key.toBytes(), passwordKey, preferences.iv.toBytes()
+                )
+            )
             return true
         } catch (_: Exception) {
             return false

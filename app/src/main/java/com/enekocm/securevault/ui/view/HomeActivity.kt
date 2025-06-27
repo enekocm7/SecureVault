@@ -82,6 +82,11 @@ class HomeActivity : AppCompatActivity() {
                     passwordAdapter.updatePasswords(passwordList.sortedBy {
                         it.name
                     })
+                    if (passwordList.isEmpty()) {
+                        binding.emptyTextView.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyTextView.visibility = View.GONE
+                    }
                 }
             }
         }

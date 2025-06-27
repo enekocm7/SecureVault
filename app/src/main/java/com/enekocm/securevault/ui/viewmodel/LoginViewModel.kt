@@ -13,11 +13,15 @@ import com.enekocm.securevault.domain.usecases.auth.AuthenticateBiometrics
 import com.enekocm.securevault.domain.usecases.auth.GetDecryptCryptoObject
 import com.enekocm.securevault.domain.usecases.auth.IsBiometricConfigured
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithBiometrics
+import com.enekocm.securevault.domain.usecases.firestore.UnlockKeyWithFirebase
 import com.enekocm.securevault.domain.usecases.auth.UnlockKeyWithPassword
 import com.enekocm.securevault.domain.usecases.firestore.GetModel
-import com.enekocm.securevault.domain.usecases.firestore.SavePreferences
+import com.enekocm.securevault.domain.usecases.firestore.ModelToPreferences
 import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import com.enekocm.securevault.ui.biometrics.BiometricPromptManager
+import com.enekocm.securevault.utils.GoogleLogin
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,7 +30,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -36,13 +39,15 @@ class LoginViewModel
     @ApplicationContext private val context: Context,
     private val unlockKeyWithPassword: UnlockKeyWithPassword,
     private val unlockKeyWithBiometrics: UnlockKeyWithBiometrics,
+    private val unlockKeyWithFirebase: UnlockKeyWithFirebase,
     private val isBiometricConfigured: IsBiometricConfigured,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val getDecryptCryptoObject: GetDecryptCryptoObject,
-    private val savePreferences: SavePreferences,
+    private val modelToPreferences: ModelToPreferences,
     private val getModel: GetModel,
     private val getAllPasswords: Lazy<GetAllPasswords>,
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     private val title = context.getString(R.string.biometric_authentication)
@@ -55,14 +60,41 @@ class LoginViewModel
     private val _passwordLoginState = MutableStateFlow<Boolean?>(null)
     val passwordLoginState = _passwordLoginState.asStateFlow()
 
+    private val _currentUser = MutableStateFlow<FirebaseUser?>(null)
+    val currentUser = _currentUser.asStateFlow()
+
+    private val _accountSwitchResult = MutableStateFlow<Boolean?>(null)
+    val accountSwitchResult = _accountSwitchResult.asStateFlow()
+
     private val cryptoObjectDeferred by lazy {
         viewModelScope.async(dispatchers.default) {
             getDecryptCryptoObject()
         }
     }
 
+    init {
+        _currentUser.value = firebaseAuth.currentUser
+    }
+
     fun login(password: String) {
-        loadPreferences()
+        if (_currentUser.value==null) loginPassword(password) else loginFirebase(password)
+
+    }
+
+    private fun loginFirebase(password: String){
+        viewModelScope.launch(dispatchers.default) {
+            val model = getModel()?: run {
+                _passwordLoginState.value = false
+                return@launch
+            }
+            val result = unlockKeyWithFirebase(password, modelToPreferences(model))
+            withContext(dispatchers.main) {
+                _passwordLoginState.value = result
+            }
+        }
+    }
+
+    private fun loginPassword(password: String){
         viewModelScope.launch(dispatchers.default) {
             val result = unlockKeyWithPassword(password)
             withContext(dispatchers.main) {
@@ -114,10 +146,35 @@ class LoginViewModel
         return getAllPasswords.get()().map { PasswordMapper.mapToEntity(it) }
     }
 
-    fun loadPreferences() {
-        runBlocking {
-            val model = getModel() ?: return@runBlocking
-            savePreferences(model)
+    fun getCurrentUser(): FirebaseUser? {
+        return firebaseAuth.currentUser
+    }
+
+    suspend fun switchToAccount(activity: AppCompatActivity): Boolean {
+        return try {
+            val googleLogin = GoogleLogin(activity)
+            val result = googleLogin.signIn(allowNewAccounts = false)
+            if (result != null) {
+                _currentUser.value = firebaseAuth.currentUser
+                _accountSwitchResult.value = true
+                true
+            } else {
+                _accountSwitchResult.value = false
+                false
+            }
+        } catch (_: Exception) {
+            _accountSwitchResult.value = false
+            false
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            try {
+                firebaseAuth.signOut()
+                _currentUser.value = null
+            } catch (_: Exception) {
+            }
         }
     }
 }
