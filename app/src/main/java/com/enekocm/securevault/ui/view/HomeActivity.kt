@@ -13,11 +13,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.enekocm.securevault.R
 import com.enekocm.securevault.databinding.MainScreenBinding
 import com.enekocm.securevault.ui.adapter.PasswordAdapter
 import com.enekocm.securevault.ui.view.dialogs.CreatePasswordDialog
 import com.enekocm.securevault.ui.viewmodel.HomeViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,6 +32,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: MainScreenBinding
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var passwordAdapter: PasswordAdapter
+    private val auth = Firebase.auth
 
     companion object {
         const val PASSWORD_RELOAD_REQUEST_KEY = "passwordReload"
@@ -45,14 +49,30 @@ class HomeActivity : AppCompatActivity() {
 
         binding = MainScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        changeSettingsIcon()
         setupRecyclerView()
         setListeners()
         setObservers()
     }
 
+    private fun changeSettingsIcon() {
+        if (viewModel.isLoggedIn()) {
+            auth.currentUser?.let { user ->
+                user.photoUrl?.let {
+                    Glide.with(this)
+                        .load(it)
+                        .into(binding.settingIcon)
+                }
+            }
+        }else{
+            binding.settingIcon.setImageResource(R.drawable.ic_settings)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.loadPasswords()
+        changeSettingsIcon()
     }
 
     private fun setObservers() {
@@ -90,7 +110,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setListeners() {
         binding.addIcon.setOnClickListener {
-            CreatePasswordDialog(supportFragmentManager).show(supportFragmentManager, "Create new password")
+            CreatePasswordDialog(supportFragmentManager).show(
+                supportFragmentManager,
+                "Create new password"
+            )
         }
 
         binding.search.setOnClickListener {
@@ -103,7 +126,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.settingIcon.setOnClickListener {
-            val intent = Intent(this,SettingsActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }

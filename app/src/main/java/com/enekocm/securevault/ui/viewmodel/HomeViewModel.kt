@@ -6,6 +6,7 @@ import com.enekocm.securevault.di.DispatcherProvider
 import com.enekocm.securevault.domain.model.PasswordDto
 import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import com.enekocm.securevault.domain.usecases.password.GetPasswordsByName
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllPasswords: GetAllPasswords,
     private val getPasswordsByName: GetPasswordsByName,
+    private val auth: FirebaseAuth,
     private val dispatchers: DispatcherProvider
 ) :
     ViewModel() {
@@ -60,5 +62,9 @@ class HomeViewModel @Inject constructor(
 
     private fun getPasswordsByNameIgnoreCase(name: String): List<PasswordDto> {
         return getPasswordsByName(name)
+    }
+
+    fun isLoggedIn(): Boolean{
+        return auth.currentUser!=null
     }
 }
