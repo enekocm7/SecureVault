@@ -12,6 +12,8 @@ import com.enekocm.securevault.domain.usecases.auth.IsBiometricConfigured
 import com.enekocm.securevault.domain.usecases.password.DeleteAllPasswords
 import com.enekocm.securevault.domain.usecases.password.GetAllPasswords
 import com.enekocm.securevault.utils.GoogleLogin
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +29,8 @@ class SettingsViewModel @Inject constructor(
     private val deleteAllPasswords: DeleteAllPasswords,
     private val backupManager: BackupManager,
     private val getAllPasswords: GetAllPasswords,
+    private val firestore: FirebaseFirestore,
+    private val auth: FirebaseAuth,
     private val dispatchers: DispatcherProvider
 ) :
     ViewModel() {
@@ -111,4 +115,13 @@ class SettingsViewModel @Inject constructor(
     fun clearError() {
         _errorMessage.value = null
     }
+
+    fun deletePasswordsFromCloud() {
+        viewModelScope.launch(dispatchers.io) {
+            val userId = auth.uid ?: return@launch
+            firestore.collection("users")
+                .document(userId).delete()
+        }
+    }
 }
+

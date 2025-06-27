@@ -156,5 +156,6 @@
     <string name="sign_out_confirmation">Estas seguro que quieres cerrar sesion?</string>
     <string name="master_password_warning">¡Recuerda esta contraseña! Sin ella, NO puedes acceder a tus contraseñas.</string>
     <string name="login_description">Inicia sesión para acceder a tu bóveda segura</string>
+    <string name="delete_passwords">Borra las contraseñas de la nube</string>
 </resources>
 

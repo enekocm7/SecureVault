@@ -87,6 +87,7 @@ class SettingsActivity : AppCompatActivity() {
         val signInButton = binding.btnSignIn
         val signOutButton = binding.btnSignOut
         val syncText = binding.syncStatusText
+        val deleteCloud = binding.deletePasswords
 
         auth.currentUser?.let { user ->
             name.text = user.displayName ?: getString(R.string.unknown_user)
@@ -98,6 +99,7 @@ class SettingsActivity : AppCompatActivity() {
 
             signInButton.visibility = View.GONE
             signOutButton.visibility = View.VISIBLE
+            deleteCloud.visibility = View.VISIBLE
 
             syncText.text = getString(R.string.sync_enabled)
 
@@ -114,6 +116,7 @@ class SettingsActivity : AppCompatActivity() {
 
             signInButton.visibility = View.VISIBLE
             signOutButton.visibility = View.GONE
+            deleteCloud.visibility = View.GONE
 
             syncText.text = getString(R.string.sync_disabled)
         }
@@ -263,6 +266,11 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.btnSignIn.setOnClickListener {
             viewModel.signInWithGoogle(this)
+        }
+
+        binding.deletePasswords.setOnClickListener {
+            viewModel.deletePasswordsFromCloud()
+            Toast.makeText(this, R.string.passwords_clear_toast, Toast.LENGTH_LONG).show()
         }
 
         binding.btnSignOut.setOnClickListener {

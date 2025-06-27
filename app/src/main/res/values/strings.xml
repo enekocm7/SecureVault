@@ -161,4 +161,5 @@
     <string name="sign_out_confirmation">Are you sure you want to log out?</string>
     <string name="master_password_warning">Remember this password! Without it, you CANNOT access your passwords.</string>
     <string name="login_description">Sign in to access your secure vault</string>
+    <string name="delete_passwords">Delete passwords from the cloud</string>
 </resources>
