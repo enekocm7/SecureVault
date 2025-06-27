@@ -94,7 +94,13 @@ class HomeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.isLoading.collect { isLoading ->
-                    binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                    if (isLoading){
+                        binding.progressBar.visibility =     View.VISIBLE
+                        binding.emptyTextView.visibility = View.GONE
+                    } else{
+                        binding.progressBar.visibility = View.GONE
+                        binding.emptyTextView.visibility = View.VISIBLE
+                    }
                 }
             }
         }
