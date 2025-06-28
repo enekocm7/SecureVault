@@ -55,6 +55,7 @@ class HomeActivity : AppCompatActivity() {
         setObservers()
     }
 
+
     private fun changeSettingsIcon() {
         if (viewModel.isLoggedIn()) {
             auth.currentUser?.let { user ->
@@ -64,7 +65,7 @@ class HomeActivity : AppCompatActivity() {
                         .into(binding.settingIcon)
                 }
             }
-        }else{
+        } else {
             binding.settingIcon.setImageResource(R.drawable.ic_settings)
         }
     }
@@ -82,11 +83,7 @@ class HomeActivity : AppCompatActivity() {
                     passwordAdapter.updatePasswords(passwordList.sortedBy {
                         it.name
                     })
-                    if (passwordList.isEmpty()) {
-                        binding.emptyTextView.visibility = View.VISIBLE
-                    } else {
-                        binding.emptyTextView.visibility = View.GONE
-                    }
+                    updateEmptyState()
                 }
             }
         }
@@ -94,13 +91,12 @@ class HomeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.isLoading.collect { isLoading ->
-                    if (isLoading){
-                        binding.progressBar.visibility =     View.VISIBLE
-                        binding.emptyTextView.visibility = View.GONE
-                    } else{
+                    if (isLoading) {
+                        binding.progressBar.visibility = View.VISIBLE
+                    } else {
                         binding.progressBar.visibility = View.GONE
-                        binding.emptyTextView.visibility = View.VISIBLE
                     }
+                    updateEmptyState()
                 }
             }
         }
@@ -165,5 +161,16 @@ class HomeActivity : AppCompatActivity() {
         binding.title.visibility = View.VISIBLE
         binding.search.setImageResource(R.drawable.ic_search)
         binding.searchEditText.text.clear()
+    }
+
+    private fun updateEmptyState() {
+        val isLoading = viewModel.isLoading.value
+        val passwordsEmpty = viewModel.passwords.value.isEmpty()
+
+        binding.emptyTextView.visibility = if (!isLoading && passwordsEmpty) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 }
