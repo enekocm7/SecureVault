@@ -56,7 +56,7 @@ class SettingsActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             @Suppress("DEPRECATION")
-            window.statusBarColor = getColor(R.color.light_red)
+            window.statusBarColor = getColor(R.color.red)
         }
 
         setSupportActionBar(binding.toolbarSettings)
