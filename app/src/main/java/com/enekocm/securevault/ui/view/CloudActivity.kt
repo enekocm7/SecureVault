@@ -63,7 +63,9 @@ class CloudActivity : AppCompatActivity() {
             skip()
         }
         binding.googleSignInButton.setOnClickListener {
-            viewModel.signInWithGoogle(this, allowNewAccounts = !login)
+            lifecycleScope.launch {
+                viewModel.signInWithGoogle(this@CloudActivity, allowNewAccounts = !login)
+            }
         }
     }
 

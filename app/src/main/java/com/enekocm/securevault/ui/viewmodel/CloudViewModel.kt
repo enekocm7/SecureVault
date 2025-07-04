@@ -40,8 +40,8 @@ class CloudViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle(activity: AppCompatActivity, allowNewAccounts: Boolean) {
-        viewModelScope.launch {
+    suspend fun signInWithGoogle(activity: AppCompatActivity, allowNewAccounts: Boolean) {
+
             try {
                 _isLoading.value = true
                 _errorMessage.value = null
@@ -59,7 +59,7 @@ class CloudViewModel @Inject constructor(
             } finally {
                 _isLoading.value = false
             }
-        }
+
     }
 
 

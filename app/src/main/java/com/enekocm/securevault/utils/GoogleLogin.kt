@@ -39,7 +39,7 @@ class GoogleLogin(private val activity: AppCompatActivity) {
         try {
             val result: GetCredentialResponse = credentialManager.getCredential(
                 request = request,
-                context = activity,
+                context = context,
             )
             return handleSignIn(result.credential)
         } catch (_: GetCredentialException) {
