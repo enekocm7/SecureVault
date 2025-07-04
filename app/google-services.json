@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "733223963023-osbusot4ula3r5jp56sq09rqj7uo5pf3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enekocm.securevault",
+            "certificate_hash": "7307a7ece1437c119481149116c01821486665c7"
+          }
+        },
+        {
           "client_id": "733223963023-8t6alkns5o0h632m4amm0r2mkamb27sb.apps.googleusercontent.com",
           "client_type": 3
         }
