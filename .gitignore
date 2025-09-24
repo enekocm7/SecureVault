@@ -2,10 +2,10 @@
 .gradle
 /app/google-services.json
 /local.properties
-/.idea
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/
