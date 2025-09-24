@@ -2,6 +2,7 @@ package com.enekocm.securevault.data.crypto
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.security.SecureRandom
 
 object AppKeyProvider {
     private var appKey: ByteArray? = null
@@ -9,7 +10,7 @@ object AppKeyProvider {
 
     suspend fun generate(): ByteArray = mutex.withLock {
         appKey?.copyOf() ?: ByteArray(32).apply {
-            java.security.SecureRandom().nextBytes(this)
+            SecureRandom().nextBytes(this)
             appKey = this.copyOf()
         }
     }
