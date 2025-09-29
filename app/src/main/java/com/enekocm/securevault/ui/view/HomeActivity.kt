@@ -125,10 +125,11 @@ class HomeActivity : AppCompatActivity() {
 
         binding.search.setOnClickListener {
             isSearchMode = !isSearchMode
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             if (isSearchMode) {
-                enterSearchMode()
+                enterSearchMode(imm)
             } else {
-                exitSearchMode()
+                exitSearchMode(imm)
             }
         }
 
@@ -145,22 +146,22 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.adapter = passwordAdapter
     }
 
-    private fun enterSearchMode() {
+    private fun enterSearchMode(imm: InputMethodManager) {
         binding.settingIcon.visibility = View.GONE
         binding.title.visibility = View.GONE
         binding.searchEditText.visibility = View.VISIBLE
         binding.search.setImageResource(R.drawable.ic_close)
         binding.searchEditText.requestFocus()
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    private fun exitSearchMode() {
+    private fun exitSearchMode(imm: InputMethodManager) {
         binding.searchEditText.visibility = View.GONE
         binding.settingIcon.visibility = View.VISIBLE
         binding.title.visibility = View.VISIBLE
         binding.search.setImageResource(R.drawable.ic_search)
         binding.searchEditText.text.clear()
+        imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
     }
 
     private fun updateEmptyState() {
