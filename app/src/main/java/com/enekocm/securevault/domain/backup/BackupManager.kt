@@ -59,10 +59,7 @@ class BackupManager @Inject constructor(
             return false
         }
 
-        val backupLocation = backupStorage.getLocation()
-        if (backupLocation == null) {
-            return false
-        }
+        val backupLocation = backupStorage.getLocation() ?: return false
 
         return createBackup(backupLocation, passwords)
     }
