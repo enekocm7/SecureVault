@@ -283,6 +283,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchBiometrics.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && !viewModel.isBiometric()) {
                 val intent = Intent(this, BiometricActivity::class.java)
+                intent.putExtra("settings", true)
                 startActivity(intent)
             }
         }

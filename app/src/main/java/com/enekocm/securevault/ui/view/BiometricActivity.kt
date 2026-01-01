@@ -20,6 +20,8 @@ class BiometricActivity : AppCompatActivity() {
 
     private val viewModel: BiometricViewModel by viewModels()
 
+    private var isFromSettings: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
@@ -31,6 +33,8 @@ class BiometricActivity : AppCompatActivity() {
         binding = BiometricSugestionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        isFromSettings = intent.getStringExtra("settings") == null
+
         setListeners()
         setObservers()
     }
@@ -39,7 +43,7 @@ class BiometricActivity : AppCompatActivity() {
         viewModel.authenticationState.observe(this) { result ->
             when (result) {
                 is BiometricResult.AuthenticationSuccess -> {
-                    skip()
+                    if (isFromSettings) skip() else skipCloud()
                 }
 
                 is BiometricResult.AuthenticationError -> {
@@ -78,20 +82,28 @@ class BiometricActivity : AppCompatActivity() {
         binding.enableButton.setOnClickListener {
             if (!viewModel.enableBiometric(this)) {
                 Toast.makeText(this, R.string.no_biometric_key, Toast.LENGTH_LONG).show()
-                skip()
+                if (isFromSettings) skip() else skipCloud()
             }
         }
 
         binding.skipTextButton.setOnClickListener {
-            skip()
+            if (isFromSettings) skip() else skipCloud()
         }
     }
 
-    private fun skip() {
+    private fun skipCloud() {
         val intent = Intent(this, CloudActivity::class.java)
         startActivity(intent)
         finishAffinity()
     }
+
+    private fun skip() {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+        finishAffinity()
+    }
+
+
 }
 
 
