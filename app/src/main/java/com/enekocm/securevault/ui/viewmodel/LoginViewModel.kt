@@ -36,7 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel
 @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val unlockKeyWithPassword: UnlockKeyWithPassword,
     private val unlockKeyWithBiometrics: UnlockKeyWithBiometrics,
     private val unlockKeyWithFirebase: UnlockKeyWithFirebase,

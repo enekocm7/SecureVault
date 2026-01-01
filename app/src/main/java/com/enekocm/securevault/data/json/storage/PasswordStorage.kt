@@ -5,7 +5,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import javax.inject.Inject
 
-class PasswordStorage @Inject constructor(@ApplicationContext private val context: Context) {
+class PasswordStorage @Inject constructor(@param:ApplicationContext private val context: Context) {
 
     private val fileName = "passwords.sv"
 

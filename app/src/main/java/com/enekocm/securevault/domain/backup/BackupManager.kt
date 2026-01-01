@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BackupManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val backupStorage: BackupStorage,
     private val encryptor: FileEncryptor,
     private val readSv: ReadSv,
@@ -59,10 +59,7 @@ class BackupManager @Inject constructor(
             return false
         }
 
-        val backupLocation = backupStorage.getLocation()
-        if (backupLocation == null) {
-            return false
-        }
+        val backupLocation = backupStorage.getLocation() ?: return false
 
         return createBackup(backupLocation, passwords)
     }

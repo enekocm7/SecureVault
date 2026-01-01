@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class WriteSv @Inject constructor(
     private val encryptor: FileEncryptor,
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     operator fun invoke(uri: Uri, passwords: List<PasswordDto>, password: String) {
         val encryptedPasswords =

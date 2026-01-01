@@ -1,28 +1,29 @@
 [versions]
-activityKtx = "1.10.1"
-agp = "8.11.0"
+activityKtx = "1.12.2"
+agp = "8.13.2"
 biometric = "1.1.0"
 circleimageview = "3.1.0"
 credentials = "1.5.0"
-firebaseBom = "33.16.0"
-fragmentKtx = "1.8.8"
-glide = "4.16.0"
+firebaseBom = "34.7.0"
+fragmentKtx = "1.8.9"
+glide = "5.0.5"
 googleid = "1.1.1"
-hiltAndroid = "2.56.2"
-kotlin = "2.2.0"
-ksp = "2.2.0-2.0.2"
-coreKtx = "1.16.0"
+hiltAndroid = "2.57.2"
+kotlin = "2.3.0"
+kotlinMetadataJvm = "2.3.0"
+ksp = "2.3.0"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
 appcompat = "1.7.1"
-lifecycleViewmodelKtx = "2.9.1"
-material = "1.12.0"
-activity = "1.10.1"
+lifecycleViewmodelKtx = "2.10.0"
+material = "1.13.0"
+activity = "1.12.2"
 constraintlayout = "2.2.1"
 moshiKotlin = "1.15.2"
 nbvcxz = "1.5.1"
-playServicesAuth = "21.3.0"
+playServicesAuth = "21.4.0"
 preferenceKtx = "1.2.1"
 autofill = "1.3.0"
 
@@ -37,7 +38,7 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
@@ -49,6 +50,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlinMetadataJvm" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }

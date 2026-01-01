@@ -19,8 +19,8 @@ import com.enekocm.securevault.databinding.MainScreenBinding
 import com.enekocm.securevault.ui.adapter.PasswordAdapter
 import com.enekocm.securevault.ui.view.dialogs.CreatePasswordDialog
 import com.enekocm.securevault.ui.viewmodel.HomeViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExportPasswordViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val writeCsv: WriteCsv,
     private val writeSv: WriteSv,
     private val getAllPasswords: GetAllPasswords,

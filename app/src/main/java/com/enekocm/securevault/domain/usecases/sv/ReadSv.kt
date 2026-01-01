@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class ReadSv @Inject constructor(
     private val fileEncryptor: FileEncryptor,
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     operator fun invoke(uri: Uri, password: String): List<PasswordDto> =
         fileEncryptor.decryptPasswords(
