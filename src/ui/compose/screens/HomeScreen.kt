@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -139,7 +140,7 @@ fun HomeScreen(
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Box(modifier = Modifier.weight(1f)) {
+            Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
                 if (isLoading) {
                     CircularProgressIndicator(
                         color = Red,
@@ -149,7 +150,8 @@ fun HomeScreen(
                     Text(
                         text = stringResource(R.string.no_passwords_found),
                         color = Black, fontSize = 28.sp,
-                        modifier = Modifier.align(Alignment.Center)
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.Center).offset(y = (-60).dp)
                     )
                 } else {
                     LazyColumn(
