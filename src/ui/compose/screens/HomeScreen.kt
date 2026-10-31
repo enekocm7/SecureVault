@@ -74,7 +74,7 @@ fun HomeScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(70.dp)
+                    .height(80.dp)
                     .padding(10.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = CardDefaults.cardColors(containerColor = Red),
