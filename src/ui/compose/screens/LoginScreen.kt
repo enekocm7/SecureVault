@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,7 +57,9 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(LightRed)
-            .padding(24.dp),
+            .statusBarsPadding()
+            .padding(horizontal = 24.dp)
+            .padding(top = 12.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
