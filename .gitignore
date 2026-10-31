@@ -19,3 +19,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+/target
+
+google-services.json

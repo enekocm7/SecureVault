@@ -61,6 +61,40 @@
 
 ---
 
+### Build with Kargo (Compose UI)
+
+This branch migrates the app from Gradle + XML views to
+[Kargo](https://enekocm7.github.io/kargo/) + Jetpack Compose, keeping the UI
+1:1 (same `light_red`/`red` theme, same screens, same strings/drawables).
+
+```sh
+# one-time: accept the Android SDK licenses
+kargo toolchain install android-sdk --accept-licenses
+
+# type-check / build the Android app (APK in target/)
+kargo check -t android
+kargo build -t android
+kargo run -t android            # install on a device/emulator
+```
+
+Notes:
+
+* UI lives in `app/src/main/java/com/enekocm/securevault/ui/compose/`
+  (`theme/`, `components/`, `screens/`, `dialogs/`), one `@Composable`
+  per former XML layout, each with a `@Preview`.
+* Kargo drives the Android Gradle Plugin for you; there are no
+  `build.gradle.kts` / `settings.gradle.kts` files to edit — configure
+  everything in `kargo.toml` / `app/kargo.toml`.
+* Hilt's Gradle plugin has no Kargo equivalent, so DI is now manual via
+  `di/AppContainer.kt` (see `SecureVaultApp`). `MainActivity` already uses
+  `MainViewModel.factory()`; extend the same pattern to the remaining screens.
+* The `google-services` Gradle plugin also has no equivalent: put your
+  Firebase web client ID in `default_web_client_id`
+  (`app/src/main/res/values/strings.xml`) instead of relying on
+  `google-services.json` codegen.
+
+---
+
 ### License
 
 This project is licensed under the [MIT License](LICENSE).

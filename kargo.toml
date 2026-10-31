@@ -1,0 +1,62 @@
+[package]
+name = "securevault"
+version = "2.0.1"
+group = "com.enekocm.securevault"
+description = "SecureVault password manager"
+license = "MIT"
+
+[kotlin]
+version = "2.3.0"
+
+[toolchain]
+jdk = "21"
+android-sdk = "37"
+
+[target.android]
+namespace = "com.enekocm.securevault"
+kind = "application"
+min-sdk = 30
+target-sdk = 37
+compile-sdk = 37
+version-code = 8
+version-name = "2.0.1"
+minify = true
+proguard-files = ["proguard-rules.pro"]
+
+[frameworks]
+compose = true
+coroutines = true
+
+[dependencies]
+"androidx.core:core-ktx" = "1.19.1"
+"androidx.appcompat:appcompat" = "1.8.0"
+"com.google.android.material:material" = "1.14.0"
+"androidx.activity:activity" = "1.13.0"
+"androidx.activity:activity-compose" = "1.13.0"
+"androidx.lifecycle:lifecycle-runtime-compose" = "2.11.0"
+"androidx.lifecycle:lifecycle-viewmodel-compose" = "2.11.0"
+"androidx.compose.runtime:runtime-livedata" = {}
+"io.coil-kt:coil-compose" = "2.7.0"
+"me.gosimple:nbvcxz" = "1.5.1"
+"androidx.biometric:biometric" = "1.1.0"
+"androidx.lifecycle:lifecycle-viewmodel-ktx" = "2.11.0"
+"androidx.activity:activity-ktx" = "1.13.0"
+"androidx.fragment:fragment-ktx" = "1.9.1"
+"com.google.dagger:hilt-android" = "2.60.1"
+"com.squareup.moshi:moshi-kotlin" = "1.15.2"
+"androidx.preference:preference-ktx" = "1.2.1"
+"androidx.autofill:autofill" = "1.3.0"
+"com.google.firebase:firebase-bom" = { version = "35.1.0", bom = true }
+"com.google.firebase:firebase-crashlytics" = {}
+"com.google.firebase:firebase-analytics" = {}
+"com.google.firebase:firebase-auth" = {}
+"com.google.firebase:firebase-firestore" = {}
+"com.google.android.gms:play-services-auth" = "22.0.0"
+"androidx.credentials:credentials" = "1.6.0"
+"androidx.credentials:credentials-play-services-auth" = "1.6.0"
+"com.google.android.libraries.identity.googleid:googleid" = "1.2.1"
+"com.google.dagger:hilt-compiler" = { version = "2.60.1", scope = "ksp" }
+"org.jetbrains.kotlin:kotlin-metadata-jvm" = { version = "2.4.21", scope = "ksp" }
+
+[dev-dependencies]
+"junit:junit" = "4.13.2"
