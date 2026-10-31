@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 class SettingsActivity : AppCompatActivity() {
     private val viewModel: SettingsViewModel by viewModels { settingsFactory(application) }
     private val auth get() = (application as SecureVaultApp).container.firebaseAuth
+    private var refreshTick = mutableStateOf(0)
 
     private val folderPicker = FilePicker(activity = this) { uri ->
         viewModel.setBackupLocation(uri)
@@ -86,10 +87,11 @@ class SettingsActivity : AppCompatActivity() {
 
         setContent {
             SecureVaultTheme {
+                val tick = refreshTick.value
                 val user = auth?.currentUser
                 val signedIn = user != null
-                val backupEnabled = remember { mutableStateOf(viewModel.isBackupEnabled()) }
-                val backupLoc = viewModel.getBackupLocation()
+                val backupEnabled = remember(tick) { mutableStateOf(viewModel.isBackupEnabled()) }
+                val backupLoc = if (tick >= 0) viewModel.getBackupLocation() else null
                 val showBackup = backupEnabled.value && backupLoc != null
 
                 SettingsScreen(
@@ -113,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
                     onSignIn = { viewModel.signInWithGoogle(this) },
                     onSignOut = {
                         auth?.signOut()
-                        recreate()
+                        refreshTick.value++
                     },
                     onChangeMaster = { ChangeMasterPasswordDialog().show(supportFragmentManager, "ChangeMasterPassword") },
                     onBiometricChange = {
@@ -156,7 +158,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        recreate()
+        refreshTick.value++
     }
 
     private fun requestAutofillService() {        if (!hasEnabledAutofill()) {
