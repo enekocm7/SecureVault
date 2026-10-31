@@ -145,7 +145,7 @@ fun HomeScreen(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
                 if (isLoading) {
                     CircularProgressIndicator(
