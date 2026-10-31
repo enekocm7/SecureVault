@@ -2,6 +2,7 @@ package ui.compose.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -120,9 +121,14 @@ fun HomeScreen(
                             placeholder = { Text(stringResource(R.string.search_bar_text), color = White.copy(alpha = 0.8f)) },
                             singleLine = true,
                             modifier = Modifier.weight(1f),
+                            keyboardOptions = KeyboardOptions(autoCorrect = false),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = White,
-                                unfocusedBorderColor = White,
+                                focusedBorderColor = Color.Transparent,
+                                unfocusedBorderColor = Color.Transparent,
+                                disabledBorderColor = Color.Transparent,
+                                errorBorderColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
                                 cursorColor = White,
                                 focusedTextColor = White,
                                 unfocusedTextColor = White
