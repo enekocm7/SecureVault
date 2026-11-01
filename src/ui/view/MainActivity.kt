@@ -8,13 +8,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import ui.compose.screens.WelcomeScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.MainViewModel
-import ui.viewmodel.mainFactory
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val viewModel: MainViewModel by viewModels { mainFactory(application) }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

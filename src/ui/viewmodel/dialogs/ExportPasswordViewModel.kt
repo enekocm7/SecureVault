@@ -13,10 +13,13 @@ import domain.usecases.sv.WriteSv
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+@HiltViewModel
 class ExportPasswordViewModel @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val writeCsv: WriteCsv,
     private val writeSv: WriteSv,
     private val getAllPasswords: GetAllPasswords,

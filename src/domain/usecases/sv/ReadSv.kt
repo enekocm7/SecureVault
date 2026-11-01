@@ -5,11 +5,12 @@ import android.net.Uri
 import data.json.crypto.FileEncryptor
 import data.mapper.PasswordMapper
 import domain.model.PasswordDto
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class ReadSv @Inject constructor(
     private val fileEncryptor: FileEncryptor,
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) {
     operator fun invoke(uri: Uri, password: String): List<PasswordDto> =
         fileEncryptor.decryptPasswords(

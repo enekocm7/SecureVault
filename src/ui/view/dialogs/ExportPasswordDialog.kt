@@ -16,16 +16,17 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import ui.compose.dialogs.ExportDialogContent
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.dialogs.ExportPasswordViewModel
-import ui.viewmodel.exportPasswordFactory
 import utils.FilePicker
 import utils.FilePickerType
 
+@AndroidEntryPoint
 class ExportPasswordDialog : DialogFragment() {
 
-    private val viewModel: ExportPasswordViewModel by viewModels { exportPasswordFactory(requireActivity().application) }
+    private val viewModel: ExportPasswordViewModel by viewModels()
     private var folderUri: Uri? = null
     private var pathSetter: ((String) -> Unit)? = null
 

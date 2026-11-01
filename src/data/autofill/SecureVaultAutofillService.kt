@@ -8,8 +8,10 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import data.autofill.handlers.FillRequestHandler
 import data.autofill.handlers.SaveRequestHandler
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SecureVaultAutofillService : AutofillService() {
 
     @Inject

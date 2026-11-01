@@ -11,14 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.view.WindowCompat
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import ui.compose.screens.RegisterScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.RegisterViewModel
-import ui.viewmodel.registerFactory
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
-    private val viewModel: RegisterViewModel by viewModels { registerFactory(application) }
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

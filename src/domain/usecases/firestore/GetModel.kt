@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetModel @Inject constructor(private val storage: FirebaseStorage?, private val auth: FirebaseAuth?) {
     suspend operator fun invoke(): FirestoreModel? {
-        val uid = auth?.uid ?: return null
+        val uid = auth?.currentUser?.uid ?: return null
         return storage?.getPasswords(uid)
     }
 }

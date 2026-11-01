@@ -28,11 +28,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+@HiltViewModel
 class LoginViewModel
 @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val unlockKeyWithPassword: UnlockKeyWithPassword,
     private val unlockKeyWithBiometrics: UnlockKeyWithBiometrics,
     private val unlockKeyWithFirebase: UnlockKeyWithFirebase,

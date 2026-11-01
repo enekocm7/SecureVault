@@ -13,13 +13,14 @@ import data.autofill.utils.StructureParser
 import data.autofill.utils.Utils
 import data.autofill.utils.Utils.isAppKeyAvailable
 import data.repository.factory.PasswordRepositoryFactory
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FillRequestHandler @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val passwordRepositoryFactory: PasswordRepositoryFactory
 ) {
 

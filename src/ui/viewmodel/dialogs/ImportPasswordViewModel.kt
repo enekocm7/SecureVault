@@ -12,8 +12,10 @@ import domain.usecases.password.InsertAllPasswords
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class ImportPasswordViewModel @Inject constructor(
     private val getPasswordsFromEncrypted: GetPasswordsFromEncrypted,
     private val readCsv: ReadCsv,

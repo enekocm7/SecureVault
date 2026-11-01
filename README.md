@@ -68,6 +68,11 @@ This branch migrates the app from Gradle + XML views to
 1:1 (same `light_red`/`red` theme, same screens, same strings/drawables).
 
 ```sh
+# one-time: put your Firebase config at android/google-services.json
+# (not committed; see .gitignore). Download it from the Firebase console:
+# Project settings > Your apps > google-services.json
+cp ~/Downloads/google-services.json android/google-services.json
+
 # one-time: accept the Android SDK licenses
 kargo toolchain install android-sdk --accept-licenses
 
@@ -84,14 +89,27 @@ Notes:
   per former XML layout, each with a `@Preview`.
 * Kargo drives the Android Gradle Plugin for you; there are no
   `build.gradle.kts` / `settings.gradle.kts` files to edit — configure
-  everything in `kargo.toml` / `app/kargo.toml`.
-* Hilt's Gradle plugin has no Kargo equivalent, so DI is now manual via
-  `di/AppContainer.kt` (see `SecureVaultApp`). `MainActivity` already uses
-  `MainViewModel.factory()`; extend the same pattern to the remaining screens.
-* The `google-services` Gradle plugin also has no equivalent: put your
-  Firebase web client ID in `default_web_client_id`
-  (`app/src/main/res/values/strings.xml`) instead of relying on
-  `google-services.json` codegen.
+  everything in `kargo.toml`.
+* DI is Hilt: `SecureVaultApp` is `@HiltAndroidApp`, bindings live in
+  `src/di/*` (`@Module @InstallIn(SingletonComponent::class)`), ViewModels
+  are `@HiltViewModel` and Activities/Fragments/Services are
+  `@AndroidEntryPoint` (`by viewModels()` with no factories). The Hilt
+  Gradle plugin is applied via `[target.android.plugins]` in `kargo.toml`
+  (version matches `com.google.dagger:hilt-android` in `[dependencies]`,
+  processor `com.google.dagger:hilt-compiler` with `scope = "ksp"`).
+  The `crashlytics` plugin is applied the same way
+  (`com.google.firebase.crashlytics` 3.0.2): it is required because the app
+  depends on `firebase-crashlytics`, whose SDK crashes at startup without
+  its Gradle plugin stamping a build ID.
+* Firebase is wired via the `google-services` Gradle plugin (also under
+  `[target.android.plugins]`): Kargo copies `android/google-services.json`
+  into the generated Gradle module, so `Firebase.auth` / `Firebase.firestore`
+  work and `default_web_client_id` is generated from the json — no manual
+  string resource needed. Without that file the build still succeeds but the
+  app runs fully offline (cloud sync / Google sign-in disabled, local vault
+  unaffected). For cloud features, place the real file at
+  `android/google-services.json` before building; CI should provide it as
+  a secret.
 
 ---
 

@@ -11,6 +11,7 @@ import data.repository.factory.PasswordRepositoryFactory
 import data.storage.BackupStorage
 import di.DispatcherProvider
 import domain.usecases.sv.ReadSv
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BackupManager @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val backupStorage: BackupStorage,
     private val encryptor: FileEncryptor,
     private val readSv: ReadSv,

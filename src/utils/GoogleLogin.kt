@@ -28,9 +28,10 @@ class GoogleLogin(private val activity: AppCompatActivity) {
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 
     suspend fun signIn(allowNewAccounts : Boolean = true): AuthResult? {
-        // Server client ID comes from google-services.json (google-services plugin).
-        // Kargo does not apply that Gradle plugin, so provide the value via
-        // `default_web_client_id` string resource (see res/values/strings.xml).
+        // Server client ID is generated from android/google-services.json by the
+        // google-services Gradle plugin ([target.android.plugins] in kargo.toml).
+        // google-services.json is not committed; place the Firebase file at
+        // android/google-services.json before building.
         val serverClientId = try {
             context.getString(R.string.default_web_client_id)
         } catch (_: Exception) {

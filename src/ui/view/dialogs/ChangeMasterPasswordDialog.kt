@@ -13,13 +13,14 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import ui.compose.screens.RegisterScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.RegisterViewModel
-import ui.viewmodel.registerFactory
 
+@AndroidEntryPoint
 class ChangeMasterPasswordDialog : DialogFragment() {
-    private val viewModel: RegisterViewModel by viewModels { registerFactory(requireActivity().application) }
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState).apply {

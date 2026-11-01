@@ -170,5 +170,4 @@
     <string name="please_login">Please login</string>
     <string name="sign_up_with_google">Sign up with Google</string>
     <string name="no_passwords_found">No passwords found</string>
-    <string name="default_web_client_id" translatable="false">733223963023-8t6alkns5o0h632m4amm0r2mkamb27sb.apps.googleusercontent.com</string>
 </resources>

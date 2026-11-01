@@ -13,14 +13,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.fragment.app.setFragmentResult
+import dagger.hilt.android.AndroidEntryPoint
 import ui.compose.dialogs.GeneratePasswordDialogContent
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.dialogs.GeneratePasswordViewModel
-import ui.viewmodel.generatePasswordFactory
 
+@AndroidEntryPoint
 class GeneratePasswordDialog : DialogFragment() {
 
-    private val viewModel: GeneratePasswordViewModel by viewModels { generatePasswordFactory(requireActivity().application) }
+    private val viewModel: GeneratePasswordViewModel by viewModels()
 
     companion object {
         const val REQUEST_KEY = "GENERATED_PASSWORD_REQUEST_KEY"

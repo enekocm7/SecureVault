@@ -2,6 +2,7 @@ package ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import di.DispatcherProvider
 import domain.model.PasswordDto
 import domain.usecases.password.GetAllPasswords
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAllPasswords: GetAllPasswords,
     private val getPasswordsByName: GetPasswordsByName,
@@ -64,5 +66,9 @@ class HomeViewModel @Inject constructor(
 
     fun isLoggedIn(): Boolean{
         return auth?.currentUser != null
+    }
+
+    fun profilePhotoUrl(): String? {
+        return auth?.currentUser?.photoUrl?.toString()
     }
 }

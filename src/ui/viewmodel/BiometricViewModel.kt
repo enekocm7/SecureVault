@@ -13,11 +13,14 @@ import domain.usecases.auth.GenerateBiometricKey
 import domain.usecases.auth.GetEncryptCryptoObject
 import ui.biometrics.BiometricPromptManager
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+@HiltViewModel
 class BiometricViewModel
 @Inject constructor(
-    context: Context,
+    @ApplicationContext context: Context,
     private val generateBiometricKey: GenerateBiometricKey,
     private val authenticateBiometrics: AuthenticateBiometrics,
     private val getEncryptCryptoObject: GetEncryptCryptoObject

@@ -1,6 +1,5 @@
 package ui.view
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -11,15 +10,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.view.WindowCompat
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import domain.model.BiometricResult
 import ui.compose.screens.BiometricScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.BiometricViewModel
-import ui.viewmodel.biometricFactory
+import android.content.Intent
 
+@AndroidEntryPoint
 class BiometricActivity : AppCompatActivity() {
 
-    private val viewModel: BiometricViewModel by viewModels { biometricFactory(application) }
+    private val viewModel: BiometricViewModel by viewModels()
     private var isFromSettings: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

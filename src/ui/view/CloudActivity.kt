@@ -12,16 +12,17 @@ import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import domain.model.AuthState
 import ui.compose.screens.CloudScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.CloudViewModel
-import ui.viewmodel.cloudFactory
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class CloudActivity : AppCompatActivity() {
 
-    private val viewModel: CloudViewModel by viewModels { cloudFactory(application) }
+    private val viewModel: CloudViewModel by viewModels()
     private var login: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

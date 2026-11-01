@@ -24,12 +24,13 @@ import ui.compose.dialogs.AccountDialogContent
 import ui.compose.screens.LoginScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.LoginViewModel
-import ui.viewmodel.loginFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel: LoginViewModel by viewModels { loginFactory(application) }
+    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var usernameId: AutofillId
     private lateinit var passwordId: AutofillId

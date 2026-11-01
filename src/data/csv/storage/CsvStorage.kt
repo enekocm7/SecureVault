@@ -4,10 +4,11 @@ import android.content.Context
 import android.net.Uri
 import data.csv.formatter.CsvFormatter
 import data.json.model.Password
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class CsvStorage @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val csvFormatter: CsvFormatter
 ) {
 

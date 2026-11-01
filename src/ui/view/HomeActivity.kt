@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.view.WindowCompat
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import domain.model.PasswordDto
 import ui.compose.dialogs.CreatePasswordDialogContent
 import ui.compose.dialogs.GeneratePasswordDialogContent
@@ -23,23 +24,17 @@ import ui.compose.dialogs.PasswordDetailDialogContent
 import ui.compose.screens.HomeScreen
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.HomeViewModel
-import ui.viewmodel.createPasswordFactory
-import ui.viewmodel.generatePasswordFactory
-import ui.viewmodel.homeFactory
-import ui.viewmodel.passwordDetailFactory
 import ui.viewmodel.dialogs.CreatePasswordViewModel
 import ui.viewmodel.dialogs.GeneratePasswordViewModel
 import ui.viewmodel.dialogs.PasswordDetailViewModel
-import com.google.firebase.Firebase
-import com.enekocm.securevault.SecureVaultApp
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private val viewModel: HomeViewModel by viewModels { homeFactory(application) }
-    private val createVm: CreatePasswordViewModel by viewModels { createPasswordFactory(application) }
-    private val detailVm: PasswordDetailViewModel by viewModels { passwordDetailFactory(application) }
-    private val genVm: GeneratePasswordViewModel by viewModels { generatePasswordFactory(application) }
-    private val auth get() = (application as SecureVaultApp).container.firebaseAuth
+    private val viewModel: HomeViewModel by viewModels()
+    private val createVm: CreatePasswordViewModel by viewModels()
+    private val detailVm: PasswordDetailViewModel by viewModels()
+    private val genVm: GeneratePasswordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +65,7 @@ class HomeActivity : AppCompatActivity() {
                     isLoading = isLoading,
                     isSearchMode = isSearchMode,
                     searchQuery = query,
-                    profilePhotoUrl = if (viewModel.isLoggedIn()) auth?.currentUser?.photoUrl?.toString() else null,
+                    profilePhotoUrl = if (viewModel.isLoggedIn()) viewModel.profilePhotoUrl() else null,
                     onSearchToggle = {
                         isSearchMode = !isSearchMode
                         if (!isSearchMode) {

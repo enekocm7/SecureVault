@@ -11,6 +11,8 @@ import domain.model.AuthState
 import domain.usecases.auth.IsBiometricConfigured
 import domain.usecases.password.DeleteAllPasswords
 import domain.usecases.password.GetAllPasswords
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import utils.GoogleLogin
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,13 +20,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val isBiometricConfigured: IsBiometricConfigured,
     private val deleteAllPasswords: DeleteAllPasswords,
     private val backupManager: BackupManager,
     private val getAllPasswords: GetAllPasswords,
+    private val auth: FirebaseAuth?,
     private val dispatchers: DispatcherProvider
 ) :
     ViewModel() {
@@ -108,6 +113,14 @@ class SettingsViewModel @Inject constructor(
 
     fun clearError() {
         _errorMessage.value = null
+    }
+
+    fun currentUser(): FirebaseUser? {
+        return auth?.currentUser
+    }
+
+    fun signOut() {
+        auth?.signOut()
     }
 
 }

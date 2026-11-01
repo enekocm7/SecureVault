@@ -12,8 +12,10 @@ import domain.usecases.auth.IsAppKeyConfigured
 import domain.usecases.password.AddPassword
 import domain.usecases.password.DeletePassword
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val estimatePassword: EstimatePassword,
     private val generateAppKey: GenerateAppKey,

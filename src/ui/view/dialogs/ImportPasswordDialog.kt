@@ -18,15 +18,16 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.enekocm.securevault.R
+import dagger.hilt.android.AndroidEntryPoint
 import domain.model.ImportState
 import ui.compose.dialogs.ImportDialogContent
 import ui.compose.theme.SecureVaultTheme
 import ui.viewmodel.dialogs.ImportPasswordViewModel
-import ui.viewmodel.importPasswordFactory
 import utils.FilePicker
 import utils.FilePickerType
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ImportPasswordDialog : DialogFragment() {
 
     companion object {
@@ -34,7 +35,7 @@ class ImportPasswordDialog : DialogFragment() {
         private const val CSV = "text/*"
     }
 
-    private val viewModel: ImportPasswordViewModel by viewModels { importPasswordFactory(requireActivity().application) }
+    private val viewModel: ImportPasswordViewModel by viewModels()
     private var fileUri: Uri? = null
     private var fileNameState: ((String) -> Unit)? = null
     private var encryptedState: (() -> Boolean)? = null

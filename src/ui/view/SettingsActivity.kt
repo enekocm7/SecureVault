@@ -24,15 +24,14 @@ import ui.view.dialogs.ChangeMasterPasswordDialog
 import ui.view.dialogs.ExportPasswordDialog
 import ui.view.dialogs.ImportPasswordDialog
 import ui.viewmodel.SettingsViewModel
-import ui.viewmodel.settingsFactory
 import utils.FilePicker
 import utils.FilePickerType
-import com.enekocm.securevault.SecureVaultApp
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
-    private val viewModel: SettingsViewModel by viewModels { settingsFactory(application) }
-    private val auth get() = (application as SecureVaultApp).container.firebaseAuth
+    private val viewModel: SettingsViewModel by viewModels()
     private var refreshTick = mutableStateOf(0)
 
     private val folderPicker = FilePicker(activity = this) { uri ->
@@ -88,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
         setContent {
             SecureVaultTheme {
                 val tick = refreshTick.value
-                val user = auth?.currentUser
+                val user = viewModel.currentUser()
                 val signedIn = user != null
                 val backupEnabled = remember(tick) { mutableStateOf(viewModel.isBackupEnabled()) }
                 val backupLoc = if (tick >= 0) viewModel.getBackupLocation() else null
@@ -114,7 +113,7 @@ class SettingsActivity : AppCompatActivity() {
                     onBack = { onBackPressedDispatcher.onBackPressed() },
                     onSignIn = { viewModel.signInWithGoogle(this) },
                     onSignOut = {
-                        auth?.signOut()
+                        viewModel.signOut()
                         refreshTick.value++
                     },
                     onChangeMaster = { ChangeMasterPasswordDialog().show(supportFragmentManager, "ChangeMasterPassword") },
